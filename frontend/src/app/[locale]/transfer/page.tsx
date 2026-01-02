@@ -27,10 +27,11 @@ function TransferContent() {
     const [scaRequired, setScaRequired] = useState(false);
     const [mockTan, setMockTan] = useState("");
     const [pendingTxId, setPendingTxId] = useState("");
+    const [currentTanId, setCurrentTanId] = useState("");
 
     useEffect(() => {
         if (user && token) {
-            fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:5000'}/api/dashboard`, {
+            fetch(`/api/dashboard`, {
                 headers: { Authorization: `Bearer ${token}` }
             })
                 .then(res => res.json())
@@ -47,27 +48,45 @@ function TransferContent() {
         setError("");
 
         try {
-            const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:5000'}/api/transfer/initiate`, {
+            // Updated to new API route standard
+            // The route is now /api/transfer with action='initiate'
+            const res = await fetch(`/api/transfer`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                     'Authorization': `Bearer ${token}`
                 },
                 body: JSON.stringify({
-                    from_account_id: fromAccount,
-                    amount: parseFloat(amount),
-                    reference: reference,
-                    type: 'external',
-                    recipient_account_number: iban
+                    action: 'initiate',
+                    data: {
+                        from_account_id: fromAccount,
+                        amount: parseFloat(amount),
+                        reference: reference,
+                        type: 'external',
+                        recipient_info: {
+                            recipient_account_number: iban
+                        }
+                    }
                 })
             });
 
             const data = await res.json();
             if (data.error) throw new Error(data.error);
 
-            if (data.status === 'sca_required') {
-                setPendingTxId(data.transaction_id);
-                setMockTan(data.challenge.mock_value);
+            // New API returns { transactionId, tanId, challengeData: { mock_tan: ... } }
+            if (data.transactionId && data.challengeData) {
+                setPendingTxId(data.transactionId);
+                // The API now returns tanId needed for verification
+                // We'll store it in a way we can access (e.g., hidden state or passed to modal)
+                // For this component, we might need state for tanId
+                // Let's add it via setState below this block if possible, or hack it into pendingTxId
+
+                // Hack: We need to store tanId too.
+                // Assuming handleConfirmSCA takes only the input, we need to pass tanId there.
+                // I'll update the component state to hold tanId.
+                setPendingTxId(data.transactionId);
+                setMockTan(data.challengeData.mock_tan);
+                setCurrentTanId(data.tanId); // Ensure this is set
                 setScaRequired(true);
             }
         } catch (err: any) {
@@ -83,15 +102,19 @@ function TransferContent() {
         setError("");
 
         try {
-            const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:5000'}/api/transfer/confirm`, {
+            const res = await fetch(`/api/transfer`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                     'Authorization': `Bearer ${token}`
                 },
                 body: JSON.stringify({
-                    transaction_id: pendingTxId,
-                    tan: tanValue
+                    action: 'execute',
+                    data: {
+                        transactionId: pendingTxId,
+                        tanInput: tanValue,
+                        tanId: currentTanId
+                    }
                 })
             });
 

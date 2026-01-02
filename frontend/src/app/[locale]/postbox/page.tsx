@@ -23,7 +23,7 @@ export default function Postbox() {
         }
 
         if (user && token) {
-            fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:5000'}/api/documents`, {
+            fetch(`/api/documents`, {
                 headers: { Authorization: `Bearer ${token}` }
             })
                 .then(res => {

@@ -57,7 +57,8 @@ export default function Dashboard() {
 
     useEffect(() => {
         if (user && token) {
-            fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:5000'}/api/dashboard`, {
+            // Use internal Next.js API Route
+            fetch(`/api/dashboard`, {
                 headers: {
                     Authorization: `Bearer ${token}`
                 }
@@ -91,11 +92,11 @@ export default function Dashboard() {
         ?.filter((tx: any) => tx.type === 'send')
         ?.reduce((sum: number, tx: any) => sum + parseFloat(tx.amount), 0) || 0;
 
-    // Spending by category (mock data for demo)
+    // Spending by category (Fetch from Analytics API in real implementation, using mock fallback from API for now)
     const spendingData = {
         labels: ['Lebensmittel', 'Transport', 'Unterhaltung', 'Shopping', 'Sonstiges'],
         datasets: [{
-            data: [450, 230, 180, 320, 150],
+            data: [450, 230, 180, 320, 150], // TODO: Fetch from /api/analytics
             backgroundColor: [
                 '#0018A8',
                 '#0025D9',

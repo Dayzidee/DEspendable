@@ -31,7 +31,18 @@ export default function Signup() {
         }
 
         try {
-            await createUserWithEmailAndPassword(auth, email, password);
+            const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+            const user = userCredential.user;
+            const token = await user.getIdToken();
+
+            // Call Backend to Initialize Accounts
+            await fetch('/api/signup', {
+                method: 'POST',
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            });
+
             router.push("/dashboard");
         } catch (err: any) {
             if (err.code === 'auth/email-already-in-use') {
