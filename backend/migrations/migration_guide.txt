@@ -1,0 +1,105 @@
+# Step-by-Step Guide to Migrate to Supabase
+
+This guide provides instructions for migrating your Flask application from a SQLite database to a Supabase PostgreSQL database.
+
+---
+### **Part 1: Supabase Project Setup**
+---
+
+1.  **Create a Supabase Account:**
+    *   If you don't have one, sign up at [supabase.com](https://supabase.com).
+
+2.  **Create a New Project:**
+    *   On your Supabase dashboard, click "New project".
+    *   Choose an organization and give your project a name (e.g., `northsecure-bank`).
+    *   Generate a secure database password and **save it somewhere safe**. You will need this for the database connection string.
+    *   Select a region that is geographically close to your users.
+    *   Click "Create new project" and wait for it to be set up.
+
+3.  **Get Your Project Credentials:**
+    *   Once your project is ready, navigate to **Project Settings** (the gear icon in the left sidebar).
+    *   Go to the **Database** section to find your connection details (Host, Port, Database name, etc.).
+    *   Go to the **API** section to find your `SUPABASE_URL` and `SUPABASE_ANON_KEY`. These are needed for client-side interactions, though the backend will primarily use the direct database connection string.
+
+---
+### **Part 2: Database Schema Migration**
+---
+
+1.  **Navigate to the SQL Editor:**
+    *   In your Supabase project dashboard, go to the **SQL Editor** (the icon that looks like a terminal window).
+
+2.  **Apply the Initial Schema:**
+    *   Click on "**+ New query**".
+    *   Open the `V1__initial_schema.sql` file located in this `migrations` folder.
+    *   Copy the entire content of the SQL script.
+    *   Paste it into the Supabase SQL Editor.
+    *   Click the "**RUN**" button to execute the script.
+
+3.  **Verify the Schema:**
+    *   After the script runs successfully, go to the **Table Editor** (the icon that looks like a spreadsheet).
+    *   You should see the new tables: `customer`, `account`, `transaction`, `chatsession`, and `chatmessage`.
+    *   Click on the `customer` table, then go to the "RLS Policies" tab to verify that the Row-Level Security policies have been created.
+
+---
+### **Part 3: Data Migration (from SQLite to Supabase)**
+---
+
+Migrating data requires extracting it from the `northsecure_bank.db` SQLite file and inserting it into your new Supabase database. This is a sensitive process and should be handled carefully.
+
+**Recommended Approach: Use a Python Script**
+
+1.  **Set up your local environment:**
+    *   Make sure you have Python installed, along with the `psycopg2-binary` and `SQLAlchemy` libraries (`pip install psycopg2-binary SQLAlchemy`).
+
+2.  **Create a Migration Script:**
+    *   You will need to write a Python script that does the following:
+        a.  Connects to your local `northsecure_bank.db` SQLite database.
+        b.  Connects to your new Supabase PostgreSQL database using the connection string.
+        c.  **For Users/Customers:**
+            *   Fetches all users from the SQLite `customer` table.
+            *   For each user, create a corresponding user in Supabase Auth. You can do this programmatically using the Supabase client library or by directly inserting into `auth.users` (advanced).
+            *   **IMPORTANT:** The `handle_new_user` trigger we created will automatically create a `customer` profile. You will then need to `UPDATE` this new profile with the remaining data (full name, phone number, etc.) from your old database.
+        d.  **For Other Data (Accounts, Transactions, etc.):**
+            *   Fetch all records from the other tables (`account`, `transaction`, etc.).
+            *   Map the old `customer_id` (integer) to the new `customer_id` (UUID) from Supabase.
+            *   Insert the records into the corresponding Supabase tables.
+
+3.  **Run the script and verify the data** in the Supabase Table Editor.
+
+---
+### **Part 4: Application Configuration**
+---
+
+To make your Flask application work with Supabase, you need to update its configuration.
+
+1.  **Set Environment Variables:**
+    *   You will need to set the `DATABASE_URL` environment variable for your Flask application. The format is:
+        ```
+        DATABASE_URL=postgresql://postgres:[YOUR-DB-PASSWORD]@[YOUR-DB-HOST]:[YOUR-DB-PORT]/postgres
+        ```
+    *   Replace the placeholders with the credentials you saved from your Supabase project settings.
+
+2.  **Update `config.py` / `app.py`:**
+    *   The application code in `app.py` already has logic to use `DATABASE_URL` if it's present.
+        ```python
+        DATABASE_URL = os.getenv('DATABASE_URL')
+        if DATABASE_URL and DATABASE_URL.startswith('postgres'):
+            app.config['SQLALCHEMY_DATABASE_URI'] = DATABASE_URL.replace('postgres://', 'postgresql://', 1)
+        ```
+    *   The code correctly replaces `postgres://` with `postgresql://` which is required by SQLAlchemy. No code change is needed here, just ensure the environment variable is set.
+
+3.  **Review Application Logic:**
+    *   The application logic will need to be reviewed and potentially updated to handle the new authentication system (Supabase Auth) instead of the previous Flask-Login method that relied on a password hash in the `customer` table.
+    *   This will involve:
+        *   Replacing signup, login, and logout routes to use the Supabase client library (e.g., `supabase.auth.sign_up()`, `supabase.auth.sign_in()`).
+        *   Modifying how the `current_user` is loaded, likely by verifying a JWT from Supabase.
+
+---
+### **Final Steps**
+---
+
+1.  **Test Thoroughly:**
+    *   After migrating, test all aspects of the application: user registration, login, profile updates, transfers, admin functions, and chat.
+
+2.  **Deploy:**
+    *   Once you are confident everything is working, you can deploy your updated application. Make sure to set the `DATABASE_URL` environment variable in your production environment.
