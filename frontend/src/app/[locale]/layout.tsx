@@ -4,6 +4,7 @@ import { notFound } from 'next/navigation';
 import { routing } from '@/i18n/routing';
 import { AuthProvider } from "@/context/AuthContext";
 import { DiscreetProvider } from "@/context/DiscreetContext";
+import { LanguageProvider } from "@/context/LanguageContext";
 import ConsentBanner from "@/components/ConsentBanner";
 import BottomNav from "@/components/BottomNav";
 
@@ -33,15 +34,17 @@ export default async function LocaleLayout({
         <html lang={locale}>
             <body>
                 <NextIntlClientProvider messages={messages}>
-                    <DiscreetProvider>
-                        <AuthProvider>
-                            <div className="pb-20"> {/* Padding for BottomNav */}
-                                {children}
-                            </div>
-                            <ConsentBanner />
-                            <BottomNav />
-                        </AuthProvider>
-                    </DiscreetProvider>
+                    <LanguageProvider>
+                        <DiscreetProvider>
+                            <AuthProvider>
+                                <div className="pb-20"> {/* Padding for BottomNav */}
+                                    {children}
+                                </div>
+                                <ConsentBanner />
+                                <BottomNav />
+                            </AuthProvider>
+                        </DiscreetProvider>
+                    </LanguageProvider>
                 </NextIntlClientProvider>
             </body>
         </html>
