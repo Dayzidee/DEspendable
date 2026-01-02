@@ -4,9 +4,9 @@ import { notFound } from 'next/navigation';
 import { routing } from '@/i18n/routing';
 import { AuthProvider } from "@/context/AuthContext";
 import { DiscreetProvider } from "@/context/DiscreetContext";
-import { LanguageProvider } from "@/context/LanguageContext";
 import ConsentBanner from "@/components/ConsentBanner";
 import BottomNav from "@/components/BottomNav";
+import ChatWidget from "@/components/ChatWidget";
 
 export function generateStaticParams() {
     return routing.locales.map((locale) => ({ locale }));
