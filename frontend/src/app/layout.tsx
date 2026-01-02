@@ -1,8 +1,6 @@
 import type { Metadata } from "next";
 import "./globals.css";
-import { LanguageProvider } from "@/context/LanguageContext";
-import { AuthProvider } from "@/context/AuthContext";
-import { DiscreetProvider } from "@/context/DiscreetContext";
+import ClientProviders from "@/components/ClientProviders";
 
 export const metadata: Metadata = {
   title: "DEspendables | Modern Banking",
@@ -17,13 +15,9 @@ export default function RootLayout({
   return (
     <html suppressHydrationWarning>
       <body>
-        <LanguageProvider>
-          <DiscreetProvider>
-            <AuthProvider>
-              {children}
-            </AuthProvider>
-          </DiscreetProvider>
-        </LanguageProvider>
+        <ClientProviders>
+          {children}
+        </ClientProviders>
       </body>
     </html>
   );
