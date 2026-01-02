@@ -38,7 +38,7 @@ export default function MobileMenu() {
             children: [
                 { title: "All Features", href: "/features" },
                 { title: "Security", href: "/features#security" },
-                { title: "Virtual Cards", href: "/features#cards" },
+                { title: "Virtual Cards", href: "/cards" },
             ],
         },
         {
