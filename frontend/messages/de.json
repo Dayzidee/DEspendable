@@ -52,7 +52,12 @@
         "faq": "FAQ",
         "support": "Support"
     },
-    "navigation": {
+    "nav": {
+        "about": "Über uns",
+        "features": "Funktionen",
+        "support": "Support",
+        "login": "Anmelden",
+        "signup": "Konto eröffnen",
         "dashboard": "Dashboard",
         "transfer": "Überweisung",
         "cards": "Karten",

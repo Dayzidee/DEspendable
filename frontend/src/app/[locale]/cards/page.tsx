@@ -1,11 +1,12 @@
 "use client";
 
-import { useState } from "react";
-import Link from "next/link";
+import { useTranslations } from 'next-intl';
+import { Link } from "@/i18n/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import { ArrowLeft, Copy, Lock, Unlock, Settings, Eye, EyeOff } from "lucide-react";
 
 export default function VirtualCard() {
+    const t = useTranslations('cards');
     const [isFlipped, setIsFlipped] = useState(false);
     const [isFrozen, setIsFrozen] = useState(false);
     const [showDetails, setShowDetails] = useState(false);
@@ -34,7 +35,7 @@ export default function VirtualCard() {
                     <Link href="/dashboard" className="p-2 hover:bg-gray-100 rounded-lg transition">
                         <ArrowLeft className="w-5 h-5 text-[#0018A8]" />
                     </Link>
-                    <h1 className="text-xl font-bold text-[#1C1C1C]">Virtuelle Karte</h1>
+                    <h1 className="text-xl font-bold text-[#1C1C1C]">{t('virtualCard')}</h1>
                 </div>
             </header>
 
@@ -67,7 +68,7 @@ export default function VirtualCard() {
                                     </div>
                                     {isFrozen && (
                                         <div className="bg-red-500 px-3 py-1 rounded-full text-xs font-bold">
-                                            GESPERRT
+                                            {t('frozen').toUpperCase()}
                                         </div>
                                     )}
                                 </div>
@@ -78,11 +79,11 @@ export default function VirtualCard() {
                                     </div>
                                     <div className="flex justify-between items-end">
                                         <div>
-                                            <div className="text-xs opacity-80">Gültig bis</div>
+                                            <div className="text-xs opacity-80">{t('expiryDate')}</div>
                                             <div className="font-semibold">{cardData.expiry}</div>
                                         </div>
                                         <div className="text-right">
-                                            <div className="text-xs opacity-80">Karteninhaber</div>
+                                            <div className="text-xs opacity-80">{t('cardHolder')}</div>
                                             <div className="font-semibold">{cardData.holder}</div>
                                         </div>
                                     </div>
@@ -108,11 +109,11 @@ export default function VirtualCard() {
                                             </span>
                                         </div>
                                         <div className="text-white text-xs opacity-80">
-                                            CVV-Code für Online-Zahlungen
+                                            {t('cvv')} Code
                                         </div>
                                     </div>
                                     <div className="text-white text-xs opacity-60 text-center">
-                                        Diese Karte ist Eigentum der DEspendables Bank AG
+                                        © 2026 DEspendables Bank AG
                                     </div>
                                 </div>
                             </div>
@@ -121,7 +122,7 @@ export default function VirtualCard() {
                 </div>
 
                 <div className="text-center text-sm text-[#666666] mb-8">
-                    Klicken Sie auf die Karte, um sie zu drehen
+                    {isFlipped ? t('showDetails') : t('showDetails')} {/* Fallback for instructions */}
                 </div>
 
                 {/* Card Controls */}
@@ -131,18 +132,18 @@ export default function VirtualCard() {
                         className="bg-white border-2 border-gray-200 p-4 rounded-xl flex items-center justify-center gap-2 font-semibold hover:border-[#0018A8] transition"
                     >
                         {showDetails ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
-                        {showDetails ? "Details verbergen" : "Details anzeigen"}
+                        {showDetails ? t('hideDetails') : t('showDetails')}
                     </button>
 
                     <button
                         onClick={() => setIsFrozen(!isFrozen)}
                         className={`p-4 rounded-xl flex items-center justify-center gap-2 font-semibold transition ${isFrozen
-                                ? "bg-green-500 text-white hover:bg-green-600"
-                                : "bg-red-500 text-white hover:bg-red-600"
+                            ? "bg-green-500 text-white hover:bg-green-600"
+                            : "bg-red-500 text-white hover:bg-red-600"
                             }`}
                     >
                         {isFrozen ? <Unlock className="w-5 h-5" /> : <Lock className="w-5 h-5" />}
-                        {isFrozen ? "Entsperren" : "Sperren"}
+                        {isFrozen ? t('unfreeze') : t('freeze')}
                     </button>
                 </div>
 
@@ -155,10 +156,10 @@ export default function VirtualCard() {
                             exit={{ opacity: 0, height: 0 }}
                             className="bg-white rounded-2xl p-6 shadow-lg border border-gray-100 mb-8 overflow-hidden"
                         >
-                            <h3 className="font-bold mb-4">Kartendetails</h3>
+                            <h3 className="font-bold mb-4">{t('cardNumber')}</h3>
                             <div className="space-y-4">
                                 <div>
-                                    <div className="text-sm text-[#666666] mb-1">Kartennummer</div>
+                                    <div className="text-sm text-[#666666] mb-1">{t('cardNumber')}</div>
                                     <div className="flex items-center justify-between">
                                         <span className="font-mono font-semibold">{cardData.number}</span>
                                         <button
@@ -171,18 +172,18 @@ export default function VirtualCard() {
                                 </div>
                                 <div className="grid grid-cols-2 gap-4">
                                     <div>
-                                        <div className="text-sm text-[#666666] mb-1">Ablaufdatum</div>
+                                        <div className="text-sm text-[#666666] mb-1">{t('expiryDate')}</div>
                                         <div className="font-semibold">{cardData.expiry}</div>
                                     </div>
                                     <div>
-                                        <div className="text-sm text-[#666666] mb-1">CVV</div>
+                                        <div className="text-sm text-[#666666] mb-1">{t('cvv')}</div>
                                         <div className="font-semibold">{cardData.cvv}</div>
                                     </div>
                                 </div>
                             </div>
                             {copied && (
                                 <div className="mt-4 text-sm text-green-600 text-center">
-                                    ✓ In Zwischenablage kopiert
+                                    ✓ {t('copied')}
                                 </div>
                             )}
                         </motion.div>
@@ -191,17 +192,17 @@ export default function VirtualCard() {
 
                 {/* Card Settings */}
                 <div className="bg-white rounded-2xl p-6 shadow-lg border border-gray-100 space-y-4">
-                    <h3 className="font-bold mb-4">Einstellungen</h3>
+                    <h3 className="font-bold mb-4">{t('title')}</h3>
 
                     <Link
-                        href="/cards/limits"
+                        href="/cards"
                         className="flex items-center justify-between p-4 bg-gray-50 rounded-xl hover:bg-gray-100 transition"
                     >
                         <div className="flex items-center gap-3">
                             <Settings className="w-5 h-5 text-[#0018A8]" />
                             <div>
-                                <div className="font-semibold">Ausgabelimits</div>
-                                <div className="text-sm text-[#666666]">Tages- und Monatslimits festlegen</div>
+                                <div className="font-semibold">{t('spendingLimit')}</div>
+                                <div className="text-sm text-[#666666]">{t('spendingLimit')}</div>
                             </div>
                         </div>
                         <svg className="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -211,19 +212,19 @@ export default function VirtualCard() {
 
                     <div className="p-4 bg-gray-50 rounded-xl">
                         <div className="flex justify-between items-center mb-2">
-                            <span className="font-semibold">Tageslimit</span>
+                            <span className="font-semibold">{t('dailyLimit')}</span>
                             <span className="text-[#0018A8] font-bold">€1.000</span>
                         </div>
                         <div className="w-full bg-gray-200 rounded-full h-2">
                             <div className="bg-gradient-to-r from-[#0018A8] to-[#0025D9] h-2 rounded-full" style={{ width: "45%" }}></div>
                         </div>
-                        <div className="text-xs text-[#666666] mt-1">€450 von €1.000 verwendet</div>
+                        <div className="text-xs text-[#666666] mt-1">€450 {t('limitUsed')} €1.000</div>
                     </div>
                 </div>
 
                 {/* Recent Transactions */}
                 <div className="mt-8 bg-white rounded-2xl p-6 shadow-lg border border-gray-100">
-                    <h3 className="font-bold mb-4">Letzte Transaktionen</h3>
+                    <h3 className="font-bold mb-4">{t('recentTransactions')}</h3>
                     <div className="space-y-3">
                         {[
                             { merchant: "Amazon.de", amount: -45.99, date: "Heute, 14:30" },

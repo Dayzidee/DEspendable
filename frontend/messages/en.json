@@ -52,7 +52,12 @@
         "contact_us": "Contact Us",
         "read_more": "Read More"
     },
-    "navigation": {
+    "nav": {
+        "about": "About Us",
+        "features": "Features",
+        "support": "Support",
+        "login": "Sign In",
+        "signup": "Open Account",
         "dashboard": "Dashboard",
         "transfer": "Transfer",
         "cards": "Cards",

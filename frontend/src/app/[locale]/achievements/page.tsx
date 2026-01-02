@@ -1,7 +1,7 @@
 "use client";
 
-import { useLanguage } from "@/context/LanguageContext";
-import Link from "next/link";
+import { useTranslations } from 'next-intl';
+import { Link } from "@/i18n/navigation";
 import { ArrowLeft, Trophy, Award, Star, TrendingUp } from "lucide-react";
 import ScrollReveal from "@/components/animations/ScrollReveal";
 import AnimatedBackground from "@/components/animations/AnimatedBackground";
@@ -9,7 +9,7 @@ import AnimatedCounter from "@/components/animations/AnimatedCounter";
 import LandingHeader from "@/components/navigation/LandingHeader";
 
 export default function AchievementsPage() {
-    const { t } = useLanguage();
+    const t = useTranslations();
 
     const timeline = [
         { year: "2020", event: "Company Founded", description: "DEspendables Bank AG established in Berlin" },

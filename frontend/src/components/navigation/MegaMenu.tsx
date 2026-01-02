@@ -27,27 +27,27 @@ export default function MegaMenu() {
             items: [
                 {
                     title: t('mission'),
-                    href: "/#about",
+                    href: "/mission",
                     description: t('missionDesc'),
                 },
                 {
                     title: t('vision'),
-                    href: "/#about",
+                    href: "/vision",
                     description: t('visionDesc'),
                 },
                 {
                     title: t('team'),
-                    href: "/#about",
+                    href: "/team",
                     description: t('teamDesc'),
                 },
                 {
                     title: t('achievements'),
-                    href: "/#about",
+                    href: "/achievements",
                     description: t('achievementsDesc'),
                 },
                 {
                     title: t('locations'),
-                    href: "/#contact",
+                    href: "/directions",
                     description: t('locationsDesc'),
                 },
             ],
@@ -57,12 +57,12 @@ export default function MegaMenu() {
             items: [
                 {
                     title: t('allFeatures'),
-                    href: "/#features",
+                    href: "/features",
                     description: t('allFeaturesDesc'),
                 },
                 {
                     title: t('security'),
-                    href: "/#features",
+                    href: "/features#security",
                     description: t('securityDesc'),
                 },
                 {
@@ -77,7 +77,7 @@ export default function MegaMenu() {
             items: [
                 {
                     title: t('customerService'),
-                    href: "/faq",
+                    href: "/customer-service",
                     description: t('customerServiceDesc'),
                 },
                 {

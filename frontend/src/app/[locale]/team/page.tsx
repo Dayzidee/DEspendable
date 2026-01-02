@@ -1,7 +1,7 @@
 "use client";
 
-import { useLanguage } from "@/context/LanguageContext";
-import Link from "next/link";
+import { useTranslations } from 'next-intl';
+import { Link } from "@/i18n/navigation";
 import { Linkedin } from "lucide-react";
 import ScrollReveal from "@/components/animations/ScrollReveal";
 import AnimatedBackground from "@/components/animations/AnimatedBackground";
@@ -9,7 +9,7 @@ import LandingHeader from "@/components/navigation/LandingHeader";
 import Image from "next/image";
 
 export default function TeamPage() {
-    const { t } = useLanguage();
+    const t = useTranslations();
 
     const leadership = [
         {

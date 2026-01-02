@@ -1,14 +1,14 @@
 "use client";
 
-import { useLanguage } from "@/context/LanguageContext";
-import Link from "next/link";
+import { useTranslations } from 'next-intl';
+import { Link } from "@/i18n/navigation";
 import { MapPin, Phone, Mail, Clock } from "lucide-react";
 import ScrollReveal from "@/components/animations/ScrollReveal";
 import AnimatedBackground from "@/components/animations/AnimatedBackground";
 import LandingHeader from "@/components/navigation/LandingHeader";
 
 export default function DirectionsPage() {
-    const { t } = useLanguage();
+    const t = useTranslations();
 
     return (
         <div className="min-h-screen bg-gradient-to-br from-[#F4F6F8] via-white to-[#E3E7FF] relative overflow-hidden">
