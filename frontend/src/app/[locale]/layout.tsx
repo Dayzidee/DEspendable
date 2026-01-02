@@ -29,17 +29,17 @@ export default async function LocaleLayout({
 
     // Providing all messages to the client
     const messages = await getMessages();
+    console.log(`[i18n] Loaded ${Object.keys(messages).length} message namespaces for locale: ${locale}`);
 
     return (
         <html lang={locale}>
             <body>
-                <NextIntlClientProvider messages={messages}>
+                <NextIntlClientProvider locale={locale} messages={messages}>
                     <DiscreetProvider>
                         <AuthProvider>
                             <div className="pb-20"> {/* Padding for BottomNav */}
                                 {children}
                             </div>
-                            <ChatWidget />
                             <ConsentBanner />
                             <BottomNav />
                         </AuthProvider>
