@@ -9,51 +9,52 @@ import LandingHeader from "@/components/navigation/LandingHeader";
 
 export default function CustomerServicePage() {
     const t = useTranslations();
+    const ft = useTranslations('faq');
 
     const contactMethods = [
         {
             icon: <MessageCircle className="w-8 h-8" />,
             title: t("customer_service.chat_title"),
             description: t("customer_service.chat_desc"),
-            action: "Start Chat",
+            action: t("common.start_chat") || "Start Chat",
             color: "from-blue-500 to-indigo-600",
         },
         {
             icon: <Phone className="w-8 h-8" />,
             title: t("customer_service.phone_title"),
             description: t("customer_service.phone_desc"),
-            action: "Call Now",
+            action: t("common.call_now") || "Call Now",
             color: "from-emerald-500 to-teal-600",
         },
         {
             icon: <Mail className="w-8 h-8" />,
             title: t("customer_service.email_title"),
             description: t("customer_service.email_desc"),
-            action: "Send Email",
+            action: t("common.send_email") || "Send Email",
             color: "from-purple-500 to-pink-600",
         },
     ];
 
     const faqs = [
         {
-            question: "How do I open an account?",
-            answer: "Click 'Open Account' and complete the online application. You'll need a valid ID and proof of address. The process takes about 5 minutes.",
+            question: ft("q1"),
+            answer: ft("a1"),
         },
         {
-            question: "Are there any monthly fees?",
-            answer: "Our basic account is completely free with no monthly fees. Premium accounts start at €4.99/month with additional benefits.",
+            question: ft("q2"),
+            answer: ft("a2"),
         },
         {
-            question: "How long do transfers take?",
-            answer: "Internal transfers are instant. SEPA transfers typically arrive within 1 business day. International transfers take 2-5 business days.",
+            question: ft("q3"),
+            answer: ft("a3"),
         },
         {
-            question: "Is my money insured?",
-            answer: "Yes, deposits are insured up to €100,000 per customer through the German deposit insurance scheme.",
+            question: ft("q4"),
+            answer: ft("a4"),
         },
         {
-            question: "Can I use DEspendables abroad?",
-            answer: "Absolutely! Use your card worldwide with no foreign transaction fees. We support 30+ currencies.",
+            question: ft("q5"),
+            answer: ft("a5"),
         },
     ];
 
@@ -120,7 +121,7 @@ export default function CustomerServicePage() {
                                     disabled
                                 />
                                 <button className="px-6 py-3 bg-gradient-to-r from-[#0018A8] to-[#0025D9] text-white font-semibold rounded-lg hover:shadow-lg transition-all">
-                                    Send
+                                    {t("common.send") || "Send"}
                                 </button>
                             </div>
 
