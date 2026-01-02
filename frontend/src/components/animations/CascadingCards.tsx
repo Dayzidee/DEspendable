@@ -2,6 +2,7 @@
 
 import { useRef, useEffect } from "react";
 import { gsap } from "@/lib/gsap-config";
+import { useTranslations } from "next-intl";
 
 interface Card {
     id: number;
@@ -39,6 +40,7 @@ const cards: Card[] = [
 
 export default function CascadingCards() {
     const containerRef = useRef<HTMLDivElement>(null);
+    const t = useTranslations();
 
     useEffect(() => {
         if (!containerRef.current) return;
@@ -136,7 +138,7 @@ export default function CascadingCards() {
                                 <div className="text-xl font-mono mb-4">{card.number}</div>
                                 <div className="flex justify-between items-end">
                                     <div>
-                                        <div className="text-xs opacity-80">Gültig bis</div>
+                                        <div className="text-xs opacity-80">{t("landing.card_valid_until")}</div>
                                         <div className="font-semibold">12/28</div>
                                     </div>
                                     <div className="w-12 h-8 bg-white/20 rounded backdrop-blur-sm" />
@@ -149,3 +151,4 @@ export default function CascadingCards() {
         </div>
     );
 }
+
