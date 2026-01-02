@@ -60,7 +60,7 @@ export default function Signup() {
                             <FaLeaf />
                         </Link>
                         <h2 className="text-2xl font-bold text-[#1C1C1C]">Create Your Account</h2>
-                        <p className="text-[#666666] mt-1">Join Well Care Spendables and start your journey to financial wellness.</p>
+                        <p className="text-[#666666] mt-1">Join DEspendables and start your journey to financial wellness.</p>
                     </header>
 
                     {error && (

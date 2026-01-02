@@ -31,7 +31,7 @@ export default function VirtualCard({ cardHolder }: VirtualCardProps) {
             <div className="flex justify-between items-start">
               <div className="w-12 h-8 bg-yellow-400 rounded-md opacity-80"></div>
               <div className="flex items-center gap-2 font-bold text-lg">
-                <FaLeaf /> WCS
+                <FaLeaf /> DE
               </div>
             </div>
             <div className="text-2xl font-mono tracking-widest my-4">

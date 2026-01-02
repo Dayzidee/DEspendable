@@ -52,7 +52,7 @@ export default function Login() {
                             <FaLeaf />
                         </Link>
                         <h2 className="text-2xl font-bold text-[#1C1C1C]">Welcome Back</h2>
-                        <p className="text-[#666666] mt-1">Sign in to your Well Care Spendables account.</p>
+                        <p className="text-[#666666] mt-1">Sign in to your DEspendables account.</p>
                     </header>
 
                     {error && (

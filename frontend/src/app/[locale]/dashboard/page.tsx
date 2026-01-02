@@ -3,11 +3,9 @@
 import { useAuth } from "@/context/AuthContext";
 import { useRouter } from "@/i18n/navigation";
 import { useEffect, useState } from "react";
-import { auth } from "@/lib/firebase";
 import { useTranslations } from 'next-intl';
-import { useDiscreet } from "@/context/DiscreetContext";
 import DashboardHeader from "@/components/dashboard/DashboardHeader";
-import Sidebar from "@/components/dashboard/Sidebar";
+import DashboardLayout from "@/components/dashboard/DashboardLayout";
 import FinancialSummary from "@/components/dashboard/FinancialSummary";
 import SpendingAnalytics from "@/components/dashboard/SpendingAnalytics";
 import AccountIdentifier from "@/components/dashboard/AccountIdentifier";
@@ -15,7 +13,7 @@ import AccountsList from "@/components/dashboard/AccountsList";
 import RecentTransactions from "@/components/dashboard/RecentTransactions";
 import VirtualCard from "@/components/dashboard/VirtualCard";
 import FloatingChatWidget from "@/components/dashboard/FloatingChatWidget";
-import { FaUserShield, FaFileImport, FaBullseye, FaChevronRight, FaChartLine, FaTrophy, FaLightbulb } from 'react-icons/fa';
+import { FaUserShield, FaFileImport, FaBullseye, FaChevronRight, FaChartLine, FaTrophy } from 'react-icons/fa';
 import Link from "next/link";
 
 export default function Dashboard() {
@@ -89,8 +87,8 @@ export default function Dashboard() {
     };
 
     return (
-        <div className="min-h-screen bg-[var(--color-background)] pb-12">
-            <div className="container mx-auto px-4 py-8">
+        <DashboardLayout>
+            <div className="max-w-7xl mx-auto">
                 {/* 1. DASHBOARD HEADER */}
                 <DashboardHeader
                     username={data?.recent_transactions?.[0]?.owner?.username || user.displayName || "User"}
@@ -105,9 +103,9 @@ export default function Dashboard() {
                 />
 
                 {/* 3. MAIN DASHBOARD GRID */}
-                <div className="flex flex-col lg:flex-row gap-8">
+                <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
                     {/* [A] Main Content Column */}
-                    <main className="w-full lg:w-2/3 space-y-6">
+                    <div className="lg:col-span-2 space-y-6">
                         {/* Analytics Card */}
                         <SpendingAnalytics data={chartData} />
 
@@ -119,12 +117,12 @@ export default function Dashboard() {
 
                         {/* Recent Transactions Card */}
                         <RecentTransactions transactions={recentTransactions} />
-                    </main>
+                    </div>
 
-                    {/* [B] Sidebar Column */}
-                    <Sidebar>
+                    {/* [B] Sidebar Column (Now Right Rail) */}
+                    <aside className="space-y-6">
                         {/* Quick Actions Card */}
-                        <section className="bg-white rounded-xl shadow-sm p-6 mb-6 card-hover">
+                        <section className="bg-white rounded-xl shadow-sm p-6 card-hover">
                             <header className="mb-4">
                                 <h2 className="text-xl font-bold text-[var(--color-text-primary)]">Quick Actions</h2>
                             </header>
@@ -163,7 +161,7 @@ export default function Dashboard() {
                         </section>
 
                         {/* Financial Insights Card */}
-                        <section className="bg-white rounded-xl shadow-sm p-6 mb-6 card-hover">
+                        <section className="bg-white rounded-xl shadow-sm p-6 card-hover">
                             <header className="mb-4">
                                 <h2 className="text-xl font-bold text-[var(--color-text-primary)]">Financial Insights</h2>
                             </header>
@@ -190,12 +188,12 @@ export default function Dashboard() {
 
                         {/* Virtual Card */}
                         <VirtualCard cardHolder={data?.recent_transactions?.[0]?.owner?.username || user.displayName || "User"} />
-                    </Sidebar>
+                    </aside>
                 </div>
             </div>
 
             {/* 4. FLOATING CHAT WIDGET */}
             <FloatingChatWidget />
-        </div>
+        </DashboardLayout>
     );
 }

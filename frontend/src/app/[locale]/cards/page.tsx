@@ -1,9 +1,10 @@
 "use client";
 
+import DashboardLayout from "@/components/dashboard/DashboardLayout";
 import { useState } from "react";
-import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
-import { ArrowLeft, Copy, Lock, Unlock, Settings, Eye, EyeOff } from "lucide-react";
+import { Copy, Lock, Unlock, Settings, Eye, EyeOff } from "lucide-react";
+import Link from "next/link";
 
 export default function VirtualCard() {
     const [isFlipped, setIsFlipped] = useState(false);
@@ -27,18 +28,13 @@ export default function VirtualCard() {
     };
 
     return (
-        <div className="min-h-screen bg-[#F4F6F8] pb-24">
-            {/* Header */}
-            <header className="bg-white border-b border-gray-200 px-6 py-6 sticky top-0 z-10">
-                <div className="flex items-center gap-4">
-                    <Link href="/dashboard" className="p-2 hover:bg-gray-100 rounded-lg transition">
-                        <ArrowLeft className="w-5 h-5 text-[#0018A8]" />
-                    </Link>
-                    <h1 className="text-xl font-bold text-[#1C1C1C]">Virtuelle Karte</h1>
-                </div>
-            </header>
+        <DashboardLayout>
+            <div className="max-w-2xl mx-auto">
+                <header className="mb-8">
+                    <h1 className="text-2xl font-bold text-[var(--color-text-primary)]">Your Card</h1>
+                    <p className="text-gray-500">Manage your virtual and physical cards.</p>
+                </header>
 
-            <div className="max-w-2xl mx-auto px-6 py-8">
                 {/* 3D Card */}
                 <div className="perspective-1000 mb-8">
                     <motion.div
@@ -243,6 +239,6 @@ export default function VirtualCard() {
                     </div>
                 </div>
             </div>
-        </div>
+        </DashboardLayout>
     );
 }

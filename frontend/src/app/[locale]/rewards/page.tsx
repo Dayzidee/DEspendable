@@ -1,8 +1,9 @@
 "use client";
 
+import DashboardLayout from "@/components/dashboard/DashboardLayout";
 import Link from "next/link";
 import { motion } from "framer-motion";
-import { ArrowLeft, Award, Gift, TrendingUp, Users, Star } from "lucide-react";
+import { ArrowLeft, TrendingUp, Users, Star } from "lucide-react";
 
 export default function Rewards() {
     // Mock rewards data
@@ -35,34 +36,26 @@ export default function Rewards() {
     ];
 
     return (
-        <div className="min-h-screen bg-[#F4F6F8] pb-24">
-            {/* Header */}
-            <header className="bg-gradient-to-r from-[#0018A8] to-[#0025D9] text-white px-6 py-12 rounded-b-[2.5rem]">
-                <div className="flex items-center gap-4 mb-8">
-                    <Link href="/dashboard" className="p-2 bg-white/10 rounded-lg hover:bg-white/20 transition">
-                        <ArrowLeft className="w-5 h-5" />
-                    </Link>
-                    <h1 className="text-2xl font-bold">Belohnungen</h1>
-                </div>
-
-                {/* Points Balance */}
-                <div className="text-center">
-                    <div className="text-sm opacity-80 mb-2">Ihre Punkte</div>
-                    <motion.div
-                        initial={{ scale: 0.9 }}
-                        animate={{ scale: 1 }}
-                        className="text-6xl font-bold mb-4"
-                    >
-                        {userPoints.toLocaleString()}
-                    </motion.div>
-                    <div className="inline-flex items-center gap-2 bg-white/20 px-4 py-2 rounded-full">
-                        <Star className="w-4 h-4 fill-yellow-300 text-yellow-300" />
-                        <span className="font-semibold">{currentTier} Tier</span>
+        <DashboardLayout>
+            <div className="max-w-4xl mx-auto">
+                {/* Header */}
+                <header className="bg-gradient-to-r from-[#0018A8] to-[#0025D9] text-white px-6 py-12 rounded-2xl mb-8">
+                    <div className="text-center">
+                        <div className="text-sm opacity-80 mb-2">Ihre Punkte</div>
+                        <motion.div
+                            initial={{ scale: 0.9 }}
+                            animate={{ scale: 1 }}
+                            className="text-6xl font-bold mb-4"
+                        >
+                            {userPoints.toLocaleString()}
+                        </motion.div>
+                        <div className="inline-flex items-center gap-2 bg-white/20 px-4 py-2 rounded-full">
+                            <Star className="w-4 h-4 fill-yellow-300 text-yellow-300" />
+                            <span className="font-semibold">{currentTier} Tier</span>
+                        </div>
                     </div>
-                </div>
-            </header>
+                </header>
 
-            <div className="max-w-4xl mx-auto px-6 -mt-8">
                 {/* Tier Progress */}
                 <div className="bg-white rounded-2xl p-6 shadow-lg border border-gray-100 mb-8">
                     <div className="flex justify-between items-center mb-4">
@@ -205,6 +198,6 @@ export default function Rewards() {
                     </button>
                 </div>
             </div>
-        </div>
+        </DashboardLayout>
     );
 }

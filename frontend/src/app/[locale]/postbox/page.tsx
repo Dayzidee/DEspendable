@@ -1,11 +1,12 @@
 "use client";
 
+import DashboardLayout from "@/components/dashboard/DashboardLayout";
 import { useAuth } from "@/context/AuthContext";
 import { useRouter } from "@/i18n/navigation";
 import { useEffect, useState } from "react";
 import { formatDate } from "@/lib/formatters";
 import { Link } from "@/i18n/navigation";
-import { ArrowLeft, FileText, Download } from "lucide-react";
+import { FileText, Download } from "lucide-react";
 import { motion } from "framer-motion";
 import { useTranslations } from 'next-intl';
 
@@ -45,25 +46,14 @@ export default function Postbox() {
     }, [user, token, router]);
 
     return (
-        <div className="min-h-screen bg-[#F4F6F8] pb-24">
-            {/* Header */}
-            <header className="bg-white border-b border-gray-200 px-6 py-6 sticky top-0 z-10">
-                <div className="flex items-center gap-4">
-                    <Link href="/dashboard" className="p-2 hover:bg-gray-100 rounded-lg transition">
-                        <ArrowLeft className="w-5 h-5 text-[#0018A8]" />
-                    </Link>
-                    <h1 className="text-xl font-bold text-[#1C1C1C]">{t('title')}</h1>
-                </div>
-            </header>
+        <DashboardLayout>
+            <div className="max-w-4xl mx-auto">
+                <header className="mb-8">
+                    <h1 className="text-2xl font-bold text-[var(--color-text-primary)]">{t('title')}</h1>
+                    <p className="text-gray-500">Manage and download your documents.</p>
+                </header>
 
-            <div className="max-w-4xl mx-auto px-6 py-8">
-                <div className="mb-6">
-                    <p className="text-[#666666]">
-                        {t('retentionInfo')}
-                    </p>
-                </div>
-
-                <div className="bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden">
+                <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden mb-8">
                     {loading ? (
                         <div className="p-12 text-center text-[#666666]">
                             <div className="animate-spin w-8 h-8 border-4 border-[#0018A8] border-t-transparent rounded-full mx-auto mb-4"></div>
@@ -108,13 +98,13 @@ export default function Postbox() {
                 </div>
 
                 {/* Info Box */}
-                <div className="mt-8 bg-blue-50 border border-blue-200 rounded-xl p-6">
+                <div className="bg-blue-50 border border-blue-200 rounded-xl p-6">
                     <h3 className="font-semibold text-[#0018A8] mb-2">{t('retention')}</h3>
                     <p className="text-sm text-[#666666]">
                         {t('retentionInfo')}
                     </p>
                 </div>
             </div>
-        </div>
+        </DashboardLayout>
     );
 }
