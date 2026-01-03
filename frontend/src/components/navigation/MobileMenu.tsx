@@ -142,14 +142,14 @@ export default function MobileMenu() {
                     {/* Backdrop */}
                     <div
                         ref={overlayRef}
-                        className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50"
+                        className="fixed inset-0 bg-black/50 backdrop-blur-sm z-[100]"
                         onClick={closeMenu}
                     />
 
                     {/* Menu Panel */}
                     <div
                         ref={menuRef}
-                        className="fixed top-0 right-0 bottom-0 w-full max-w-sm bg-white z-50 overflow-y-auto"
+                        className="fixed top-0 right-0 bottom-0 w-full max-w-sm bg-white z-[101] overflow-y-auto shadow-2xl"
                     >
                         {/* Header */}
                         <div className="flex items-center justify-between p-6 border-b border-gray-200">
