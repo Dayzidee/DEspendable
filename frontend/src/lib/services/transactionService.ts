@@ -124,7 +124,9 @@ export class TransactionService {
 
     // 3. Execute Atomically using Firestore Transaction
     await db.runTransaction(async (t) => {
-      // Re-read source balance
+      // --- READ PHASE ---
+
+      // Read source account
       const fromAccRef = db.collection('accounts').doc(txData.from_account_id);
       const fromAccSnap = await t.get(fromAccRef);
 
@@ -132,6 +134,23 @@ export class TransactionService {
         throw new Error("Absenderkonto existiert nicht mehr");
       }
 
+      // If internal, read recipient account
+      let toAccRef: any = null;
+      let toAccSnap: any = null;
+
+      if (txData.type === 'internal' && txData.recipient_info.to_account_id) {
+         toAccRef = db.collection('accounts').doc(txData.recipient_info.to_account_id);
+         toAccSnap = await t.get(toAccRef);
+      } else if (txData.type === 'external') {
+         // Attempt to find internal recipient by account number?
+         // Firestore transactions cannot run queries that are not document lookups easily if data can change.
+         // Queries in transactions require all docs to be read.
+         // For SIMPLICITY and SAFETY in this demo:
+         // We will NOT query for external recipient users inside the transaction to avoid complexity.
+         // External transfers will just deduct funds.
+      }
+
+      // --- LOGIC PHASE ---
       const currentBalance = fromAccSnap.data()?.balance || 0;
       const amount = Number(txData.amount);
 
@@ -139,46 +158,15 @@ export class TransactionService {
         throw new Error("Unzureichendes Guthaben (Saldo hat sich geändert)");
       }
 
+      // --- WRITE PHASE ---
+
       // Deduct from sender
       t.update(fromAccRef, { balance: currentBalance - amount });
 
-      // Credit Recipient
-      if (txData.type === 'internal') {
-        const toAccId = txData.recipient_info.to_account_id;
-        if (toAccId) {
-          const toAccRef = db.collection('accounts').doc(toAccId);
-          const toAccSnap = await t.get(toAccRef);
-          if (toAccSnap.exists) {
-             const newBal = (toAccSnap.data()?.balance || 0) + amount;
-             t.update(toAccRef, { balance: newBal });
-          }
-        }
-      } else if (txData.type === 'external') {
-         // Lookup recipient by account number
-         const recAccNum = txData.recipient_info.recipient_account_number;
-         // Note: In Firestore transactions, queries must be done before writes?
-         // Actually, queries in transactions are tricky if they are not by doc ID.
-         // We'll try to find the user first.
-         // Ideally, external transfers in a simulation just deduct money and "vanish"
-         // or we find a matching account in our system.
-
-         // For this simulation, let's try to find a local account with that number
-         const usersQuery = db.collection('users').where('account_number', '==', recAccNum).limit(1);
-         const userSnaps = await t.get(usersQuery);
-
-         if (!userSnaps.empty) {
-           const recipientUser = userSnaps.docs[0];
-           // Find their checking account - this query inside transaction might fail if not indexed or simple
-           // Simpler approach for demo: Just update if we find the user document has an 'primary_account_id' field
-           // Or we assume we can't credit external accounts in this transaction scope easily without more queries.
-
-           // IMPROVEMENT: For a robust demo, let's assume external transfers just succeed
-           // and we don't actually update the other person's balance if it's too complex for this transaction scope.
-           // BUT, if we want to simulate internal-as-external, we need to do it.
-
-           // Let's keep it simple: Deduct only for now.
-           // Real banking systems use separate ledgers.
-         }
+      // Credit Recipient (if internal and found)
+      if (toAccRef && toAccSnap && toAccSnap.exists) {
+          const newBal = (toAccSnap.data()?.balance || 0) + amount;
+          t.update(toAccRef, { balance: newBal });
       }
 
       // Update Transaction Status
