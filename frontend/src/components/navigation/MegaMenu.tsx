@@ -27,27 +27,27 @@ export default function MegaMenu() {
             items: [
                 {
                     title: t('mission'),
-                    href: "/#about",
+                    href: "/mission",
                     description: t('missionDesc'),
                 },
                 {
                     title: t('vision'),
-                    href: "/#about",
+                    href: "/vision",
                     description: t('visionDesc'),
                 },
                 {
                     title: t('team'),
-                    href: "/#about",
+                    href: "/team",
                     description: t('teamDesc'),
                 },
                 {
                     title: t('achievements'),
-                    href: "/#about",
+                    href: "/achievements",
                     description: t('achievementsDesc'),
                 },
                 {
                     title: t('locations'),
-                    href: "/#contact",
+                    href: "/directions",
                     description: t('locationsDesc'),
                 },
             ],
@@ -57,12 +57,12 @@ export default function MegaMenu() {
             items: [
                 {
                     title: t('allFeatures'),
-                    href: "/#features",
+                    href: "/features",
                     description: t('allFeaturesDesc'),
                 },
                 {
                     title: t('security'),
-                    href: "/#features",
+                    href: "/features#security",
                     description: t('securityDesc'),
                 },
                 {
@@ -77,7 +77,7 @@ export default function MegaMenu() {
             items: [
                 {
                     title: t('customerService'),
-                    href: "/faq",
+                    href: "/customer-service",
                     description: t('customerServiceDesc'),
                 },
                 {
@@ -87,7 +87,7 @@ export default function MegaMenu() {
                 },
                 {
                     title: t('contact'),
-                    href: "/#contact",
+                    href: "/directions#contact",
                     description: t('contactDesc'),
                 },
             ],
@@ -153,6 +153,8 @@ export default function MegaMenu() {
                     <button
                         key={key}
                         onMouseEnter={() => handleMouseEnter(key)}
+                        // Added onClick for accessibility/touch devices where hover might not work
+                        onClick={() => setActiveMenu(activeMenu === key ? null : key)}
                         className={`px-3 py-2 text-sm font-semibold rounded-lg transition-all ${activeMenu === key
                             ? "text-[#0018A8] bg-blue-50"
                             : "text-[#666666] hover:text-[#0018A8] hover:bg-gray-50"
@@ -167,7 +169,7 @@ export default function MegaMenu() {
             {/* Mega Menu Dropdown */}
             {activeMenu && (
                 <div
-                    className="absolute top-full right-0 mt-2 bg-white rounded-2xl shadow-2xl border border-gray-100 p-6 z-50 w-[350px] max-h-[500px] overflow-y-auto"
+                    className="absolute top-full right-0 mt-2 bg-white rounded-2xl shadow-2xl border border-gray-100 p-6 z-[100] w-[350px] max-h-[500px] overflow-y-auto"
                     onMouseEnter={() => setActiveMenu(activeMenu)}
                     onMouseLeave={handleMouseLeave}
                 >

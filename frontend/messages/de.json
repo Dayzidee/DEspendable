@@ -52,7 +52,12 @@
         "faq": "FAQ",
         "support": "Support"
     },
-    "navigation": {
+    "nav": {
+        "about": "Über uns",
+        "features": "Funktionen",
+        "support": "Support",
+        "login": "Anmelden",
+        "signup": "Konto eröffnen",
         "dashboard": "Dashboard",
         "transfer": "Überweisung",
         "cards": "Karten",
@@ -122,6 +127,9 @@
     "dashboard": {
         "title": "Dashboard",
         "welcome": "Willkommen zurück",
+        "welcome_user": "Willkommen, {username}",
+        "overview": "Hier ist Ihre Finanzübersicht für heute.",
+        "tier_label": "{tier}-Stufe",
         "totalBalance": "Gesamtsaldo",
         "accounts": "Konten",
         "recentActivity": "Letzte Aktivitäten",
@@ -145,7 +153,56 @@
         "financial_status": "Finanzstatus",
         "recent_activity": "Umsätze",
         "no_transactions": "Keine aktuellen Umsätze",
-        "postbox": "Postfach"
+        "postbox": "Postfach",
+        "admin_panel": "Admin-Bereich",
+        "import_statement": "Kontoauszug importieren",
+        "manage_goals": "Ziele verwalten",
+        "financial_insights": "Finanzielle Einblicke",
+        "spending_insight": "Sie haben <bold>€{amount}</bold> für {category} ausgegeben, <bold>{percentage}%</bold> mehr als im letzten Monat.",
+        "goal_alert": "Sie haben <bold>{percentage}%</bold> Ihres Ziels <bold>\"{goalName}\"</bold> erreicht!",
+        "noSpendingData": "Noch keine Ausgabendaten verfügbar. Fangen Sie an, Ihre Ausgaben zu verfolgen!",
+        "pending": "Ausstehend",
+        "premium": "Premium",
+        "spendingAnalytics": "Ausgaben-Analyse",
+        "last30Days": "Letzte 30 Tage",
+        "last90Days": "Letzte 90 Tage",
+        "noSpendingData": "Noch keine Ausgabendaten",
+        "noSpendingDataDesc": "Ihre Ausgaben-Analyse erscheint hier, sobald Sie Transaktionen tätigen.",
+        "recentTransactions": "Letzte Transaktionen",
+        "noTransactionsDesc": "Sobald Sie Ihre erste Transaktion tätigen, erscheint sie hier.",
+        "yourAccounts": "Ihre Konten",
+        "noAccounts": "Keine Konten gefunden",
+        "noAccountsDesc": "Kontaktieren Sie den Support, um zu starten."
+    },
+    "goals": {
+        "title": "Finanzielle Ziele",
+        "subtitle": "Setzen und verfolgen Sie Ihre Sparziele",
+        "no_goals": "Noch keine Ziele vorhanden. Fangen Sie heute an zu sparen!",
+        "add_goal": "Neues Ziel erstellen",
+        "edit_goal": "Ziel bearbeiten",
+        "delete_goal": "Ziel löschen",
+        "target_amount": "Zielbetrag",
+        "current_amount": "Aktueller Stand",
+        "deadline": "Frist",
+        "no_deadline": "Keine Frist",
+        "category": "Kategorie",
+        "categories": {
+            "savings": "Sparen",
+            "investment": "Anlage",
+            "major_purchase": "Große Anschaffung",
+            "emergency_fund": "Notgroschen",
+            "travel": "Reise",
+            "education": "Bildung",
+            "housing": "Wohnen",
+            "car": "Auto"
+        },
+        "name": "Name des Ziels",
+        "save_goal": "Ziel speichern",
+        "success_created": "Ziel erfolgreich erstellt",
+        "success_deleted": "Ziel erfolgreich gelöscht",
+        "progress": "Fortschritt",
+        "remaining": "Noch zu sparen",
+        "completed": "Abgeschlossen!"
     },
     "transfer": {
         "title": "Überweisung",
@@ -239,10 +296,18 @@
         "internationalPayments": "Internationale Zahlungen",
         "atmWithdrawals": "Geldautomaten-Abhebungen"
     },
+    "investments": {
+        "title": "Investitionen",
+        "subtitle": "Verfolgen Sie Ihre Portfolio-Performance.",
+        "total_value": "Gesamt-Portfoliowert",
+        "invest_more": "Mehr investieren",
+        "equity": "Aktien",
+        "past_month": "Letzter Monat"
+    },
     "rewards": {
         "title": "Belohnungen",
         "yourPoints": "Ihre Punkte",
-        "currentTier": "Aktuelle Stufe",
+        "currentTier": "Stufe",
         "nextTier": "Nächste Stufe",
         "pointsToNext": "Punkte bis zur nächsten Stufe",
         "tierBenefits": "Stufen-Vorteile",
@@ -273,7 +338,39 @@
         "inviteFriends": "Freunde einladen",
         "referralLink": "Empfehlungslink",
         "shareLink": "Link teilen",
-        "referralBonus": "Empfehlungsbonus"
+        "referralBonus": "Empfehlungsbonus",
+        "invite_desc": "Laden Sie Freunde ein und erhalten Sie beide 500 Punkte!",
+        "points_label": "Punkte",
+        "tier_progress": "Fortschritt zu {tier}",
+        "points_remaining": "{points} Punkte verbleibend",
+        "benefits": {
+            "cashback_1": "1% Cashback",
+            "cashback_1_5": "1,5% Cashback",
+            "cashback_2": "2% Cashback",
+            "cashback_3": "3% Cashback",
+            "basic_support": "Basis-Support",
+            "priority_support": "Priority Support",
+            "priority_support_24_7": "24/7 Support",
+            "free_card": "Kostenlose virtuelle Karte",
+            "free_transfers": "Kostenlose Auslandsüberweisungen",
+            "dedicated_manager": "Persönlicher Berater",
+            "exclusive_events": "Exklusive Events"
+        },
+        "cashback_10": "10 € Cashback",
+        "cashback_25": "25 € Cashback",
+        "cashback_50": "50 € Cashback",
+        "amazon_voucher": "Amazon Gutschein 20 €",
+        "netflix": "Netflix 3 Monate",
+        "spotify": "Spotify Premium 6 Monate",
+        "history": {
+            "grocery_shopping": "Lebensmitteleinkauf",
+            "online_shopping": "Online-Shopping",
+            "gas_station": "Tankstelle",
+            "restaurant": "Restaurant"
+        },
+        "transactions_earn": "1 Punkt pro 1 € Umsatz",
+        "referral_earn": "500 Punkte pro Empfehlung",
+        "monthly_goals_earn": "Bonus-Punkte verdienen"
     },
     "postbox": {
         "title": "Postfach",
@@ -297,7 +394,9 @@
         "newest": "Neueste",
         "oldest": "Älteste",
         "retention": "Dokumentenaufbewahrung",
-        "retentionInfo": "Alle Dokumente werden sicher verschlüsselt und für 10 Jahre aufbewahrt, wie es die gesetzlichen Vorschriften verlangen."
+        "retentionInfo": "Alle Dokumente werden sicher verschlüsselt und für 10 Jahre aufbewahrt, wie es die gesetzlichen Vorschriften verlangen.",
+        "subtitle": "Verwalten und laden Sie Ihre Dokumente herunter.",
+        "loading": "Dokumente werden geladen..."
     },
     "menu": {
         "title": "Menü",
@@ -395,7 +494,11 @@
         "systemSettings": "Systemeinstellungen",
         "interestRates": "Zinssätze",
         "feeStructure": "Gebührenstruktur",
-        "rewardsConfig": "Belohnungskonfiguration"
+        "rewardsConfig": "Belohnungskonfiguration",
+        "avgBalance": "Ø Guthaben",
+        "deleteConfirm": "Sind Sie sicher, dass Sie diesen Benutzer löschen möchten?",
+        "searchPlaceholder": "Suche nach Name oder E-Mail...",
+        "save": "Speichern"
     },
     "auth": {
         "login": "Anmelden",
@@ -453,7 +556,10 @@
         "closeAccount": "Konto schließen",
         "accountSettings": "Kontoeinstellungen",
         "addAccount": "Konto hinzufügen",
-        "accountType": "Kontotyp"
+        "accountType": "Kontotyp",
+        "your_accounts": "Ihre Konten",
+        "available_balance": "Verfügbares Guthaben",
+        "loading_accounts": "Konten werden geladen..."
     },
     "transactions": {
         "title": "Transaktionen",
@@ -483,7 +589,11 @@
             "healthcare": "Gesundheit",
             "education": "Bildung",
             "other": "Sonstiges"
-        }
+        },
+        "your_transactions": "Transaktionen",
+        "search_placeholder": "Suchen...",
+        "no_transactions_found": "Keine Transaktionen gefunden.",
+        "loading_transactions": "Transaktionen werden geladen..."
     },
     "errors": {
         "generic": "Ein Fehler ist aufgetreten",
@@ -564,10 +674,23 @@
     "directions": {
         "title": "Finden Sie uns",
         "subtitle": "Besuchen Sie unsere Zentrale oder nehmen Sie Kontakt auf",
-        "address": "Friedrichstraße 123, 10117 Berlin, Deutschland",
+        "address": "Friedrichstraße 123",
+        "city_zip": "10117 Berlin, Deutschland",
         "phone": "+49 30 1234 5678",
         "email": "support@despendables.de",
-        "hours": "Mo-Fr: 9:00 - 18:00 Uhr, Sa: 10:00 - 14:00 Uhr"
+        "hours": "Mo-Fr: 9:00 - 18:00 Uhr, Sa: 10:00 - 14:00 Uhr",
+        "map_title": "Interaktive Karte",
+        "customer_service_247": "24/7 Kundenservice",
+        "response_time": "Antwort innerhalb von 24 Stunden",
+        "online_banking_247": "Online-Banking: 24/7",
+        "form_title": "Schreiben Sie uns",
+        "form_subject": "Betreff",
+        "form_subject_placeholder": "Wie können wir helfen?",
+        "form_message": "Nachricht",
+        "form_message_placeholder": "Ihre Nachricht...",
+        "form_submit": "Nachricht senden",
+        "reach_us_title": "So erreichen Sie uns",
+        "walk_suffix": "Minuten Fußweg"
     },
     "features_page": {
         "title": "Funktionen",
@@ -620,13 +743,26 @@
     "impressum": {
         "title": "Impressum",
         "section_tmg": "Angaben gemäß § 5 TMG",
+        "address_name": "DEspendables GmbH",
+        "address_street": "Finanzplatz 1",
+        "address_city": "60311 Frankfurt am Main",
+        "address_country": "Deutschland",
         "represented_by": "Vertreten durch",
+        "management": "Max Mustermann (CEO), Erika Musterfrau (CTO)",
         "contact": "Kontakt",
         "phone": "Telefon",
         "email": "E-Mail",
         "register": "Registereintrag",
+        "register_text": "Eintragung im Handelsregister.",
+        "register_court": "Registergericht: Amtsgericht Frankfurt am Main",
+        "register_number": "Registernummer: HRB 12345",
         "vat_id": "Umsatzsteuer-ID",
-        "authority": "Aufsichtsbehörde"
+        "vat_id_text": "Umsatzsteuer-Identifikationsnummer gemäß §27 a Umsatzsteuergesetz:",
+        "vat_number": "DE 123 456 789",
+        "authority": "Aufsichtsbehörde",
+        "authority_name": "Bundesanstalt für Finanzdienstleistungsaufsicht (BaFin)",
+        "authority_address": "Graurheindorfer Str. 108, 53117 Bonn",
+        "demo_notice": "Dies ist eine Demo-Anwendung zu Bildungszwecken."
     },
     "datenschutz": {
         "title": "Datenschutzerklärung",
@@ -655,7 +791,12 @@
         "q6": "Kann ich mein Konto jederzeit kündigen?",
         "a6": "Ja, Sie können Ihr Konto jederzeit ohne Kündigungsfrist schließen. Ihr Restguthaben wird auf ein von Ihnen angegebenes Konto überwiesen.",
         "q7": "Wie kontaktiere ich den Support?",
-        "a7": "Sie erreichen uns per Live-Chat (24/7), E-Mail (support@despendables.de) oder Telefon (+49 30 1234 5678)."
+        "a7": "Sie erreichen uns per Live-Chat (24/7), E-Mail (support@despendables.de) oder Telefon (+49 30 1234 5678).",
+        "q8": "Gibt es eine mobile App?",
+        "a8": "Ja, unsere App ist für iOS und Android verfügbar und bietet alle Funktionen der Webversion.",
+        "more_questions": "Noch Fragen?",
+        "support_text": "Unser Support-Team hilft Ihnen gerne weiter!",
+        "contact_button": "Kontakt aufnehmen"
     },
     "terms": {
         "title": "Allgemeine Geschäftsbedingungen",

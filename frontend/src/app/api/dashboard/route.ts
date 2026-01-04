@@ -18,45 +18,64 @@ export async function GET(request: NextRequest) {
       .where('owner_uid', '==', userId)
       .get();
 
-    const accounts = accountsSnapshot.docs.map(doc => ({
-      id: doc.id,
-      ...doc.data(),
-      // Ensure balance is number
-      balance: Number(doc.data().balance)
-    }));
+    const accounts = accountsSnapshot.docs.map(doc => {
+      const data = doc.data();
+      return {
+        id: doc.id,
+        account_name: data.name || 'Girokonto',
+        masked_account_number: data.iban ? `DE****${data.iban.slice(-4)}` : 'DE****0000',
+        balance: Number(data.balance || 0),
+        currency: data.currency || 'EUR',
+        type: data.type || 'Checking'
+      };
+    });
 
-    // Fetch Recent Transactions (Limit 5)
-    // Note: In a real app, we'd query transactions where user is sender OR recipient.
-    // Firestore OR queries are limited. We'll query by user_id (sender) for now.
+    // Fetch Recent Transactions (Limit 20 for analytics)
     const transactionsSnapshot = await db
       .collection('transactions')
       .where('user_id', '==', userId)
       .orderBy('created_at', 'desc')
-      .limit(5)
+      .limit(20)
       .get();
 
     const transactions = transactionsSnapshot.docs.map(doc => {
       const data = doc.data();
+      let timestamp = new Date().toISOString();
+
       if (data.created_at instanceof Timestamp) {
-        data.created_at = data.created_at.toDate().toISOString();
+        timestamp = data.created_at.toDate().toISOString();
       } else if (data.completed_at instanceof Timestamp) {
-        // Fallback for sorting if needed, or ensuring completed_at is safe
-        data.completed_at = data.completed_at.toDate().toISOString();
+        timestamp = data.completed_at.toDate().toISOString();
       }
+
       return {
         id: doc.id,
-        ...data
+        type: data.type || 'transfer',
+        amount: Number(data.amount || 0),
+        timestamp: timestamp,
+        status: data.status || 'completed',
+        description: data.reference || data.recipient_name || data.recipient_iban || 'Bank Transfer',
+        category: data.category || 'Finances',
+        recipient: data.recipient_name || data.recipient_iban || 'Unknown'
       };
     });
 
+    // Aggregate Spending by Category
+    const spendingByCategory: Record<string, number> = {};
+    transactions.filter(tx => tx.amount < 0).forEach(tx => {
+      const cat = tx.category || 'Other';
+      spendingByCategory[cat] = (spendingByCategory[cat] || 0) + Math.abs(tx.amount);
+    });
+
     // Calculate Total Balance
-    const totalBalance = accounts.reduce((sum, acc) => sum + (acc.balance || 0), 0);
+    const totalBalance = accounts.reduce((sum, acc) => sum + acc.balance, 0);
 
     return NextResponse.json({
       accounts,
-      transactions,
+      recent_transactions: transactions,
+      spending_by_category: spendingByCategory,
       total_balance: totalBalance,
-      last_login: new Date().toISOString() // Simulating last login update
+      last_login: new Date().toISOString()
     });
 
   } catch (error: any) {

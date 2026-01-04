@@ -5,7 +5,6 @@ import { routing } from '@/i18n/routing';
 import { AuthProvider } from "@/context/AuthContext";
 import { DiscreetProvider } from "@/context/DiscreetContext";
 import ConsentBanner from "@/components/ConsentBanner";
-import BottomNav from "@/components/BottomNav";
 import ChatWidget from "@/components/ChatWidget";
 
 export function generateStaticParams() {
@@ -37,11 +36,10 @@ export default async function LocaleLayout({
                 <NextIntlClientProvider locale={locale} messages={messages}>
                     <DiscreetProvider>
                         <AuthProvider>
-                            <div className="pb-20"> {/* Padding for BottomNav */}
+                            <div>
                                 {children}
                             </div>
                             <ConsentBanner />
-                            <BottomNav />
                         </AuthProvider>
                     </DiscreetProvider>
                 </NextIntlClientProvider>

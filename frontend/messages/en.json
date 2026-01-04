@@ -52,7 +52,12 @@
         "contact_us": "Contact Us",
         "read_more": "Read More"
     },
-    "navigation": {
+    "nav": {
+        "about": "About Us",
+        "features": "Features",
+        "support": "Support",
+        "login": "Sign In",
+        "signup": "Open Account",
         "dashboard": "Dashboard",
         "transfer": "Transfer",
         "cards": "Cards",
@@ -122,6 +127,9 @@
     "dashboard": {
         "title": "Dashboard",
         "welcome": "Welcome back",
+        "welcome_user": "Welcome, {username}",
+        "overview": "Here's your financial overview for today.",
+        "tier_label": "{tier} Tier",
         "totalBalance": "Total Balance",
         "accounts": "Accounts",
         "recentActivity": "Recent Activity",
@@ -145,7 +153,55 @@
         "financial_status": "Financial Status",
         "recent_activity": "Recent Activity",
         "no_transactions": "No recent transactions",
-        "postbox": "Postbox"
+        "postbox": "Postbox",
+        "admin_panel": "Admin Panel",
+        "import_statement": "Import Statement",
+        "manage_goals": "Manage Goals",
+        "financial_insights": "Financial Insights",
+        "spending_insight": "You've spent <bold>€{amount}</bold> on {category}, <bold>{percentage}%</bold> more than last month.",
+        "goal_alert": "You are <bold>{percentage}%</bold> of the way to your <bold>\"{goalName}\"</bold> goal!",
+        "noSpendingData": "No spending data available yet. Start tracking your expenses!",
+        "pending": "Pending",
+        "premium": "Premium",
+        "spendingAnalytics": "Spending Analytics",
+        "last30Days": "Last 30 Days",
+        "last90Days": "Last 90 Days",
+        "noSpendingDataDesc": "Your spending analytics will appear here once you have transactions.",
+        "recentTransactions": "Recent Transactions",
+        "noTransactionsDesc": "When you make your first transaction, it will appear here.",
+        "yourAccounts": "Your Accounts",
+        "noAccounts": "No Accounts Found",
+        "noAccountsDesc": "Contact support to get started."
+    },
+    "goals": {
+        "title": "Financial Goals",
+        "subtitle": "Set and track your savings targets",
+        "no_goals": "No goals yet. Start saving today!",
+        "add_goal": "Add New Goal",
+        "edit_goal": "Edit Goal",
+        "delete_goal": "Delete Goal",
+        "target_amount": "Target Amount",
+        "current_amount": "Current Amount",
+        "deadline": "Deadline",
+        "no_deadline": "No deadline",
+        "category": "Category",
+        "categories": {
+            "savings": "Savings",
+            "investment": "Investment",
+            "major_purchase": "Major Purchase",
+            "emergency_fund": "Emergency Fund",
+            "travel": "Travel",
+            "education": "Education",
+            "housing": "Housing",
+            "car": "Car"
+        },
+        "name": "Goal Name",
+        "save_goal": "Save Goal",
+        "success_created": "Goal created successfully",
+        "success_deleted": "Goal deleted successfully",
+        "progress": "Progress",
+        "remaining": "Remaining",
+        "completed": "Completed!"
     },
     "transfer": {
         "title": "Payment",
@@ -273,7 +329,39 @@
         "inviteFriends": "Invite Friends",
         "referralLink": "Referral Link",
         "shareLink": "Share Link",
-        "referralBonus": "Referral Bonus"
+        "referralBonus": "Referral Bonus",
+        "points_label": "Points",
+        "tier_progress": "Progress to {tier}",
+        "points_remaining": "{points} points remaining",
+        "benefits": {
+            "cashback_1": "1% Cashback",
+            "cashback_1_5": "1.5% Cashback",
+            "cashback_2": "2% Cashback",
+            "cashback_3": "3% Cashback",
+            "basic_support": "Basic Support",
+            "priority_support": "Priority Support",
+            "priority_support_24_7": "24/7 Support",
+            "free_card": "Free Virtual Card",
+            "free_transfers": "Free Int'l Transfers",
+            "dedicated_manager": "Dedicated Manager",
+            "exclusive_events": "Exclusive Events"
+        },
+        "cashback_10": "€10 Cashback",
+        "cashback_25": "€25 Cashback",
+        "cashback_50": "€50 Cashback",
+        "amazon_voucher": "Amazon Voucher €20",
+        "netflix": "Netflix 3 Months",
+        "spotify": "Spotify Premium 6 Months",
+        "history": {
+            "grocery_shopping": "Grocery Shopping",
+            "online_shopping": "Online Shopping",
+            "gas_station": "Gas Station",
+            "restaurant": "Restaurant"
+        },
+        "transactions_earn": "1 point per €1 spent",
+        "referral_earn": "500 points per referral",
+        "monthly_goals_earn": "Earn bonus points",
+        "invite_desc": "Invite friends and you both get 500 points!"
     },
     "postbox": {
         "title": "Postbox",
@@ -297,7 +385,9 @@
         "newest": "Newest",
         "oldest": "Oldest",
         "retention": "Document Retention",
-        "retentionInfo": "All documents are securely encrypted and retained for 10 years as required by law."
+        "retentionInfo": "All documents are securely encrypted and retained for 10 years as required by law.",
+        "subtitle": "Manage and download your documents.",
+        "loading": "Loading documents..."
     },
     "menu": {
         "title": "Menu",
@@ -395,7 +485,12 @@
         "systemSettings": "System Settings",
         "interestRates": "Interest Rates",
         "feeStructure": "Fee Structure",
-        "rewardsConfig": "Rewards Configuration"
+        "rewardsConfig": "Rewards Configuration",
+        "avgBalance": "Avg. Balance",
+        "deleteConfirm": "Are you sure you want to delete this user?",
+        "searchPlaceholder": "Search by name or email...",
+        "save": "Save",
+        "cancel": "Cancel"
     },
     "auth": {
         "login": "Sign In",
@@ -453,7 +548,10 @@
         "closeAccount": "Close Account",
         "accountSettings": "Account Settings",
         "addAccount": "Add Account",
-        "accountType": "Account Type"
+        "accountType": "Account Type",
+        "your_accounts": "Your Accounts",
+        "available_balance": "Available Balance",
+        "loading_accounts": "Loading accounts..."
     },
     "transactions": {
         "title": "Transactions",
@@ -483,7 +581,11 @@
             "healthcare": "Healthcare",
             "education": "Education",
             "other": "Other"
-        }
+        },
+        "your_transactions": "Transactions",
+        "search_placeholder": "Search...",
+        "no_transactions_found": "No transactions found.",
+        "loading_transactions": "Loading transactions..."
     },
     "errors": {
         "generic": "An error occurred",
@@ -564,10 +666,23 @@
     "directions": {
         "title": "Find Us",
         "subtitle": "Visit our headquarters or get in touch",
-        "address": "Friedrichstraße 123, 10117 Berlin, Germany",
+        "address": "Friedrichstraße 123",
+        "city_zip": "10117 Berlin, Germany",
         "phone": "+49 30 1234 5678",
         "email": "support@despendables.de",
-        "hours": "Mon-Fri: 9:00 - 18:00, Sat: 10:00 - 14:00"
+        "hours": "Mon-Fri: 9:00 - 18:00, Sat: 10:00 - 14:00",
+        "map_title": "Interactive Map",
+        "customer_service_247": "24/7 Customer Service",
+        "response_time": "Response within 24 hours",
+        "online_banking_247": "Online banking: 24/7",
+        "form_title": "Send Us a Message",
+        "form_subject": "Subject",
+        "form_subject_placeholder": "How can we help?",
+        "form_message": "Message",
+        "form_message_placeholder": "Your message...",
+        "form_submit": "Send Message",
+        "reach_us_title": "How to Reach Us",
+        "walk_suffix": "min walk"
     },
     "features_page": {
         "title": "Features",
@@ -620,13 +735,26 @@
     "impressum": {
         "title": "Legal Notice",
         "section_tmg": "Information according to § 5 TMG",
+        "address_name": "DEspendables GmbH",
+        "address_street": "Finanzplatz 1",
+        "address_city": "60311 Frankfurt am Main",
+        "address_country": "Germany",
         "represented_by": "Represented by",
+        "management": "Max Mustermann (CEO), Erika Musterfrau (CTO)",
         "contact": "Contact",
         "phone": "Phone",
         "email": "E-Mail",
         "register": "Register entry",
+        "register_text": "Registered in the commercial register.",
+        "register_court": "Registration court: District Court Frankfurt am Main",
+        "register_number": "Registration number: HRB 12345",
         "vat_id": "VAT ID",
-        "authority": "Supervisory Authority"
+        "vat_id_text": "Value added tax identification number according to §27 a UStG:",
+        "vat_number": "DE 123 456 789",
+        "authority": "Supervisory Authority",
+        "authority_name": "Federal Financial Supervisory Authority (BaFin)",
+        "authority_address": "Graurheindorfer Str. 108, 53117 Bonn",
+        "demo_notice": "This is a demo application for educational purposes."
     },
     "datenschutz": {
         "title": "Privacy Policy",

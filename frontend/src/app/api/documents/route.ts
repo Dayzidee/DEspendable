@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { auth, db } from '@/lib/firebaseAdmin';
-import { FieldValue, Timestamp } from 'firebase-admin/firestore';
+import { FieldValue } from 'firebase-admin/firestore';
 
 export async function GET(request: NextRequest) {
   try {
@@ -14,59 +14,58 @@ export async function GET(request: NextRequest) {
 
     const docsSnapshot = await db
       .collection('documents')
-      .where('owner_uid', '==', userId)
+      .where('user_id', '==', userId)
       .orderBy('created_at', 'desc')
       .get();
 
-    let docs = docsSnapshot.docs.map((doc) => {
-      const data = doc.data();
-      // Convert Timestamp to ISO string for JSON serialization
-      if (data.created_at instanceof Timestamp) {
-        data.created_at = data.created_at.toDate().toISOString();
-      }
-      return {
-        id: doc.id,
-        ...data,
-      };
-    });
-
-    // Seed dummy data if empty (Simulation only)
-    if (docs.length === 0) {
-      const now = new Date();
-      const dummyDocs = [
+    if (docsSnapshot.empty) {
+      // Seed initial welcome documents
+      const initialDocs = [
         {
-          title: 'Finanzstatus 12/2025',
-          type: 'Statement',
+          title: "Willkommen bei DEspendables",
+          type: "Info",
           created_at: FieldValue.serverTimestamp(),
-          owner_uid: userId,
-          download_url: '#',
+          user_id: userId,
+          content_url: "#"
         },
         {
-          title: 'AGB Änderung (Terms Update)',
-          type: 'Legal',
+          title: "Kontoeröffnungsbestätigung",
+          type: "Vertrag",
           created_at: FieldValue.serverTimestamp(),
-          owner_uid: userId,
-          download_url: '#',
-        },
+          user_id: userId,
+          content_url: "#"
+        }
       ];
 
       const batch = db.batch();
-      for (const d of dummyDocs) {
+      initialDocs.forEach(doc => {
         const ref = db.collection('documents').doc();
-        batch.set(ref, d);
-      }
+        batch.set(ref, doc);
+      });
       await batch.commit();
 
-      // Return the dummy docs with client-friendly dates
-      docs = dummyDocs.map((d, i) => ({
-        ...d,
-        id: `new_${i}`,
-        created_at: now.toISOString(), // Use client-safe date
-      }));
+      // Fetch again to get the documents with IDs
+      const newSnapshot = await db
+        .collection('documents')
+        .where('user_id', '==', userId)
+        .get();
+
+      return NextResponse.json(newSnapshot.docs.map(doc => ({
+        id: doc.id,
+        ...doc.data(),
+        created_at: doc.data().created_at?.toDate?.() || new Date()
+      })));
     }
 
-    return NextResponse.json(docs);
+    const documents = docsSnapshot.docs.map(doc => ({
+      id: doc.id,
+      ...doc.data(),
+      created_at: doc.data().created_at?.toDate?.() || new Date()
+    }));
+
+    return NextResponse.json(documents);
   } catch (error: any) {
+    console.error('Documents API Error:', error);
     return NextResponse.json({ error: error.message }, { status: 400 });
   }
 }

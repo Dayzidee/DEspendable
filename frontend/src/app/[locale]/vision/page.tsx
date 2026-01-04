@@ -1,14 +1,14 @@
 "use client";
 
-import { useLanguage } from "@/context/LanguageContext";
-import Link from "next/link";
+import { useTranslations } from 'next-intl';
+import { Link } from "@/i18n/navigation";
 import { Cpu, Link as LinkIcon, Leaf, Globe } from "lucide-react";
 import ScrollReveal from "@/components/animations/ScrollReveal";
 import AnimatedBackground from "@/components/animations/AnimatedBackground";
 import LandingHeader from "@/components/navigation/LandingHeader";
 
 export default function VisionPage() {
-    const { t } = useLanguage();
+    const t = useTranslations();
 
     const initiatives = [
         {

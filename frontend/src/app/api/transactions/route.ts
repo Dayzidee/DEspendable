@@ -23,23 +23,32 @@ export async function GET(request: NextRequest) {
       .limit(limit);
 
     if (type) {
-        query = query.where('type', '==', type);
+      query = query.where('type', '==', type);
     }
 
     const snapshot = await query.get();
 
     const transactions = snapshot.docs.map(doc => {
-        const data = doc.data();
-        if (data.created_at instanceof Timestamp) {
-            data.created_at = data.created_at.toDate().toISOString();
-        }
-        if (data.completed_at instanceof Timestamp) {
-            data.completed_at = data.completed_at.toDate().toISOString();
-        }
-        return {
-            id: doc.id,
-            ...data
-        };
+      const data = doc.data();
+      let timestamp = new Date().toISOString();
+
+      if (data.created_at instanceof Timestamp) {
+        timestamp = data.created_at.toDate().toISOString();
+      } else if (data.completed_at instanceof Timestamp) {
+        timestamp = data.completed_at.toDate().toISOString();
+      }
+
+      return {
+        id: doc.id,
+        type: data.type || 'transfer',
+        amount: Number(data.amount || 0),
+        timestamp: timestamp,
+        date: timestamp, // Alias for backward compatibility in some views
+        status: data.status || 'completed',
+        description: data.reference || data.recipient_name || data.recipient_iban || 'Bank Transfer',
+        category: data.category || 'Finances',
+        recipient: data.recipient_name || data.recipient_iban || 'Unknown'
+      };
     });
 
     return NextResponse.json(transactions);

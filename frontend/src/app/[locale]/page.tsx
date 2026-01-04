@@ -181,7 +181,7 @@ export default function Home() {
       </section>
 
       {/* About Section */}
-      <section className="py-20 px-6 bg-gradient-to-br from-[#0018A8] to-[#0025D9] text-white">
+      <section id="about" className="py-20 px-6 bg-gradient-to-br from-[#0018A8] to-[#0025D9] text-white">
         <div className="max-w-7xl mx-auto">
           <div className="grid lg:grid-cols-2 gap-12 items-center">
             <FadeIn>
@@ -232,7 +232,7 @@ export default function Home() {
       </section>
 
       {/* Contact Section */}
-      <section className="py-20 px-6">
+      <section id="contact" className="py-20 px-6">
         <div className="max-w-4xl mx-auto">
           <FadeIn className="text-center mb-12">
             <h2 className="text-4xl font-bold mb-4">{t("landing.contact_title")}</h2>
