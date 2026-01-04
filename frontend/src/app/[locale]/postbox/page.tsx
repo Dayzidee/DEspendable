@@ -29,7 +29,7 @@ export default function Postbox() {
             })
                 .then(res => {
                     if (!res.ok) {
-                        throw new Error('API endpoint not available');
+                        return res.json().then(err => { throw new Error(err.error || 'API Error'); });
                     }
                     return res.json();
                 })
@@ -50,14 +50,14 @@ export default function Postbox() {
             <div className="max-w-4xl mx-auto">
                 <header className="mb-8">
                     <h1 className="text-2xl font-bold text-[var(--color-text-primary)]">{t('title')}</h1>
-                    <p className="text-gray-500">Manage and download your documents.</p>
+                    <p className="text-gray-500">{t('subtitle')}</p>
                 </header>
 
                 <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden mb-8">
                     {loading ? (
                         <div className="p-12 text-center text-[#666666]">
                             <div className="animate-spin w-8 h-8 border-4 border-[#0018A8] border-t-transparent rounded-full mx-auto mb-4"></div>
-                            {t('search')}
+                            {t('loading')}
                         </div>
                     ) : documents.length === 0 ? (
                         <div className="p-12 text-center">

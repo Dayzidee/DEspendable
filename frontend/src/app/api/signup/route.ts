@@ -3,13 +3,16 @@ import { auth, db } from '@/lib/firebaseAdmin';
 import { FieldValue } from 'firebase-admin/firestore';
 import crypto from 'crypto';
 
+function generateAccountNumber() {
+  return crypto.randomInt(1000000000, 9999999999).toString();
+}
+
 function generateIBAN() {
-  const bankCode = '10050000'; // Example Bank Code
-  const accountNumber = crypto.randomInt(1000000000, 9999999999).toString();
+  const bankCode = '10050000'; // DEspendables Bank Code
   const country = 'DE';
-  // Simplified Checksum (Not valid algorithm, just for format)
-  const checksum = '00';
-  return `${country}${checksum}${bankCode}${accountNumber}`;
+  const checksum = crypto.randomInt(10, 99).toString();
+  const partialAccount = crypto.randomInt(1000000000, 9999999999).toString();
+  return `${country}${checksum}${bankCode}${partialAccount}`;
 }
 
 export async function POST(request: NextRequest) {
@@ -27,36 +30,40 @@ export async function POST(request: NextRequest) {
     const userRef = db.collection('users').doc(userId);
     const userDoc = await userRef.get();
 
-    if (userDoc.exists) {
-      return NextResponse.json({ message: 'User already initialized' });
+    if (userDoc.exists && userDoc.data()?.account_number) {
+      return NextResponse.json({ message: 'User already initialized', account_number: userDoc.data()?.account_number });
     }
 
     // Initialize User & Accounts
-    const accountNumber = crypto.randomInt(1000000000, 9999999999).toString();
+    const accountNumber = generateAccountNumber();
 
     const batch = db.batch();
 
-    // 1. Create User Document
+    // 1. Create/Update User Document
     batch.set(userRef, {
       email: email,
       account_number: accountNumber,
       created_at: FieldValue.serverTimestamp(),
       is_admin: false,
+      account_tier: 'Standard',
       settings: {
         discreet_mode: false,
-        theme: 'light'
+        theme: 'light',
+        language: 'de'
       }
-    });
+    }, { merge: true });
 
     // 2. Create Checking Account (Girokonto)
     const checkingRef = db.collection('accounts').doc();
     batch.set(checkingRef, {
       owner_uid: userId,
       type: 'Checking',
-      name: 'Girokonto',
-      balance: 1500.00, // Starting balance
+      name: 'Checking Account',
+      display_name: 'Girokonto',
+      balance: 0.00, // Zero initial balance as requested
       iban: generateIBAN(),
       currency: 'EUR',
+      status: 'Active',
       created_at: FieldValue.serverTimestamp()
     });
 
@@ -65,10 +72,12 @@ export async function POST(request: NextRequest) {
     batch.set(savingsRef, {
       owner_uid: userId,
       type: 'Savings',
-      name: 'Tagesgeld',
-      balance: 5000.00,
+      name: 'Savings Account',
+      display_name: 'Tagesgeld',
+      balance: 0.00, // Zero initial balance as requested
       iban: generateIBAN(),
       currency: 'EUR',
+      status: 'Active',
       created_at: FieldValue.serverTimestamp()
     });
 

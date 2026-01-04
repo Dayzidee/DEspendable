@@ -18,57 +18,55 @@ export default function Impressum() {
                 <section className="space-y-2">
                     <h2 className="text-xl font-semibold text-gray-200">{t("impressum.section_tmg")}</h2>
                     <p className="text-gray-400">
-                        DEspendables GmbH<br />
-                        Finanzplatz 1<br />
-                        60311 Frankfurt am Main<br />
-                        Deutschland
+                        {t("impressum.address_name")}<br />
+                        {t("impressum.address_street")}<br />
+                        {t("impressum.address_city")}<br />
+                        {t("impressum.address_country")}
                     </p>
                 </section>
 
                 <section className="space-y-2">
                     <h2 className="text-xl font-semibold text-gray-200">{t("impressum.represented_by")}</h2>
                     <p className="text-gray-400">
-                        Max Mustermann (CEO)<br />
-                        Erika Musterfrau (CTO)
+                        {t("impressum.management")}
                     </p>
                 </section>
 
                 <section className="space-y-2">
                     <h2 className="text-xl font-semibold text-gray-200">{t("impressum.contact")}</h2>
                     <p className="text-gray-400">
-                        {t("impressum.phone")}: +49 (0) 69 12345678<br />
-                        {t("impressum.email")}: kontakt@despendables.de
+                        {t("impressum.phone")}: {t("directions.phone")}<br />
+                        {t("impressum.email")}: {t("directions.email")}
                     </p>
                 </section>
 
                 <section className="space-y-2">
                     <h2 className="text-xl font-semibold text-gray-200">{t("impressum.register")}</h2>
                     <p className="text-gray-400">
-                        Eintragung im Handelsregister.<br />
-                        Registergericht: Amtsgericht Frankfurt am Main<br />
-                        Registernummer: HRB 12345
+                        {t("impressum.register_text")}<br />
+                        {t("impressum.register_court")}<br />
+                        {t("impressum.register_number")}
                     </p>
                 </section>
 
                 <section className="space-y-2">
                     <h2 className="text-xl font-semibold text-gray-200">{t("impressum.vat_id")}</h2>
                     <p className="text-gray-400">
-                        Umsatzsteuer-Identifikationsnummer gemäß §27 a Umsatzsteuergesetz:<br />
-                        DE 123 456 789
+                        {t("impressum.vat_id_text")}<br />
+                        {t("impressum.vat_number")}
                     </p>
                 </section>
 
                 <section className="space-y-2">
                     <h2 className="text-xl font-semibold text-gray-200">{t("impressum.authority")}</h2>
                     <p className="text-gray-400">
-                        Bundesanstalt für Finanzdienstleistungsaufsicht (BaFin)<br />
-                        Graurheindorfer Str. 108<br />
-                        53117 Bonn
+                        {t("impressum.authority_name")}<br />
+                        {t("impressum.authority_address")}
                     </p>
                 </section>
 
                 <div className="mt-12 pt-8 border-t border-gray-800 text-sm text-gray-500">
-                    <p>This is a demo application for educational purposes.</p>
+                    <p>{t("impressum.demo_notice")}</p>
                 </div>
             </div>
         </div>

@@ -2,13 +2,23 @@ import * as admin from 'firebase-admin';
 
 if (!admin.apps.length) {
   try {
-    admin.initializeApp({
-      credential: admin.credential.applicationDefault(),
-      // If you are using real-time database, add databaseURL here
-      // databaseURL: "https://<YOUR-PROJECT-ID>.firebaseio.com"
-    });
+    const projectId = process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID;
+
+    // Check if we have enough info to initialize via config
+    if (projectId) {
+      admin.initializeApp({
+        credential: admin.credential.applicationDefault(),
+        projectId: projectId,
+      });
+      console.log(`Firebase admin initialized for project: ${projectId}`);
+    } else {
+      admin.initializeApp({
+        credential: admin.credential.applicationDefault(),
+      });
+      console.log('Firebase admin initialized using application default credentials');
+    }
   } catch (error) {
-    console.error('Firebase admin initialization error', error);
+    console.error('Firebase admin initialization error:', error);
   }
 }
 

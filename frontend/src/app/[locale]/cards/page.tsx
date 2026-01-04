@@ -1,26 +1,56 @@
 "use client";
 
 import DashboardLayout from "@/components/dashboard/DashboardLayout";
-import { useState } from "react";
-import { useTranslations } from 'next-intl';
+import { useState, useEffect } from "react";
+import { useAuth } from "@/context/AuthContext";
 import { Link } from "@/i18n/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import { ArrowLeft, Copy, Lock, Unlock, Settings, Eye, EyeOff } from "lucide-react";
+import { useTranslations } from 'next-intl';
 
 export default function VirtualCard() {
+    const { token } = useAuth();
     const t = useTranslations('cards');
+    const [cardData, setCardData] = useState<any>(null);
+    const [loading, setLoading] = useState(true);
     const [isFlipped, setIsFlipped] = useState(false);
     const [isFrozen, setIsFrozen] = useState(false);
     const [showDetails, setShowDetails] = useState(false);
     const [copied, setCopied] = useState(false);
 
-    // Mock card data
-    const cardData = {
-        number: "4532 1234 5678 9012",
-        cvv: "123",
-        expiry: "12/28",
-        holder: "Max Mustermann",
-        balance: 2500.00
+    useEffect(() => {
+        if (!token) return;
+        fetch('/api/cards', {
+            headers: { 'Authorization': `Bearer ${token}` }
+        })
+            .then(res => res.json())
+            .then(data => {
+                setCardData(data);
+                setIsFrozen(data.status === 'frozen');
+                setLoading(false);
+            })
+            .catch(() => setLoading(false));
+    }, [token]);
+
+    const toggleFreeze = async () => {
+        if (!cardData || !token) return;
+        const newStatus = isFrozen ? 'unfreeze' : 'freeze';
+        try {
+            const res = await fetch('/api/cards', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                },
+                body: JSON.stringify({ cardId: cardData.id, action: newStatus })
+            });
+            const result = await res.json();
+            if (result.success) {
+                setIsFrozen(!isFrozen);
+            }
+        } catch (err) {
+            console.error("Failed to update card status", err);
+        }
     };
 
     const copyToClipboard = (text: string) => {
@@ -28,6 +58,16 @@ export default function VirtualCard() {
         setCopied(true);
         setTimeout(() => setCopied(false), 2000);
     };
+
+    if (loading || !cardData) {
+        return (
+            <DashboardLayout>
+                <div className="min-h-screen flex items-center justify-center">
+                    <div className="text-[#0018A8] text-lg">Loading Card...</div>
+                </div>
+            </DashboardLayout>
+        );
+    }
 
     return (
         <DashboardLayout>
@@ -63,10 +103,10 @@ export default function VirtualCard() {
                             <div className="flex flex-col justify-between h-full text-white">
                                 <div className="flex justify-between items-start">
                                     <div>
-                                        <div className="text-xs opacity-80 mb-1">DEspendables Premium</div>
+                                        <div className="text-xs opacity-80 mb-1">DEspendables {t('premium')}</div>
                                         <div className="flex items-center gap-2">
                                             <div className="w-8 h-6 bg-yellow-400 rounded"></div>
-                                            <div className="text-xs opacity-60">Contactless</div>
+                                            <div className="text-xs opacity-60">{t('contactless')}</div>
                                         </div>
                                     </div>
                                     {isFrozen && (
@@ -125,7 +165,7 @@ export default function VirtualCard() {
                 </div>
 
                 <div className="text-center text-sm text-[#666666] mb-8">
-                    {isFlipped ? t('showDetails') : t('showDetails')} {/* Fallback for instructions */}
+                    {isFlipped ? t('hideDetails') : t('showDetails')}
                 </div>
 
                 {/* Card Controls */}
@@ -139,7 +179,7 @@ export default function VirtualCard() {
                     </button>
 
                     <button
-                        onClick={() => setIsFrozen(!isFrozen)}
+                        onClick={toggleFreeze}
                         className={`p-4 rounded-xl flex items-center justify-center gap-2 font-semibold transition ${isFrozen
                             ? "bg-green-500 text-white hover:bg-green-600"
                             : "bg-red-500 text-white hover:bg-red-600"
@@ -159,7 +199,7 @@ export default function VirtualCard() {
                             exit={{ opacity: 0, height: 0 }}
                             className="bg-white rounded-2xl p-6 shadow-lg border border-gray-100 mb-8 overflow-hidden"
                         >
-                            <h3 className="font-bold mb-4">{t('cardNumber')}</h3>
+                            <h3 className="font-bold mb-4">{t('title')}</h3>
                             <div className="space-y-4">
                                 <div>
                                     <div className="text-sm text-[#666666] mb-1">{t('cardNumber')}</div>
@@ -195,7 +235,7 @@ export default function VirtualCard() {
 
                 {/* Card Settings */}
                 <div className="bg-white rounded-2xl p-6 shadow-lg border border-gray-100 space-y-4">
-                    <h3 className="font-bold mb-4">{t('title')}</h3>
+                    <h3 className="font-bold mb-4">{t('settings')}</h3>
 
                     <Link
                         href="/cards"

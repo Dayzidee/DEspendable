@@ -1,11 +1,37 @@
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
+import { auth, db } from '@/lib/firebaseAdmin';
 
-export async function GET() {
-    const accounts = [
-        { id: '1', name: 'Main Checking', type: 'Checking', balance: 2450.50, iban: 'DE89 3705 0000 1234 5678 90', status: 'Active' },
-        { id: '2', name: 'Emergency Fund', type: 'Savings', balance: 15000.00, iban: 'DE45 3705 0000 9876 5432 10', status: 'Active' },
-        { id: '3', name: 'Travel Savings', type: 'Savings', balance: 3200.00, iban: 'DE12 3705 0000 5555 4444 33', status: 'Active' },
-    ];
+export async function GET(request: NextRequest) {
+    try {
+        const authHeader = request.headers.get('Authorization');
+        if (!authHeader?.startsWith('Bearer ')) {
+            return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+        }
+        const token = authHeader.split(' ')[1];
+        const decodedToken = await auth.verifyIdToken(token);
+        const userId = decodedToken.uid;
 
-    return NextResponse.json(accounts);
+        const accountsSnapshot = await db
+            .collection('accounts')
+            .where('owner_uid', '==', userId)
+            .get();
+
+        const accounts = accountsSnapshot.docs.map(doc => {
+            const data = doc.data();
+            return {
+                id: doc.id,
+                name: data.name || 'Girokonto',
+                type: data.type || 'Checking',
+                balance: Number(data.balance || 0),
+                iban: data.iban || 'DE****0000',
+                status: data.status || 'Active',
+                currency: data.currency || 'EUR'
+            };
+        });
+
+        return NextResponse.json(accounts);
+    } catch (error: any) {
+        console.error('Accounts API Error:', error);
+        return NextResponse.json({ error: error.message }, { status: 400 });
+    }
 }

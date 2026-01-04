@@ -7,24 +7,27 @@ import { auth } from "@/lib/firebase";
 import { FaHome, FaExchangeAlt, FaCreditCard, FaGift, FaInbox, FaUserShield, FaSignOutAlt, FaLeaf, FaChartLine, FaPiggyBank } from "react-icons/fa";
 import { motion } from "framer-motion";
 
+import { useTranslations } from "next-intl";
+
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
     const pathname = usePathname();
     const { user } = useAuth();
+    const t = useTranslations();
 
     const menuItems = [
-        { name: "Dashboard", href: "/dashboard", icon: <FaHome /> },
-        { name: "Transactions", href: "/transactions", icon: <FaExchangeAlt /> },
-        { name: "Accounts", href: "/accounts", icon: <FaPiggyBank /> },
-        { name: "Transfer", href: "/transfer", icon: <FaExchangeAlt /> },
-        { name: "Cards", href: "/cards", icon: <FaCreditCard /> },
-        { name: "Investments", href: "/investments", icon: <FaChartLine /> },
-        { name: "Rewards", href: "/rewards", icon: <FaGift /> },
-        { name: "Postbox", href: "/postbox", icon: <FaInbox /> },
+        { name: t("nav.dashboard"), href: "/dashboard", icon: <FaHome /> },
+        { name: t("nav.transactions"), href: "/transactions", icon: <FaExchangeAlt /> },
+        { name: t("nav.accounts"), href: "/accounts", icon: <FaPiggyBank /> },
+        { name: t("nav.transfer"), href: "/transfer", icon: <FaExchangeAlt /> },
+        { name: t("nav.cards"), href: "/cards", icon: <FaCreditCard /> },
+        { name: t("nav.investments"), href: "/investments", icon: <FaChartLine /> },
+        { name: t("nav.rewards"), href: "/rewards", icon: <FaGift /> },
+        { name: t("nav.postbox"), href: "/postbox", icon: <FaInbox /> },
     ];
 
     // Add Admin link if user is admin (mock logic, ideally check claim)
     if (user?.email?.includes("admin") || true) { // Keeping consistent with previous mock
-        menuItems.push({ name: "Admin", href: "/admin", icon: <FaUserShield /> });
+        menuItems.push({ name: t("nav.admin"), href: "/admin", icon: <FaUserShield /> });
     }
 
     return (
@@ -47,11 +50,10 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
                             <Link
                                 key={item.name}
                                 href={item.href}
-                                className={`flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 group ${
-                                    isActive
-                                    ? "bg-[var(--color-primary)] text-white shadow-md"
-                                    : "text-gray-500 hover:bg-gray-50 hover:text-[var(--color-primary)]"
-                                }`}
+                                className={`flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 group ${isActive
+                                        ? "bg-[var(--color-primary)] text-white shadow-md"
+                                        : "text-gray-500 hover:bg-gray-50 hover:text-[var(--color-primary)]"
+                                    }`}
                             >
                                 <span className={`text-lg ${isActive ? "text-white" : "text-gray-400 group-hover:text-[var(--color-primary)]"}`}>
                                     {item.icon}
@@ -74,7 +76,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
                         className="flex items-center gap-3 px-4 py-3 rounded-xl w-full text-red-500 hover:bg-red-50 transition-colors"
                     >
                         <FaSignOutAlt />
-                        <span className="font-medium">Logout</span>
+                        <span className="font-medium">{t("common.logout")}</span>
                     </button>
                 </div>
             </aside>
