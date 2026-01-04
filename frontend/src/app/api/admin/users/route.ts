@@ -8,13 +8,40 @@ export async function GET(request: NextRequest) {
     await verifyAdmin(request.headers.get('Authorization'));
 
     const usersSnapshot = await db.collection('users').get();
-    const users = usersSnapshot.docs.map(doc => ({
-      id: doc.id,
-      ...doc.data()
-    }));
 
-    return NextResponse.json(users);
+    // Fetch users with their account balances
+    const usersWithBalances = await Promise.all(
+      usersSnapshot.docs.map(async (doc) => {
+        const userData = doc.data();
+
+        // Get user's checking account balance
+        const accountsSnapshot = await db.collection('accounts')
+          .where('owner_uid', '==', doc.id)
+          .where('type', '==', 'Checking')
+          .limit(1)
+          .get();
+
+        let balance = 0;
+        if (!accountsSnapshot.empty) {
+          balance = Number(accountsSnapshot.docs[0].data().balance || 0);
+        }
+
+        return {
+          id: doc.id,
+          email: userData.email,
+          name: userData.displayName || userData.name,
+          status: userData.status || 'active',
+          tier: userData.tier || 'Standard',
+          balance: balance,
+          created_at: userData.created_at,
+          is_admin: userData.is_admin || false
+        };
+      })
+    );
+
+    return NextResponse.json(usersWithBalances);
   } catch (error: any) {
+    console.error('Admin Users GET Error:', error);
     return NextResponse.json({ error: error.message }, { status: 400 });
   }
 }

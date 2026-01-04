@@ -11,12 +11,19 @@ export async function GET(request: NextRequest) {
         const totalUsers = usersSnapshot.size;
 
         let activeUsers = 0;
-        let totalBalance = 0;
-
         usersSnapshot.docs.forEach(doc => {
             const data = doc.data();
             if (data.status !== 'suspended') activeUsers++;
-            totalBalance += Number(data.balance || 0);
+        });
+
+        // Fetch all accounts to calculate total and average balance
+        const accountsSnapshot = await db.collection('accounts')
+            .where('type', '==', 'Checking')
+            .get();
+
+        let totalBalance = 0;
+        accountsSnapshot.docs.forEach(doc => {
+            totalBalance += Number(doc.data().balance || 0);
         });
 
         const avgBalance = totalUsers > 0 ? totalBalance / totalUsers : 0;
@@ -26,7 +33,7 @@ export async function GET(request: NextRequest) {
         thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
 
         const txSnapshot = await db.collection('transactions')
-            .where('date', '>=', thirtyDaysAgo.toISOString())
+            .where('created_at', '>=', thirtyDaysAgo)
             .get();
 
         let totalVolume = 0;

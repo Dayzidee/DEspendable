@@ -16,12 +16,12 @@ export default function FloatingChatWidget() {
   };
 
   return (
-    <div className="fixed bottom-6 right-6 z-50 flex flex-col items-end">
+    <div className="fixed bottom-20 md:bottom-6 right-4 md:right-6 z-50 flex flex-col items-end">
       {/* Chat Window */}
       {isOpen && (
-        <div className="mb-4 w-80 md:w-96 bg-white rounded-2xl shadow-2xl overflow-hidden animate-fade-in-up border border-gray-100">
+        <div className="mb-4 w-[calc(100vw-2rem)] md:w-96 h-[60vh] md:h-auto bg-white rounded-2xl shadow-2xl overflow-hidden animate-fade-in-up border border-gray-100">
           <header className="bg-[var(--color-primary)] text-white p-4 flex justify-between items-center">
-            <h3 className="font-bold flex items-center gap-2">
+            <h3 className="font-bold flex items-center gap-2 text-sm md:text-base">
               <FaHeadset /> Live Support
             </h3>
             <button onClick={toggleChat} className="text-white/80 hover:text-white transition-colors cursor-pointer">
@@ -29,7 +29,7 @@ export default function FloatingChatWidget() {
             </button>
           </header>
 
-          <div className="h-80 overflow-y-auto p-4 bg-gray-50 flex flex-col gap-3">
+          <div className="h-64 md:h-80 overflow-y-auto p-4 bg-gray-50 flex flex-col gap-3">
             <div className="bg-blue-100 text-blue-900 p-3 rounded-lg rounded-tl-none self-start max-w-[85%] text-sm">
               <span>Welcome! An agent will be with you shortly.</span>
             </div>
@@ -60,7 +60,7 @@ export default function FloatingChatWidget() {
       {/* Toggle Button */}
       <button
         onClick={toggleChat}
-        className="w-14 h-14 rounded-full bg-[var(--color-primary)] hover:bg-[var(--color-primary-hover)] text-white shadow-lg flex items-center justify-center text-xl transition-transform hover:scale-105 cursor-pointer"
+        className="w-12 h-12 md:w-14 md:h-14 rounded-full bg-[var(--color-primary)] hover:bg-[var(--color-primary-hover)] text-white shadow-lg flex items-center justify-center text-lg md:text-xl transition-transform hover:scale-105 cursor-pointer"
       >
         {isOpen ? <FaTimes /> : <FaComments />}
       </button>

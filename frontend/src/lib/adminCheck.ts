@@ -23,3 +23,18 @@ export async function verifyAdmin(requestAuthorization: string | null) {
 
     return decodedToken;
 }
+
+/**
+ * Checks if a user ID has admin status.
+ * @param userId - The user ID to check.
+ * @returns True if the user is an admin, false otherwise.
+ */
+export async function checkAdminStatus(userId: string): Promise<boolean> {
+    try {
+        const userDoc = await db.collection("users").doc(userId).get();
+        return userDoc.exists && userDoc.data()?.is_admin === true;
+    } catch (error) {
+        console.error('Error checking admin status:', error);
+        return false;
+    }
+}

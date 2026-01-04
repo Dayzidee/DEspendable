@@ -5,10 +5,11 @@ import { useAuth } from "@/context/AuthContext";
 import { useRouter } from "@/i18n/navigation";
 import { Link } from "@/i18n/navigation";
 import { motion } from "framer-motion";
-import { Users, TrendingUp, DollarSign, Activity, Search, Edit, Trash2, Plus, ArrowLeft, MoreHorizontal, ShieldCheck, ShieldAlert, History } from "lucide-react";
+import { Users, TrendingUp, DollarSign, Activity, Search, Edit, Trash2, Plus, ArrowLeft, MoreHorizontal, ShieldCheck, ShieldAlert, History, MessageSquare } from "lucide-react";
 import { Bar, Line } from "react-chartjs-2";
 import { useTranslations } from 'next-intl';
 import BalanceAdjustmentModal from "@/components/admin/BalanceAdjustmentModal";
+import AdminChatPanel from "@/components/admin/AdminChatPanel";
 import { formatCurrency, formatDate } from "@/lib/formatters";
 import {
     Chart as ChartJS,
@@ -56,7 +57,7 @@ function AdminContent() {
     const [transactions, setTransactions] = useState<any[]>([]);
     const [searchQuery, setSearchQuery] = useState("");
     const [selectedUser, setSelectedUser] = useState<any>(null);
-    const [view, setView] = useState<'users' | 'transactions'>('users');
+    const [view, setView] = useState<'users' | 'transactions' | 'chats'>('users');
     const [showBalanceModal, setShowBalanceModal] = useState(false);
 
     useEffect(() => {
@@ -229,11 +230,24 @@ function AdminContent() {
                                     {t('transactions')}
                                 </div>
                             </button>
+                            <button
+                                onClick={() => setView('chats')}
+                                className={`px-6 py-2 rounded-lg font-semibold transition ${view === 'chats' ? 'bg-white shadow-sm text-[#0018A8]' : 'text-[#666666]'}`}
+                            >
+                                <div className="flex items-center gap-2">
+                                    <MessageSquare className="w-4 h-4" />
+                                    {t('supportChats')}
+                                </div>
+                            </button>
                         </div>
-                        <h2 className="text-2xl font-bold">{view === 'users' ? t('userManagement') : t('transactionVolume')}</h2>
+                        <h2 className="text-2xl font-bold">
+                            {view === 'users' ? t('userManagement') : view === 'transactions' ? t('transactionVolume') : t('supportChats')}
+                        </h2>
                     </div>
 
-                    {view === 'users' ? (
+                    {view === 'chats' ? (
+                        <AdminChatPanel />
+                    ) : view === 'users' ? (
                         <>
                             {/* Search */}
                             <div className="mb-6">

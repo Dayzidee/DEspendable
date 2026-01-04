@@ -809,5 +809,28 @@
         "section8_title": "8. Final Provisions",
         "section8_text": "German law applies. The place of jurisdiction is Berlin. Should individual provisions be invalid, the validity of the remaining provisions remains unaffected.",
         "status": "As of January 2026"
+    },
+    "chat": {
+        "title": "Support Chat",
+        "start_chat": "Start Chat",
+        "close_chat": "Close Chat",
+        "reopen_chat": "Reopen Chat",
+        "send_message": "Send Message",
+        "type_message": "Type your message...",
+        "no_messages": "No messages yet. Start the conversation!",
+        "admin_support": "Admin Support",
+        "you": "You",
+        "admin": "Admin",
+        "online": "Online",
+        "offline": "Offline",
+        "unread_messages": "{count} unread message(s)",
+        "chat_closed": "This chat has been closed",
+        "all_chats": "All Support Chats",
+        "open_chats": "Open Chats",
+        "closed_chats": "Closed Chats",
+        "no_chats": "No support chats yet",
+        "mark_resolved": "Mark as Resolved",
+        "chat_with": "Chat with {name}",
+        "supportChats": "Support Chats"
     }
 }

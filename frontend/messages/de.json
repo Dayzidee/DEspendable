@@ -817,5 +817,28 @@
         "section8_title": "8. Schlussbestimmungen",
         "section8_text": "Es gilt deutsches Recht. Gerichtsstand ist Berlin. Sollten einzelne Bestimmungen unwirksam sein, bleibt die Wirksamkeit der übrigen Bestimmungen unberührt.",
         "status": "Stand: Januar 2026"
+    },
+    "chat": {
+        "title": "Support-Chat",
+        "start_chat": "Chat starten",
+        "close_chat": "Chat schließen",
+        "reopen_chat": "Chat wieder öffnen",
+        "send_message": "Nachricht senden",
+        "type_message": "Geben Sie Ihre Nachricht ein...",
+        "no_messages": "Noch keine Nachrichten. Starten Sie das Gespräch!",
+        "admin_support": "Admin-Support",
+        "you": "Sie",
+        "admin": "Admin",
+        "online": "Online",
+        "offline": "Offline",
+        "unread_messages": "{count} ungelesene Nachricht(en)",
+        "chat_closed": "Dieser Chat wurde geschlossen",
+        "all_chats": "Alle Support-Chats",
+        "open_chats": "Offene Chats",
+        "closed_chats": "Geschlossene Chats",
+        "no_chats": "Noch keine Support-Chats",
+        "mark_resolved": "Als gelöst markieren",
+        "chat_with": "Chat mit {name}",
+        "supportChats": "Support-Chats"
     }
 }

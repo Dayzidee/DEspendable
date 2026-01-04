@@ -1,3 +1,5 @@
+"use client";
+
 import { useState, useEffect } from "react";
 import { useAuth } from "@/context/AuthContext";
 import DashboardLayout from "@/components/dashboard/DashboardLayout";
@@ -55,8 +57,8 @@ export default function InvestmentsPage() {
                             <div key={idx} className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100 hover:shadow-md transition-all">
                                 <div className="flex items-center gap-4 mb-4">
                                     <div className={`w-12 h-12 rounded-xl flex items-center justify-center text-xl ${item.color === 'blue' ? 'bg-blue-100 text-blue-600' :
-                                            item.color === 'green' ? 'bg-green-100 text-green-600' :
-                                                'bg-orange-100 text-orange-600'
+                                        item.color === 'green' ? 'bg-green-100 text-green-600' :
+                                            'bg-orange-100 text-orange-600'
                                         }`}>
                                         <FaBriefcase />
                                     </div>

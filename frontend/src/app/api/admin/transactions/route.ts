@@ -7,14 +7,24 @@ export async function GET(request: NextRequest) {
         await verifyAdmin(request.headers.get('Authorization'));
 
         const txSnapshot = await db.collection('transactions')
-            .orderBy('date', 'desc')
+            .orderBy('created_at', 'desc')
             .limit(100)
             .get();
 
-        const transactions = txSnapshot.docs.map(doc => ({
-            id: doc.id,
-            ...doc.data()
-        }));
+        const transactions = txSnapshot.docs.map(doc => {
+            const data = doc.data();
+            return {
+                id: doc.id,
+                amount: data.amount,
+                description: data.description || data.reference,
+                recipient: data.recipient_name || data.to_account_id,
+                sender: data.sender_name || data.from_account_id,
+                date: data.created_at?.toDate?.()?.toISOString() || data.created_at,
+                status: data.status,
+                type: data.type,
+                category: data.category
+            };
+        });
 
         return NextResponse.json(transactions);
     } catch (error: any) {
