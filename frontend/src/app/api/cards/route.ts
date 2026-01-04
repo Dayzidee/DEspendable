@@ -1,6 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
+
+export const dynamic = 'force-dynamic';
 import { auth, db } from '@/lib/firebaseAdmin';
-import { FieldValue } from 'firebase-admin/firestore';
+import { FieldValue, Timestamp } from 'firebase-admin/firestore';
 
 export async function GET(request: NextRequest) {
     try {
@@ -35,12 +37,54 @@ export async function GET(request: NextRequest) {
             return NextResponse.json({ id: docRef.id, ...newCard });
         }
 
+
         const cards = cardsSnapshot.docs.map(doc => ({
             id: doc.id,
             ...doc.data()
         }));
 
-        return NextResponse.json(cards[0]); // Return the primary card
+        const card = cards[0];
+
+        // Fetch recent transactions for this user
+        const transactionsSnapshot = await db
+            .collection('transactions')
+            .where('user_id', '==', userId)
+            .orderBy('created_at', 'desc')
+            .limit(10)
+            .get();
+
+        const transactions = transactionsSnapshot.docs.map(doc => {
+            const data = doc.data();
+            let timestamp = new Date().toISOString();
+            if (data.created_at instanceof Timestamp) {
+                timestamp = data.created_at.toDate().toISOString();
+            }
+
+            return {
+                id: doc.id,
+                merchant: data.description || data.recipient_name || 'Merchant',
+                amount: Number(data.amount || 0),
+                type: data.type || 'payment',
+                date: timestamp
+            };
+        });
+
+        // Calculate monthly spending for limit
+        const now = new Date();
+        const firstDayOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
+
+        const monthlySpending = transactions
+            .filter(tx => new Date(tx.date) >= firstDayOfMonth && tx.amount < 0)
+            .reduce((sum, tx) => sum + Math.abs(tx.amount), 0);
+
+        return NextResponse.json({
+            ...card,
+            transactions,
+            spending: {
+                monthly: monthlySpending,
+                limit: 1000.00 // Default limit
+            }
+        });
     } catch (error: any) {
         console.error('Cards API Error:', error);
         return NextResponse.json({ error: error.message }, { status: 400 });

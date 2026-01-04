@@ -40,7 +40,8 @@ export default function Dashboard() {
         if (user && token) {
             // Fetch Dashboard Data
             const fetchDashboard = fetch(`/api/dashboard`, {
-                headers: { Authorization: `Bearer ${token}` }
+                headers: { Authorization: `Bearer ${token}` },
+                cache: 'no-store'
             }).then(res => res.json());
 
             // Fetch Goals Data

@@ -256,12 +256,17 @@ export default function VirtualCard() {
                     <div className="p-4 bg-gray-50 rounded-xl">
                         <div className="flex justify-between items-center mb-2">
                             <span className="font-semibold">{t('dailyLimit')}</span>
-                            <span className="text-[#0018A8] font-bold">€1.000</span>
+                            <span className="text-[#0018A8] font-bold">€{cardData?.spending?.limit?.toLocaleString('de-DE') || '1.000'}</span>
                         </div>
                         <div className="w-full bg-gray-200 rounded-full h-2">
-                            <div className="bg-gradient-to-r from-[#0018A8] to-[#0025D9] h-2 rounded-full" style={{ width: "45%" }}></div>
+                            <div
+                                className="bg-gradient-to-r from-[#0018A8] to-[#0025D9] h-2 rounded-full"
+                                style={{ width: `${Math.min(((cardData?.spending?.monthly || 0) / (cardData?.spending?.limit || 1000)) * 100, 100)}%` }}
+                            ></div>
                         </div>
-                        <div className="text-xs text-[#666666] mt-1">€450 {t('limitUsed')} €1.000</div>
+                        <div className="text-xs text-[#666666] mt-1">
+                            €{(cardData?.spending?.monthly || 0).toLocaleString('de-DE')} {t('limitUsed')} €{cardData?.spending?.limit?.toLocaleString('de-DE') || '1.000'}
+                        </div>
                     </div>
                 </div>
 
@@ -269,21 +274,23 @@ export default function VirtualCard() {
                 <div className="mt-8 bg-white rounded-2xl p-6 shadow-lg border border-gray-100">
                     <h3 className="font-bold mb-4">{t('recentTransactions')}</h3>
                     <div className="space-y-3">
-                        {[
-                            { merchant: "Amazon.de", amount: -45.99, date: "Heute, 14:30" },
-                            { merchant: "Spotify", amount: -9.99, date: "Gestern, 10:15" },
-                            { merchant: "Rewe", amount: -23.50, date: "28.12.2025" },
-                        ].map((tx, index) => (
-                            <div key={index} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
-                                <div>
-                                    <div className="font-semibold text-sm">{tx.merchant}</div>
-                                    <div className="text-xs text-[#666666]">{tx.date}</div>
+                        {(cardData?.transactions && cardData.transactions.length > 0) ? (
+                            cardData.transactions.map((tx: any, index: number) => (
+                                <div key={index} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                                    <div>
+                                        <div className="font-semibold text-sm">{tx.merchant}</div>
+                                        <div className="text-xs text-[#666666]">
+                                            {new Date(tx.date).toLocaleDateString('de-DE', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit' })}
+                                        </div>
+                                    </div>
+                                    <div className={`font-bold ${tx.amount < 0 ? 'text-[#1C1C1C]' : 'text-green-600'}`}>
+                                        {tx.amount < 0 ? "" : "+"}€{Math.abs(tx.amount).toFixed(2).replace('.', ',')}
+                                    </div>
                                 </div>
-                                <div className="font-bold text-[#1C1C1C]">
-                                    {tx.amount < 0 ? "-" : "+"}€{Math.abs(tx.amount).toFixed(2)}
-                                </div>
-                            </div>
-                        ))}
+                            ))
+                        ) : (
+                            <div className="text-center text-gray-500 py-4 italic">Keine Transaktionen gefunden</div>
+                        )}
                     </div>
                 </div>
             </div>

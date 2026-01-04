@@ -296,7 +296,8 @@
         "contactless": "Contactless",
         "onlinePayments": "Online Payments",
         "internationalPayments": "International Payments",
-        "atmWithdrawals": "ATM Withdrawals"
+        "atmWithdrawals": "ATM Withdrawals",
+        "premium": "Premium"
     },
     "rewards": {
         "title": "Rewards",
@@ -359,7 +360,9 @@
             "grocery_shopping": "Grocery Shopping",
             "online_shopping": "Online Shopping",
             "gas_station": "Gas Station",
-            "restaurant": "Restaurant"
+            "restaurant": "Restaurant",
+            "welcome_bonus": "Welcome Bonus",
+            "first_login": "First Login"
         },
         "transactions_earn": "1 point per €1 spent",
         "referral_earn": "500 points per referral",
@@ -534,6 +537,17 @@
             "networkError": "Network error. Please check your connection.",
             "unknownError": "An unknown error occurred"
         }
+    },
+    "investments": {
+        "title": "Investments",
+        "subtitle": "Track and manage your portfolio",
+        "total_value": "Total Portfolio Value",
+        "past_month": "Past Month",
+        "invest_more": "Invest More",
+        "equity": "Equity",
+        "bonds": "Bonds",
+        "crypto": "Crypto",
+        "commodity": "Commodity"
     },
     "accounts": {
         "title": "Accounts",

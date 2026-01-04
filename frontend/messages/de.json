@@ -296,15 +296,8 @@
         "contactless": "Kontaktlos",
         "onlinePayments": "Online-Zahlungen",
         "internationalPayments": "Internationale Zahlungen",
-        "atmWithdrawals": "Geldautomaten-Abhebungen"
-    },
-    "investments": {
-        "title": "Investitionen",
-        "subtitle": "Verfolgen Sie Ihre Portfolio-Performance.",
-        "total_value": "Gesamt-Portfoliowert",
-        "invest_more": "Mehr investieren",
-        "equity": "Aktien",
-        "past_month": "Letzter Monat"
+        "atmWithdrawals": "Geldautomaten-Abhebungen",
+        "premium": "Premium"
     },
     "rewards": {
         "title": "Belohnungen",
@@ -542,6 +535,17 @@
             "networkError": "Netzwerkfehler. Bitte überprüfen Sie Ihre Verbindung.",
             "unknownError": "Ein unbekannter Fehler ist aufgetreten"
         }
+    },
+    "investments": {
+        "title": "Investitionen",
+        "subtitle": "Verfolgen und verwalten Sie Ihr Portfolio",
+        "total_value": "Gesamt-Portfoliowert",
+        "past_month": "Letzter Monat",
+        "invest_more": "Mehr investieren",
+        "equity": "Aktien",
+        "bonds": "Anleihen",
+        "crypto": "Krypto",
+        "commodity": "Rohstoffe"
     },
     "accounts": {
         "title": "Konten",

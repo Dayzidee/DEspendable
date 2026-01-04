@@ -27,6 +27,7 @@ static/gen/
 
 # Project Specific
 backend/serviceAccountKey.json
+frontend/serviceAccountKey.json
 .venv/
 backend/venv/
 **/.env.local

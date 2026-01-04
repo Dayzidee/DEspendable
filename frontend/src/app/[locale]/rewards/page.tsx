@@ -49,7 +49,8 @@ export default function Rewards() {
         );
     }
 
-    const { points: userPoints, tier: currentTierKey } = rewardsData;
+    const { points: userPoints, tier: rawTier } = rewardsData;
+    const currentTierKey = rawTier.toLowerCase();
     const nextTierKey = currentTierKey === "bronze" ? "silver" : currentTierKey === "silver" ? "gold" : "platinum";
     const pointsToNext = 5000 - userPoints > 0 ? 5000 - userPoints : 0;
     const pointsHistory = rewardsData.history || [];

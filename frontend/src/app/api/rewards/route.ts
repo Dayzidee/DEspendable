@@ -1,4 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
+
+export const dynamic = 'force-dynamic';
 import { auth, db } from '@/lib/firebaseAdmin';
 import { FieldValue } from 'firebase-admin/firestore';
 
@@ -19,10 +21,20 @@ export async function GET(request: NextRequest) {
             // Initialize rewards for the user
             const initialRewards = {
                 points: 1250,
-                tier: "Silver",
+                tier: "silver",
                 history: [
-                    { date: new Date().toISOString(), description: "Willkommensbonus", points: 1000 },
-                    { date: new Date().toISOString(), description: "Erste Anmeldung", points: 250 }
+                    {
+                        date: new Date().toISOString().split('T')[0],
+                        descriptionKey: "welcome_bonus",
+                        description: "Willkommensbonus",
+                        points: 1000
+                    },
+                    {
+                        date: new Date().toISOString().split('T')[0],
+                        descriptionKey: "first_login",
+                        description: "Erste Anmeldung",
+                        points: 250
+                    }
                 ],
                 created_at: FieldValue.serverTimestamp()
             };

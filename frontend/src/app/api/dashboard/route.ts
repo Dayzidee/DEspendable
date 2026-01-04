@@ -1,5 +1,6 @@
-
 import { NextRequest, NextResponse } from 'next/server';
+
+export const dynamic = 'force-dynamic';
 import { auth, db } from '@/lib/firebaseAdmin';
 import { FieldValue, Timestamp } from 'firebase-admin/firestore';
 import crypto from 'crypto';
@@ -66,17 +67,29 @@ export async function GET(request: NextRequest) {
       .where('owner_uid', '==', userId)
       .get();
 
-    const accounts = finalAccountsSnapshot.docs.map(doc => {
+    const accounts = await Promise.all(finalAccountsSnapshot.docs.map(async (doc) => {
       const data = doc.data();
+      let iban = data.iban;
+      let balance = Number(data.balance);
+
+      if (isNaN(balance)) balance = 0;
+
+      // Self-healing: Generate IBAN if missing
+      if (!iban) {
+        const newIban = generateIBAN();
+        await db.collection('accounts').doc(doc.id).update({ iban: newIban });
+        iban = newIban;
+      }
+
       return {
         id: doc.id,
         account_name: data.name || 'Girokonto',
-        masked_account_number: data.iban ? `DE **** ${data.iban.slice(-4)} ` : 'DE****0000',
-        balance: Number(data.balance || 0),
+        masked_account_number: iban ? `DE **** ${iban.slice(-4)}` : 'DE **** 0000',
+        balance: balance,
         currency: data.currency || 'EUR',
         type: data.type || 'Checking'
       };
-    });
+    }));
 
     // Fetch Recent Transactions (Limit 20 for analytics)
     const transactionsSnapshot = await db

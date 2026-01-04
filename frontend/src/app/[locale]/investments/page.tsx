@@ -38,7 +38,9 @@ export default function InvestmentsPage() {
                     <div className="relative z-10 flex flex-col md:flex-row justify-between items-end gap-6">
                         <div>
                             <span className="block text-purple-100 mb-1">{t('total_value')}</span>
-                            <h2 className="text-4xl font-bold">€12.450,00</h2>
+                            <h2 className="text-4xl font-bold">
+                                €{investments.reduce((sum, item) => sum + (Number(item.value) || 0), 0).toLocaleString('de-DE', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                            </h2>
                             <div className="flex items-center gap-2 mt-2 text-green-300 bg-green-500/20 px-3 py-1 rounded-full w-fit">
                                 <FaArrowUp /> +5.2% ({t('past_month')})
                             </div>
