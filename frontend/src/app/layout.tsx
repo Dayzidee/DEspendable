@@ -6,6 +6,7 @@ export const metadata: Metadata = {
   description: "Secure, Fast, and Premium Banking Experience",
 };
 
+
 export default function RootLayout({
   children,
 }: Readonly<{

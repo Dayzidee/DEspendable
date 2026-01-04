@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useRef } from "react";
 import { Link } from "@/i18n/navigation";
-
+import { useTranslations } from 'next-intl';
 import LanguageToggle from "./LanguageToggle";
 import { gsap } from "@/lib/gsap-config";
 import { X, ChevronDown, ChevronUp } from "lucide-react";
@@ -14,40 +14,42 @@ interface MenuItem {
 }
 
 export default function MobileMenu() {
+    const t = useTranslations('nav');
+    const mt = useTranslations('menu');
+    const at = useTranslations('auth');
     const [isOpen, setIsOpen] = useState(false);
     const [expandedSections, setExpandedSections] = useState<string[]>([]);
     const menuRef = useRef<HTMLDivElement>(null);
     const overlayRef = useRef<HTMLDivElement>(null);
 
-
     const menuItems: MenuItem[] = [
         {
-            title: "About Us",
+            title: mt("aboutUs"),
             href: "#",
             children: [
-                { title: "Mission", href: "/mission" },
-                { title: "Vision", href: "/vision" },
-                { title: "Team", href: "/team" },
-                { title: "Achievements", href: "/achievements" },
-                { title: "Locations", href: "/directions" },
+                { title: mt("mission"), href: "/mission" },
+                { title: mt("vision"), href: "/vision" },
+                { title: mt("team"), href: "/team" },
+                { title: mt("achievements"), href: "/achievements" },
+                { title: mt("locations"), href: "/directions" },
             ],
         },
         {
-            title: "Features",
+            title: mt("features"),
             href: "#",
             children: [
-                { title: "All Features", href: "/features" },
-                { title: "Security", href: "/features#security" },
-                { title: "Virtual Cards", href: "/cards" },
+                { title: mt("allFeatures"), href: "/features" },
+                { title: mt("security"), href: "/features#security" },
+                { title: mt("virtualCards"), href: "/features#cards" },
             ],
         },
         {
-            title: "Support",
+            title: mt("support"),
             href: "#",
             children: [
-                { title: "Customer Service", href: "/customer-service" },
-                { title: "FAQ", href: "/faq" },
-                { title: "Contact", href: "/directions#contact" },
+                { title: mt("customerService"), href: "/customer-service" },
+                { title: mt("faq"), href: "/faq" },
+                { title: mt("contact"), href: "/directions#contact" },
             ],
         },
     ];
@@ -140,14 +142,14 @@ export default function MobileMenu() {
                     {/* Backdrop */}
                     <div
                         ref={overlayRef}
-                        className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50"
+                        className="fixed inset-0 bg-black/50 backdrop-blur-sm z-[100]"
                         onClick={closeMenu}
                     />
 
                     {/* Menu Panel */}
                     <div
                         ref={menuRef}
-                        className="fixed top-0 right-0 bottom-0 w-full max-w-sm bg-white z-50 overflow-y-auto"
+                        className="fixed top-0 right-0 bottom-0 w-full max-w-sm bg-white z-[101] overflow-y-auto shadow-2xl"
                     >
                         {/* Header */}
                         <div className="flex items-center justify-between p-6 border-b border-gray-200">
@@ -212,7 +214,7 @@ export default function MobileMenu() {
                         <div className="p-6 border-t border-gray-200 space-y-4">
                             {/* Language Toggle */}
                             <div className="mobile-menu-item">
-                                <p className="text-sm text-[#666666] mb-2">Language</p>
+                                <p className="text-sm text-[#666666] mb-2">{mt("language")}</p>
                                 <LanguageToggle />
                             </div>
 
@@ -223,14 +225,14 @@ export default function MobileMenu() {
                                     onClick={closeMenu}
                                     className="block w-full px-6 py-3 text-center text-[#0018A8] font-semibold border-2 border-[#0018A8] rounded-lg hover:bg-blue-50 transition-all"
                                 >
-                                    Anmelden
+                                    {at("login")}
                                 </Link>
                                 <Link
                                     href="/signup"
                                     onClick={closeMenu}
                                     className="block w-full px-6 py-3 text-center bg-gradient-to-r from-[#0018A8] to-[#0025D9] text-white font-bold rounded-lg hover:shadow-lg transition-all"
                                 >
-                                    Konto eröffnen
+                                    {at("signup")}
                                 </Link>
                             </div>
                         </div>

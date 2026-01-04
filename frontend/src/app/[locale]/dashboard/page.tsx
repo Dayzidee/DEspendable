@@ -4,6 +4,12 @@ import { useAuth } from "@/context/AuthContext";
 import { useRouter } from "@/i18n/navigation";
 import { useEffect, useState } from "react";
 import { useTranslations } from 'next-intl';
+import { useDiscreet } from "@/context/DiscreetContext";
+import { formatCurrency, formatDate } from "@/lib/formatters";
+import DiscreetToggle from "@/components/DiscreetToggle";
+import LanguageSwitch from "@/components/LanguageSwitch";
+import { Link } from "@/i18n/navigation";
+
 import DashboardHeader from "@/components/dashboard/DashboardHeader";
 import DashboardLayout from "@/components/dashboard/DashboardLayout";
 import FinancialSummary from "@/components/dashboard/FinancialSummary";
@@ -14,11 +20,11 @@ import RecentTransactions from "@/components/dashboard/RecentTransactions";
 import VirtualCard from "@/components/dashboard/VirtualCard";
 import FloatingChatWidget from "@/components/dashboard/FloatingChatWidget";
 import { FaUserShield, FaFileImport, FaBullseye, FaChevronRight, FaChartLine, FaTrophy } from 'react-icons/fa';
-import Link from "next/link";
 
 export default function Dashboard() {
     const { user, token, loading } = useAuth();
     const t = useTranslations();
+    const { isDiscreet } = useDiscreet();
     const router = useRouter();
     const [data, setData] = useState<any>(null);
     const [fetchError, setFetchError] = useState("");
@@ -31,7 +37,7 @@ export default function Dashboard() {
 
     useEffect(() => {
         if (user && token) {
-            fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:5000'}/api/dashboard`, {
+            fetch(`/api/dashboard`, {
                 headers: {
                     Authorization: `Bearer ${token}`
                 }
@@ -53,146 +59,127 @@ export default function Dashboard() {
         );
     }
 
-    const totalBalance = data?.accounts?.reduce((acc: number, curr: any) => acc + parseFloat(curr.balance), 0) || 0;
-    const accounts = data?.accounts?.map((acc: any) => ({
-        id: acc.id,
-        account_name: acc.type === 'Checking' ? 'Checking Account' : acc.type === 'Savings' ? 'Savings Account' : acc.type,
-        masked_account_number: `•••• ${acc.id.slice(-4)}`,
-        balance: parseFloat(acc.balance)
-    })) || [];
+    const accounts = data?.accounts || [];
+    const recentTransactions = data?.recent_transactions || [];
+    const totalBalance = accounts.reduce((acc: number, curr: any) => acc + parseFloat(curr.balance), 0) || 0;
 
-    const recentTransactions = data?.recent_transactions?.map((tx: any) => ({
-        id: tx.id,
-        type: tx.type,
-        amount: parseFloat(tx.amount),
-        timestamp: tx.timestamp
-    })) || [];
-
-    // Mock chart data if not provided by API
+    // Convert data for SpendingAnalytics if needed
     const chartData = {
-        labels: ['Food', 'Transport', 'Entertainment', 'Bills', 'Shopping'],
+        labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
         datasets: [
             {
-                data: [300, 150, 100, 450, 200],
-                backgroundColor: [
-                    '#0018A8',
-                    '#E2001A',
-                    '#00C853',
-                    '#FFA000',
-                    '#6200EA',
-                ],
-                borderWidth: 0,
+                label: 'Income',
+                data: [2500, 2700, 2400, 2800, 2600, 3100],
+                borderColor: '#00C853',
             },
-        ],
+            {
+                label: 'Expenses',
+                data: [1800, 2100, 1900, 2200, 2000, 1950],
+                borderColor: '#E2001A',
+            }
+        ]
     };
 
     return (
         <DashboardLayout>
-            <div className="max-w-7xl mx-auto">
-                {/* 1. DASHBOARD HEADER */}
-                <DashboardHeader
-                    username={data?.recent_transactions?.[0]?.owner?.username || user.displayName || "User"}
-                    tier={data?.account_tier || "Standard"}
-                />
+            <div className="max-w-7xl mx-auto pb-12">
+                <div className="flex justify-between items-start mb-4">
+                    <DashboardHeader
+                        username={data?.recent_transactions?.[0]?.owner?.username || user.displayName || "User"}
+                        tier={data?.account_tier || "Standard"}
+                    />
+                    <div className="flex items-center gap-3">
+                        <LanguageSwitch />
+                        <DiscreetToggle />
+                    </div>
+                </div>
 
-                {/* 2. FINANCIAL SUMMARY */}
+                {fetchError && (
+                    <div className="mb-6 p-4 bg-red-50 border border-red-200 text-[#E2001A] rounded-xl text-sm">
+                        {fetchError}
+                    </div>
+                )}
+
                 <FinancialSummary
                     totalBalance={totalBalance}
                     accountsCount={accounts.length}
-                    pendingCount={0}
+                    pendingCount={recentTransactions.filter((tx: any) => tx.status === 'pending').length}
                 />
 
-                {/* 3. MAIN DASHBOARD GRID */}
                 <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-                    {/* [A] Main Content Column */}
                     <div className="lg:col-span-2 space-y-6">
-                        {/* Analytics Card */}
                         <SpendingAnalytics data={chartData} />
-
-                        {/* Account Identifier */}
-                        <AccountIdentifier accountNumber={user.uid || "1234567890"} />
-
-                        {/* Accounts Card */}
+                        <AccountIdentifier accountNumber={user.uid || "DE1234567890"} />
                         <AccountsList accounts={accounts} />
-
-                        {/* Recent Transactions Card */}
                         <RecentTransactions transactions={recentTransactions} />
                     </div>
 
-                    {/* [B] Sidebar Column (Now Right Rail) */}
                     <aside className="space-y-6">
-                        {/* Quick Actions Card */}
-                        <section className="bg-white rounded-xl shadow-sm p-6 card-hover">
+                        <section className="bg-white rounded-xl shadow-sm p-6 card-hover border border-gray-100">
                             <header className="mb-4">
-                                <h2 className="text-xl font-bold text-[var(--color-text-primary)]">Quick Actions</h2>
+                                <h2 className="text-xl font-bold text-[#1C1C1C]">Quick Actions</h2>
                             </header>
                             <div className="space-y-3">
-                                {/* Admin Panel - Show conditionally if needed, simplified here */}
                                 <Link href="/admin" className="flex items-center justify-between p-3 rounded-lg hover:bg-gray-50 transition-colors group cursor-pointer">
                                     <div className="flex items-center gap-3">
                                         <div className="w-8 h-8 rounded-full bg-red-100 text-red-600 flex items-center justify-center">
                                             <FaUserShield />
                                         </div>
-                                        <span className="font-medium text-[var(--color-text-primary)]">Admin Panel</span>
+                                        <span className="font-medium text-[#1C1C1C]">Admin Panel</span>
                                     </div>
-                                    <FaChevronRight className="text-gray-400 group-hover:text-[var(--color-primary)]" />
+                                    <FaChevronRight className="text-gray-400 group-hover:text-[#0018A8]" />
                                 </Link>
 
                                 <Link href="#" className="flex items-center justify-between p-3 rounded-lg hover:bg-gray-50 transition-colors group cursor-pointer">
                                     <div className="flex items-center gap-3">
-                                        <div className="w-8 h-8 rounded-full bg-[var(--color-primary)]/10 text-[var(--color-primary)] flex items-center justify-center">
+                                        <div className="w-8 h-8 rounded-full bg-blue-100 text-[#0018A8] flex items-center justify-center">
                                             <FaFileImport />
                                         </div>
-                                        <span className="font-medium text-[var(--color-text-primary)]">Import Statement</span>
+                                        <span className="font-medium text-[#1C1C1C]">Import Statement</span>
                                     </div>
-                                    <FaChevronRight className="text-gray-400 group-hover:text-[var(--color-primary)]" />
+                                    <FaChevronRight className="text-gray-400 group-hover:text-[#0018A8]" />
                                 </Link>
 
                                 <Link href="#" className="flex items-center justify-between p-3 rounded-lg hover:bg-gray-50 transition-colors group cursor-pointer">
                                     <div className="flex items-center gap-3">
-                                        <div className="w-8 h-8 rounded-full bg-[var(--color-warning)]/10 text-[var(--color-warning)] flex items-center justify-center">
+                                        <div className="w-8 h-8 rounded-full bg-yellow-100 text-yellow-600 flex items-center justify-center">
                                             <FaBullseye />
                                         </div>
-                                        <span className="font-medium text-[var(--color-text-primary)]">Manage Goals</span>
+                                        <span className="font-medium text-[#1C1C1C]">Manage Goals</span>
                                     </div>
-                                    <FaChevronRight className="text-gray-400 group-hover:text-[var(--color-primary)]" />
+                                    <FaChevronRight className="text-gray-400 group-hover:text-[#0018A8]" />
                                 </Link>
                             </div>
                         </section>
 
-                        {/* Financial Insights Card */}
-                        <section className="bg-white rounded-xl shadow-sm p-6 card-hover">
+                        <section className="bg-white rounded-xl shadow-sm p-6 card-hover border border-gray-100">
                             <header className="mb-4">
-                                <h2 className="text-xl font-bold text-[var(--color-text-primary)]">Financial Insights</h2>
+                                <h2 className="text-xl font-bold text-[#1C1C1C]">Financial Insights</h2>
                             </header>
-
                             <div className="space-y-4">
                                 <div className="flex gap-3">
-                                    <div className="shrink-0 w-8 h-8 rounded-full bg-[var(--color-warning)]/10 text-[var(--color-warning)] flex items-center justify-center">
+                                    <div className="shrink-0 w-8 h-8 rounded-full bg-yellow-100 text-yellow-600 flex items-center justify-center">
                                         <FaChartLine />
                                     </div>
-                                    <p className="text-sm text-[var(--color-text-secondary)]">
-                                        You&apos;ve spent <strong className="text-[var(--color-text-primary)]">$250.75</strong> on Entertainment, 15% more than last month.
+                                    <p className="text-sm text-[#666666]">
+                                        You&apos;ve spent <strong className="text-[#1C1C1C]">€250.75</strong> on Entertainment, 15% more than last month.
                                     </p>
                                 </div>
                                 <div className="flex gap-3">
-                                    <div className="shrink-0 w-8 h-8 rounded-full bg-[var(--color-success)]/10 text-[var(--color-success)] flex items-center justify-center">
+                                    <div className="shrink-0 w-8 h-8 rounded-full bg-green-100 text-green-600 flex items-center justify-center">
                                         <FaTrophy />
                                     </div>
-                                    <p className="text-sm text-[var(--color-text-secondary)]">
-                                        <strong>Goal Alert:</strong> You are <strong className="text-[var(--color-text-primary)]">85%</strong> of the way to your "Vacation Fund" goal!
+                                    <p className="text-sm text-[#666666]">
+                                        <strong>Goal Alert:</strong> You are <strong className="text-[#1C1C1C]">85%</strong> of the way to your "Vacation Fund" goal!
                                     </p>
                                 </div>
                             </div>
                         </section>
 
-                        {/* Virtual Card */}
                         <VirtualCard cardHolder={data?.recent_transactions?.[0]?.owner?.username || user.displayName || "User"} />
                     </aside>
                 </div>
             </div>
-
-            {/* 4. FLOATING CHAT WIDGET */}
             <FloatingChatWidget />
         </DashboardLayout>
     );

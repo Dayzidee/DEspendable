@@ -115,9 +115,9 @@ export default function Home() {
         <div className="max-w-7xl mx-auto">
           <ScrollReveal direction="up">
             <div className="text-center mb-16">
-              <h2 className="text-4xl font-bold mb-4">Warum DEspendables?</h2>
+              <h2 className="text-4xl font-bold mb-4">{t("landing.features_title")}</h2>
               <p className="text-xl text-[#666666]">
-                Alles, was Sie für Ihr finanzielles Wohlergehen brauchen
+                {t("landing.features_subtitle")}
               </p>
             </div>
           </ScrollReveal>
@@ -127,38 +127,38 @@ export default function Home() {
               {[
                 {
                   icon: <Zap className="w-8 h-8" />,
-                  title: "Sofortüberweisungen",
-                  description: "Geld in Sekundenschnelle an Freunde und Familie senden",
+                  title: t("landing.feature_transfers"),
+                  description: t("landing.feature_transfers_desc"),
                   color: "from-yellow-400 to-orange-500",
                 },
                 {
                   icon: <TrendingUp className="w-8 h-8" />,
-                  title: "KI-Analysen",
-                  description: "Intelligente Einblicke in Ihre Ausgaben und Sparpotenziale",
+                  title: t("landing.feature_ai"),
+                  description: t("landing.feature_ai_desc"),
                   color: "from-blue-400 to-blue-600",
                 },
                 {
                   icon: <CreditCard className="w-8 h-8" />,
-                  title: "Virtuelle Karten",
-                  description: "Sichere Online-Zahlungen mit virtuellen Einwegkarten",
+                  title: t("landing.feature_cards"),
+                  description: t("landing.feature_cards_desc"),
                   color: "from-purple-400 to-purple-600",
                 },
                 {
                   icon: <Award className="w-8 h-8" />,
-                  title: "Belohnungen",
-                  description: "Verdienen Sie Punkte bei jeder Transaktion",
+                  title: t("landing.feature_rewards"),
+                  description: t("landing.feature_rewards_desc"),
                   color: "from-green-400 to-green-600",
                 },
                 {
                   icon: <Shield className="w-8 h-8" />,
-                  title: "Bank-Sicherheit",
-                  description: "Verschlüsselung auf Bankniveau und 2FA-Schutz",
+                  title: t("landing.feature_security"),
+                  description: t("landing.feature_security_desc"),
                   color: "from-red-400 to-red-600",
                 },
                 {
                   icon: <HeadphonesIcon className="w-8 h-8" />,
-                  title: "24/7 Support",
-                  description: "Live-Chat mit echten Banking-Experten",
+                  title: t("landing.feature_support"),
+                  description: t("landing.feature_support_desc"),
                   color: "from-indigo-400 to-indigo-600",
                 },
               ].map((feature, index) => (
@@ -181,16 +181,16 @@ export default function Home() {
       </section>
 
       {/* About Section */}
-      <section className="py-20 px-6 bg-gradient-to-br from-[#0018A8] to-[#0025D9] text-white">
+      <section id="about" className="py-20 px-6 bg-gradient-to-br from-[#0018A8] to-[#0025D9] text-white">
         <div className="max-w-7xl mx-auto">
           <div className="grid lg:grid-cols-2 gap-12 items-center">
             <FadeIn>
-              <h2 className="text-4xl font-bold mb-6">Über DEspendables</h2>
+              <h2 className="text-4xl font-bold mb-6">{t("landing.about_title")}</h2>
               <p className="text-lg opacity-90 mb-6 leading-relaxed">
-                Wir sind mehr als nur eine Bank. Seit 2020 revolutionieren wir das Banking-Erlebnis für über 50.000 Kunden in Deutschland.
+                {t("landing.about_text1")}
               </p>
               <p className="text-lg opacity-90 mb-8 leading-relaxed">
-                Unsere Mission ist es, Banking einfach, transparent und zugänglich für jeden zu machen. Mit modernster Technologie und einem kundenorientierten Ansatz setzen wir neue Maßstäbe.
+                {t("landing.about_text2")}
               </p>
               <div className="flex gap-4">
                 <div className="text-center">
@@ -203,7 +203,7 @@ export default function Home() {
                 </div>
                 <div className="text-center">
                   <div className="text-3xl font-bold mb-1">PCI-DSS</div>
-                  <div className="text-sm opacity-80">Zertifiziert</div>
+                  <div className="text-sm opacity-80">{t("landing.pci_compliant") || "Certified"}</div>
                 </div>
               </div>
             </FadeIn>
@@ -211,10 +211,10 @@ export default function Home() {
             <FadeIn delay={0.2}>
               <div className="grid grid-cols-2 gap-4">
                 {[
-                  { year: "2020", text: "Gründung" },
-                  { year: "2021", text: "10K Nutzer" },
-                  { year: "2023", text: "€100M Volumen" },
-                  { year: "2025", text: "50K+ Nutzer" },
+                  { year: "2020", text: t("landing.milestone_2020") || "Foundation" },
+                  { year: "2021", text: t("landing.milestone_2021") || "10K Users" },
+                  { year: "2023", text: t("landing.milestone_2023") || "€100M Volume" },
+                  { year: "2025", text: t("landing.milestone_2025") || "50K+ Users" },
                 ].map((milestone, index) => (
                   <motion.div
                     key={index}
@@ -232,32 +232,32 @@ export default function Home() {
       </section>
 
       {/* Contact Section */}
-      <section className="py-20 px-6">
+      <section id="contact" className="py-20 px-6">
         <div className="max-w-4xl mx-auto">
           <FadeIn className="text-center mb-12">
-            <h2 className="text-4xl font-bold mb-4">Kontakt aufnehmen</h2>
+            <h2 className="text-4xl font-bold mb-4">{t("landing.contact_title")}</h2>
             <p className="text-xl text-[#666666]">
-              Haben Sie Fragen? Wir sind für Sie da!
+              {t("landing.contact_subtitle")}
             </p>
           </FadeIn>
 
           <div className="grid md:grid-cols-2 gap-8">
             <FadeIn delay={0.1}>
               <div className="bg-white rounded-2xl p-8 shadow-lg border border-gray-100">
-                <h3 className="text-xl font-bold mb-6">Nachricht senden</h3>
+                <h3 className="text-xl font-bold mb-6">{t("landing.contact_form_title") || "Send Message"}</h3>
                 <form className="space-y-4">
                   <input
                     type="text"
-                    placeholder="Name"
+                    placeholder={t("landing.contact_name")}
                     className="w-full px-4 py-3 bg-[#F4F6F8] border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#0018A8]"
                   />
                   <input
                     type="email"
-                    placeholder="E-Mail"
+                    placeholder={t("landing.contact_email")}
                     className="w-full px-4 py-3 bg-[#F4F6F8] border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#0018A8]"
                   />
                   <textarea
-                    placeholder="Ihre Nachricht"
+                    placeholder={t("landing.contact_message")}
                     rows={4}
                     className="w-full px-4 py-3 bg-[#F4F6F8] border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#0018A8]"
                   />
@@ -265,7 +265,7 @@ export default function Home() {
                     type="submit"
                     className="w-full px-6 py-3 bg-gradient-to-r from-[#0018A8] to-[#0025D9] text-white font-bold rounded-lg hover:shadow-lg hover:-translate-y-0.5 transition-all"
                   >
-                    Absenden
+                    {t("landing.contact_submit")}
                   </button>
                 </form>
               </div>
@@ -274,24 +274,24 @@ export default function Home() {
             <FadeIn delay={0.2}>
               <div className="space-y-6">
                 <div className="bg-white rounded-2xl p-6 shadow-lg border border-gray-100">
-                  <h4 className="font-bold mb-2">Hauptsitz</h4>
+                  <h4 className="font-bold mb-2">{t("landing.contact_address")}</h4>
                   <p className="text-[#666666]">
                     Friedrichstraße 123<br />
                     10117 Berlin, Deutschland
                   </p>
                 </div>
                 <div className="bg-white rounded-2xl p-6 shadow-lg border border-gray-100">
-                  <h4 className="font-bold mb-2">Kontakt</h4>
+                  <h4 className="font-bold mb-2">{t("landing.contact_info")}</h4>
                   <p className="text-[#666666]">
                     E-Mail: support@despendables.de<br />
-                    Telefon: +49 30 1234 5678
+                    {t("landing.phone") || "Phone"}: +49 30 1234 5678
                   </p>
                 </div>
                 <div className="bg-white rounded-2xl p-6 shadow-lg border border-gray-100">
-                  <h4 className="font-bold mb-2">Öffnungszeiten</h4>
+                  <h4 className="font-bold mb-2">{t("landing.contact_hours")}</h4>
                   <p className="text-[#666666]">
-                    Mo-Fr: 9:00 - 18:00 Uhr<br />
-                    Sa: 10:00 - 14:00 Uhr
+                    {t("landing.hours_weekdays") || "Mon-Fri"}: 9:00 - 18:00 {t("landing.hours_suffix") || "o'clock"}<br />
+                    {t("landing.hours_saturday") || "Sat"}: 10:00 - 14:00 {t("landing.hours_suffix") || "o'clock"}
                   </p>
                 </div>
               </div>
@@ -307,38 +307,38 @@ export default function Home() {
             <div>
               <h3 className="text-xl font-bold mb-4">DEspendables</h3>
               <p className="text-gray-400 text-sm">
-                Modernes Banking für die digitale Generation.
+                {t("landing.footer_tagline") || "Modern banking for the digital generation."}
               </p>
             </div>
             <div>
-              <h4 className="font-bold mb-4">Produkte</h4>
+              <h4 className="font-bold mb-4">{t("landing.footer_products") || "Products"}</h4>
               <ul className="space-y-2 text-sm text-gray-400">
-                <li><Link href="/dashboard" className="hover:text-white transition">Girokonto</Link></li>
-                <li><Link href="/dashboard" className="hover:text-white transition">Sparkonto</Link></li>
-                <li><Link href="/dashboard" className="hover:text-white transition">Investitionen</Link></li>
-                <li><Link href="/dashboard" className="hover:text-white transition">Kredite</Link></li>
+                <li><Link href="/dashboard" className="hover:text-white transition">{t("accounts.checking")}</Link></li>
+                <li><Link href="/dashboard" className="hover:text-white transition">{t("accounts.savings")}</Link></li>
+                <li><Link href="/dashboard" className="hover:text-white transition">{t("accounts.investment")}</Link></li>
+                <li><Link href="/dashboard" className="hover:text-white transition">{t("landing.footer_loans") || "Loans"}</Link></li>
               </ul>
             </div>
             <div>
-              <h4 className="font-bold mb-4">Unternehmen</h4>
+              <h4 className="font-bold mb-4">{t("landing.footer_company") || "Company"}</h4>
               <ul className="space-y-2 text-sm text-gray-400">
-                <li><Link href="#about" className="hover:text-white transition">Über uns</Link></li>
-                <li><Link href="#contact" className="hover:text-white transition">Kontakt</Link></li>
+                <li><Link href="#about" className="hover:text-white transition">{t("nav.about")}</Link></li>
+                <li><Link href="#contact" className="hover:text-white transition">{t("common.contact_us")}</Link></li>
                 <li><Link href="/faq" className="hover:text-white transition">FAQ</Link></li>
               </ul>
             </div>
             <div>
-              <h4 className="font-bold mb-4">Rechtliches</h4>
+              <h4 className="font-bold mb-4">{t("landing.footer_legal") || "Legal"}</h4>
               <ul className="space-y-2 text-sm text-gray-400">
-                <li><Link href="/impressum" className="hover:text-white transition">Impressum</Link></li>
-                <li><Link href="/datenschutz" className="hover:text-white transition">Datenschutz</Link></li>
-                <li><Link href="/terms" className="hover:text-white transition">AGB</Link></li>
-                <li><Link href="/cookies" className="hover:text-white transition">Cookie-Richtlinie</Link></li>
+                <li><Link href="/impressum" className="hover:text-white transition">{t("legal.impressum")}</Link></li>
+                <li><Link href="/datenschutz" className="hover:text-white transition">{t("legal.privacy")}</Link></li>
+                <li><Link href="/terms" className="hover:text-white transition">{t("legal.terms")}</Link></li>
+                <li><Link href="/cookies" className="hover:text-white transition">{t("legal.cookies")}</Link></li>
               </ul>
             </div>
           </div>
           <div className="border-t border-gray-800 pt-8 text-center text-sm text-gray-400">
-            © 2026 DEspendables Bank AG. Alle Rechte vorbehalten.
+            © 2026 DEspendables Bank AG. {t("landing.footer_rights") || "All rights reserved."}
           </div>
         </div>
       </footer>
