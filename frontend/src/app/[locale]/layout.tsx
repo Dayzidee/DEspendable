@@ -31,7 +31,7 @@ export default async function LocaleLayout({
     console.log(`[i18n] Loaded ${Object.keys(messages).length} message namespaces for locale: ${locale}`);
 
     return (
-        <html lang={locale}>
+        <html lang={locale} suppressHydrationWarning>
             <body>
                 <NextIntlClientProvider locale={locale} messages={messages}>
                     <DiscreetProvider>
