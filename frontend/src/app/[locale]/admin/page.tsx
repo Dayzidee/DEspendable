@@ -7,6 +7,31 @@ import Link from "next/link";
 import { motion } from "framer-motion";
 import { Users, TrendingUp, DollarSign, Activity, Search, Edit, Trash2, Plus, ArrowLeft } from "lucide-react";
 import { Bar, Line } from "react-chartjs-2";
+import {
+    Chart as ChartJS,
+    CategoryScale,
+    LinearScale,
+    PointElement,
+    LineElement,
+    BarElement,
+    Title,
+    Tooltip,
+    Legend,
+    Filler,
+} from 'chart.js';
+
+// Register ChartJS components
+ChartJS.register(
+    CategoryScale,
+    LinearScale,
+    PointElement,
+    LineElement,
+    BarElement,
+    Title,
+    Tooltip,
+    Legend,
+    Filler
+);
 
 export default function AdminPanel() {
     const { user, token } = useAuth();
@@ -196,8 +221,8 @@ export default function AdminPanel() {
                                         <td className="py-4 px-4 font-bold text-[#0018A8]">€{user.balance.toLocaleString()}</td>
                                         <td className="py-4 px-4">
                                             <span className={`px-3 py-1 rounded-full text-xs font-semibold ${user.tier === 'Gold' ? 'bg-yellow-100 text-yellow-800' :
-                                                    user.tier === 'Silver' ? 'bg-gray-100 text-gray-800' :
-                                                        'bg-orange-100 text-orange-800'
+                                                user.tier === 'Silver' ? 'bg-gray-100 text-gray-800' :
+                                                    'bg-orange-100 text-orange-800'
                                                 }`}>
                                                 {user.tier}
                                             </span>
