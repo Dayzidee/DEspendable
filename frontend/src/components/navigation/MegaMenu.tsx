@@ -169,7 +169,7 @@ export default function MegaMenu() {
             {/* Mega Menu Dropdown */}
             {activeMenu && (
                 <div
-                    className="absolute top-full right-0 mt-2 bg-white rounded-2xl shadow-2xl border border-gray-100 p-6 z-[100] w-[350px] max-h-[500px] overflow-y-auto"
+                    className="absolute top-full right-0 mt-2 bg-white rounded-2xl shadow-2xl border border-gray-100 p-6 z-50 w-[350px] max-h-[500px] overflow-y-auto"
                     onMouseEnter={() => setActiveMenu(activeMenu)}
                     onMouseLeave={handleMouseLeave}
                 >

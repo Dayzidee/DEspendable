@@ -1,59 +1,13 @@
-import { NextRequest, NextResponse } from 'next/server';
-import { auth, db } from '@/lib/firebaseAdmin';
-import { FieldValue, Timestamp } from 'firebase-admin/firestore';
+import { NextResponse } from 'next/server';
 
-export async function GET(request: NextRequest) {
-  try {
-    const authHeader = request.headers.get('Authorization');
-    if (!authHeader?.startsWith('Bearer ')) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-    }
-    const token = authHeader.split(' ')[1];
-    const decodedToken = await auth.verifyIdToken(token);
-    const userId = decodedToken.uid;
-
-    const { searchParams } = new URL(request.url);
-    const limit = parseInt(searchParams.get('limit') || '20');
-    // Simplified filtering
-    const type = searchParams.get('type'); // 'send' or 'receive'
-
-    let query = db.collection('transactions')
-      .where('user_id', '==', userId)
-      .orderBy('created_at', 'desc')
-      .limit(limit);
-
-    if (type) {
-      query = query.where('type', '==', type);
-    }
-
-    const snapshot = await query.get();
-
-    const transactions = snapshot.docs.map(doc => {
-      const data = doc.data();
-      let timestamp = new Date().toISOString();
-
-      if (data.created_at instanceof Timestamp) {
-        timestamp = data.created_at.toDate().toISOString();
-      } else if (data.completed_at instanceof Timestamp) {
-        timestamp = data.completed_at.toDate().toISOString();
-      }
-
-      return {
-        id: doc.id,
-        type: data.type || 'transfer',
-        amount: Number(data.amount || 0),
-        timestamp: timestamp,
-        date: timestamp, // Alias for backward compatibility in some views
-        status: data.status || 'completed',
-        description: data.reference || data.recipient_name || data.recipient_iban || 'Bank Transfer',
-        category: data.category || 'Finances',
-        recipient: data.recipient_name || data.recipient_iban || 'Unknown'
-      };
-    });
+export async function GET() {
+    const transactions = [
+        { id: 1, type: 'income', amount: 2500.00, description: 'Salary Deposit', category: 'Income', date: new Date().toISOString() },
+        { id: 2, type: 'expense', amount: -45.99, description: 'Amazon.de', category: 'Shopping', date: new Date().toISOString() },
+        { id: 3, type: 'expense', amount: -12.50, description: 'Netflix Subscription', category: 'Entertainment', date: new Date(Date.now() - 86400000).toISOString() },
+        { id: 4, type: 'expense', amount: -34.20, description: 'Uber Eats', category: 'Food', date: new Date(Date.now() - 172800000).toISOString() },
+        { id: 5, type: 'income', amount: 150.00, description: 'Refund', category: 'Income', date: new Date(Date.now() - 259200000).toISOString() },
+    ];
 
     return NextResponse.json(transactions);
-  } catch (error: any) {
-    console.error('Transactions Error:', error);
-    return NextResponse.json({ error: error.message }, { status: 400 });
-  }
 }

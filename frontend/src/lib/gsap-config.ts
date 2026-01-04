@@ -2,10 +2,8 @@ import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { MotionPathPlugin } from "gsap/MotionPathPlugin";
 
-// Register GSAP plugins only if window is defined (Client Side)
-if (typeof window !== "undefined") {
-    gsap.registerPlugin(ScrollTrigger, MotionPathPlugin);
-}
+// Register GSAP plugins
+gsap.registerPlugin(ScrollTrigger, MotionPathPlugin);
 
 // Configure GSAP defaults
 gsap.defaults({
@@ -13,13 +11,11 @@ gsap.defaults({
     duration: 0.8,
 });
 
-if (typeof window !== "undefined") {
-    // Configure ScrollTrigger defaults
-    ScrollTrigger.defaults({
-        toggleActions: "play none none reverse",
-        markers: false, // Set to true for debugging
-    });
-}
+// Configure ScrollTrigger defaults
+ScrollTrigger.defaults({
+    toggleActions: "play none none reverse",
+    markers: false, // Set to true for debugging
+});
 
 // Custom easing functions
 export const customEases = {
@@ -116,8 +112,6 @@ export const createParallax = (
     element: string | Element,
     speed: number = 0.5
 ) => {
-    if (typeof window === 'undefined') return gsap.to({}, {});
-
     return gsap.to(element, {
         y: () => window.innerHeight * speed,
         ease: "none",
@@ -135,8 +129,6 @@ export const createMagneticEffect = (
     element: HTMLElement,
     strength: number = 0.3
 ) => {
-    if (typeof window === 'undefined') return () => {};
-
     const handleMouseMove = (e: MouseEvent) => {
         const rect = element.getBoundingClientRect();
         const centerX = rect.left + rect.width / 2;

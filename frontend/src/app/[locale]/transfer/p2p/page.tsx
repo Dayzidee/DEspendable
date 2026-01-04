@@ -1,16 +1,16 @@
 "use client";
 
 import { useAuth } from "@/context/AuthContext";
-import { useState, useEffect } from "react";
+import { useLanguage } from "@/context/LanguageContext";
+import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { Link } from "@/i18n/navigation";
-import { useTranslations } from "next-intl";
+import Link from 'next/link';
 import { motion } from "framer-motion";
 import { ArrowLeft, Search, Users, Send, Clock } from "lucide-react";
 
 export default function P2PTransfer() {
     const { user, token } = useAuth();
-    const t = useTranslations();
+    const { t } = useLanguage();
     const router = useRouter();
 
     const [searchQuery, setSearchQuery] = useState("");
@@ -19,60 +19,29 @@ export default function P2PTransfer() {
     const [message, setMessage] = useState("");
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState("");
-    const [searchResults, setSearchResults] = useState<any[]>([]);
 
-    useEffect(() => {
-        if (!token || searchQuery.length < 3) {
-            setSearchResults([]);
-            return;
-        }
-
-        const delayDebounceFn = setTimeout(() => {
-            fetch(`/api/users/search?q=${encodeURIComponent(searchQuery)}`, {
-                headers: { 'Authorization': `Bearer ${token}` }
-            })
-                .then(res => res.json())
-                .then(data => setSearchResults(data))
-                .catch(err => console.error("Search error", err));
-        }, 300);
-
-        return () => clearTimeout(delayDebounceFn);
-    }, [searchQuery, token]);
+    // Mock recent contacts
+    const recentContacts = [
+        { id: "1", name: "Anna Schmidt", email: "anna.schmidt@example.com", avatar: "AS" },
+        { id: "2", name: "Max Müller", email: "max.mueller@example.com", avatar: "MM" },
+        { id: "3", name: "Lisa Weber", email: "lisa.weber@example.com", avatar: "LW" },
+    ];
 
     const handleSend = async (e: React.FormEvent) => {
         e.preventDefault();
         if (!selectedUser) {
-            setError(t('transfer.select_recipient_error'));
+            setError("Bitte wählen Sie einen Empfänger aus.");
             return;
         }
 
         setLoading(true);
         setError("");
 
-        try {
-            const res = await fetch('/api/transfer/p2p', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${token}`
-                },
-                body: JSON.stringify({
-                    recipientId: selectedUser.id,
-                    amount: amount,
-                    message: message
-                })
-            });
-            const data = await res.json();
-            if (data.success) {
-                router.push("/dashboard");
-            } else {
-                setError(data.error || "Transfer failed");
-            }
-        } catch (err) {
-            setError("An error occurred during the transfer");
-        } finally {
+        // TODO: Implement P2P transfer API call
+        setTimeout(() => {
             setLoading(false);
-        }
+            router.push("/dashboard");
+        }, 2000);
     };
 
     return (
@@ -83,7 +52,7 @@ export default function P2PTransfer() {
                     <Link href="/transfer" className="p-2 hover:bg-gray-100 rounded-lg transition">
                         <ArrowLeft className="w-5 h-5 text-[#0018A8]" />
                     </Link>
-                    <h1 className="text-xl font-bold text-[#1C1C1C]">{t('transfer.types.p2p')}</h1>
+                    <h1 className="text-xl font-bold text-[#1C1C1C]">P2P Transfer</h1>
                 </div>
             </header>
 
@@ -95,14 +64,14 @@ export default function P2PTransfer() {
                         className="bg-white text-[#0018A8] border-2 border-gray-200 p-4 rounded-xl flex items-center justify-center gap-2 font-semibold hover:border-[#0018A8] transition"
                     >
                         <Send className="w-5 h-5" />
-                        {t('transfer.types.sepa')}
+                        SEPA-Überweisung
                     </Link>
                     <Link
                         href="/transfer/p2p"
                         className="bg-gradient-to-r from-[#0018A8] to-[#0025D9] text-white p-4 rounded-xl flex items-center justify-center gap-2 font-semibold shadow-lg"
                     >
                         <Users className="w-5 h-5" />
-                        {t('transfer.types.p2p')}
+                        P2P Transfer
                     </Link>
                 </div>
 
@@ -122,7 +91,7 @@ export default function P2PTransfer() {
                         <Search className="absolute left-4 top-3.5 w-5 h-5 text-[#666666]" />
                         <input
                             type="text"
-                            placeholder={t('transfer.p2p_search_placeholder')}
+                            placeholder="Suche nach Name oder E-Mail..."
                             className="w-full bg-white border border-gray-300 rounded-xl pl-12 pr-4 py-3 text-[#1C1C1C] focus:outline-none focus:ring-2 focus:ring-[#0018A8] focus:border-transparent transition"
                             value={searchQuery}
                             onChange={e => setSearchQuery(e.target.value)}
@@ -130,20 +99,20 @@ export default function P2PTransfer() {
                     </div>
                 </div>
 
-                {/* Search Results */}
+                {/* Recent Contacts */}
                 <div className="mb-8">
                     <h3 className="text-sm font-bold text-[#666666] uppercase tracking-wider mb-3">
-                        {searchQuery.length >= 3 ? t('transfer.search_results') : t('transfer.recent_contacts')}
+                        Kürzliche Kontakte
                     </h3>
                     <div className="space-y-2">
-                        {(searchQuery.length >= 3 ? searchResults : []).map(contact => (
+                        {recentContacts.map(contact => (
                             <motion.div
                                 key={contact.id}
                                 whileHover={{ x: 4 }}
                                 onClick={() => setSelectedUser(contact)}
                                 className={`bg-white p-4 rounded-xl border-2 cursor-pointer transition ${selectedUser?.id === contact.id
-                                    ? 'border-[#0018A8] bg-blue-50'
-                                    : 'border-gray-100 hover:border-gray-200'
+                                        ? 'border-[#0018A8] bg-blue-50'
+                                        : 'border-gray-100 hover:border-gray-200'
                                     }`}
                             >
                                 <div className="flex items-center gap-3">
@@ -157,16 +126,6 @@ export default function P2PTransfer() {
                                 </div>
                             </motion.div>
                         ))}
-                        {searchQuery.length >= 3 && searchResults.length === 0 && (
-                            <div className="text-center py-8 text-gray-500 bg-white rounded-xl border border-gray-100">
-                                {t('transfer.no_users_found')}
-                            </div>
-                        )}
-                        {searchQuery.length < 3 && (
-                            <div className="text-center py-4 text-gray-400 italic">
-                                {t('transfer.search_hint')}
-                            </div>
-                        )}
                     </div>
                 </div>
 
@@ -179,14 +138,14 @@ export default function P2PTransfer() {
                         className="bg-white rounded-2xl p-8 shadow-lg border border-gray-100 space-y-6"
                     >
                         <div className="text-center pb-4 border-b border-gray-100">
-                            <div className="text-sm text-[#666666] mb-1">{t('transfer.send_to')}</div>
+                            <div className="text-sm text-[#666666] mb-1">Senden an</div>
                             <div className="text-lg font-bold text-[#1C1C1C]">{selectedUser.name}</div>
                         </div>
 
                         {/* Amount */}
                         <div>
                             <label className="block text-sm font-semibold text-[#1C1C1C] mb-2">
-                                {t('transfer.amount')}
+                                Betrag
                             </label>
                             <div className="relative">
                                 <input
@@ -197,7 +156,7 @@ export default function P2PTransfer() {
                                     className="w-full bg-[#F4F6F8] border border-gray-300 rounded-lg pl-4 pr-12 py-4 text-2xl font-bold text-[#0018A8] focus:outline-none focus:ring-2 focus:ring-[#0018A8] focus:border-transparent transition text-center"
                                     value={amount}
                                     onChange={e => setAmount(e.target.value)}
-                                    placeholder="0,00"
+                                    placeholder="0.00"
                                 />
                                 <span className="absolute right-4 top-4 text-[#666666] font-semibold text-xl">€</span>
                             </div>
@@ -206,7 +165,7 @@ export default function P2PTransfer() {
                         {/* Message */}
                         <div>
                             <label className="block text-sm font-semibold text-[#1C1C1C] mb-2">
-                                {t('transfer.message_label')}
+                                Nachricht (optional)
                             </label>
                             <input
                                 type="text"
@@ -214,7 +173,7 @@ export default function P2PTransfer() {
                                 className="w-full bg-[#F4F6F8] border border-gray-300 rounded-lg px-4 py-3 text-[#1C1C1C] focus:outline-none focus:ring-2 focus:ring-[#0018A8] focus:border-transparent transition"
                                 value={message}
                                 onChange={e => setMessage(e.target.value)}
-                                placeholder={t('transfer.message_placeholder')}
+                                placeholder="z.B. Mittagessen, Miete..."
                             />
                         </div>
 
@@ -224,11 +183,11 @@ export default function P2PTransfer() {
                             className="w-full bg-gradient-to-r from-[#0018A8] to-[#0025D9] text-white font-bold py-4 rounded-xl hover:shadow-xl hover:-translate-y-0.5 transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
                         >
                             {loading ? (
-                                t('transfer.sending')
+                                "Wird gesendet..."
                             ) : (
                                 <>
                                     <Send className="w-5 h-5" />
-                                    {t('transfer.send_money')}
+                                    Jetzt senden
                                 </>
                             )}
                         </button>
@@ -240,9 +199,9 @@ export default function P2PTransfer() {
                     <div className="flex items-start gap-3">
                         <Clock className="w-5 h-5 text-[#0018A8] mt-0.5" />
                         <div>
-                            <div className="font-semibold text-[#0018A8] mb-1">{t('transfer.instant_transfer_title')}</div>
+                            <div className="font-semibold text-[#0018A8] mb-1">Sofortige Überweisung</div>
                             <div className="text-sm text-[#666666]">
-                                {t('transfer.instant_transfer_desc')}
+                                P2P-Transfers werden in Echtzeit verarbeitet. Der Empfänger erhält das Geld sofort.
                             </div>
                         </div>
                     </div>

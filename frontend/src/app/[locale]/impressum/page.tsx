@@ -1,75 +1,76 @@
 "use client";
 
-import { Link } from "@/i18n/navigation";
-import { useTranslations } from "next-intl";
+import Link from "next/link";
+import { useLanguage } from "@/context/LanguageContext";
 
 export default function Impressum() {
-    const t = useTranslations();
+    const { t } = useLanguage();
 
     return (
         <div className="min-h-screen bg-gray-950 text-white p-8">
             <div className="max-w-2xl mx-auto space-y-6">
                 <Link href="/login" className="text-gray-400 hover:text-white transition mb-8 block">
-                    ← {t("common.back")}
+                    ← {t("common.back") || "Back"}
                 </Link>
 
-                <h1 className="text-3xl font-bold text-white mb-4">{t("impressum.title")}</h1>
+                <h1 className="text-3xl font-bold text-white mb-4">Impressum</h1>
 
                 <section className="space-y-2">
-                    <h2 className="text-xl font-semibold text-gray-200">{t("impressum.section_tmg")}</h2>
+                    <h2 className="text-xl font-semibold text-gray-200">Angaben gemäß § 5 TMG</h2>
                     <p className="text-gray-400">
-                        {t("impressum.address_name")}<br />
-                        {t("impressum.address_street")}<br />
-                        {t("impressum.address_city")}<br />
-                        {t("impressum.address_country")}
+                        DEspendables GmbH<br />
+                        Finanzplatz 1<br />
+                        60311 Frankfurt am Main<br />
+                        Deutschland
                     </p>
                 </section>
 
                 <section className="space-y-2">
-                    <h2 className="text-xl font-semibold text-gray-200">{t("impressum.represented_by")}</h2>
+                    <h2 className="text-xl font-semibold text-gray-200">Vertreten durch</h2>
                     <p className="text-gray-400">
-                        {t("impressum.management")}
+                        Max Mustermann (CEO)<br />
+                        Erika Musterfrau (CTO)
                     </p>
                 </section>
 
                 <section className="space-y-2">
-                    <h2 className="text-xl font-semibold text-gray-200">{t("impressum.contact")}</h2>
+                    <h2 className="text-xl font-semibold text-gray-200">Kontakt</h2>
                     <p className="text-gray-400">
-                        {t("impressum.phone")}: {t("directions.phone")}<br />
-                        {t("impressum.email")}: {t("directions.email")}
+                        Telefon: +49 (0) 69 12345678<br />
+                        E-Mail: kontakt@despendables.de
                     </p>
                 </section>
 
                 <section className="space-y-2">
-                    <h2 className="text-xl font-semibold text-gray-200">{t("impressum.register")}</h2>
+                    <h2 className="text-xl font-semibold text-gray-200">Registereintrag</h2>
                     <p className="text-gray-400">
-                        {t("impressum.register_text")}<br />
-                        {t("impressum.register_court")}<br />
-                        {t("impressum.register_number")}
+                        Eintragung im Handelsregister.<br />
+                        Registergericht: Amtsgericht Frankfurt am Main<br />
+                        Registernummer: HRB 12345
                     </p>
                 </section>
 
                 <section className="space-y-2">
-                    <h2 className="text-xl font-semibold text-gray-200">{t("impressum.vat_id")}</h2>
+                    <h2 className="text-xl font-semibold text-gray-200">Umsatzsteuer-ID</h2>
                     <p className="text-gray-400">
-                        {t("impressum.vat_id_text")}<br />
-                        {t("impressum.vat_number")}
+                        Umsatzsteuer-Identifikationsnummer gemäß §27 a Umsatzsteuergesetz:<br />
+                        DE 123 456 789
                     </p>
                 </section>
 
                 <section className="space-y-2">
-                    <h2 className="text-xl font-semibold text-gray-200">{t("impressum.authority")}</h2>
+                    <h2 className="text-xl font-semibold text-gray-200">Aufsichtsbehörde</h2>
                     <p className="text-gray-400">
-                        {t("impressum.authority_name")}<br />
-                        {t("impressum.authority_address")}
+                        Bundesanstalt für Finanzdienstleistungsaufsicht (BaFin)<br />
+                        Graurheindorfer Str. 108<br />
+                        53117 Bonn
                     </p>
                 </section>
 
                 <div className="mt-12 pt-8 border-t border-gray-800 text-sm text-gray-500">
-                    <p>{t("impressum.demo_notice")}</p>
+                    <p>This is a demo application for educational purposes.</p>
                 </div>
             </div>
         </div>
     );
 }
-

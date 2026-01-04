@@ -1,0 +1,13 @@
+Flask
+firebase-admin
+flask-cors
+python-dotenv
+flask-socketio
+gevent
+gunicorn
+requests
+python-jose[cryptography]
+slowapi
+pydantic
+schwifty
+python-multipart

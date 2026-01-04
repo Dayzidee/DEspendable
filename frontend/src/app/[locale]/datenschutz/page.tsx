@@ -1,29 +1,29 @@
 "use client";
 
-import { Link } from "@/i18n/navigation";
-import { useTranslations } from "next-intl";
+import Link from "next/link";
+import { useLanguage } from "@/context/LanguageContext";
 
 export default function Datenschutz() {
-    const t = useTranslations();
+    const { t } = useLanguage();
 
     return (
         <div className="min-h-screen bg-gray-950 text-white p-8">
             <div className="max-w-2xl mx-auto space-y-6">
                 <Link href="/login" className="text-gray-400 hover:text-white transition mb-8 block">
-                    ← {t("common.back")}
+                    ← {t("common.back") || "Back"}
                 </Link>
 
-                <h1 className="text-3xl font-bold text-white mb-4">{t("datenschutz.title")}</h1>
+                <h1 className="text-3xl font-bold text-white mb-4">Datenschutzerklärung</h1>
 
                 <section className="space-y-2">
-                    <h2 className="text-xl font-semibold text-gray-200">{t("datenschutz.section1_title")}</h2>
+                    <h2 className="text-xl font-semibold text-gray-200">1. Datenschutz auf einen Blick</h2>
                     <p className="text-gray-400">
-                        {t("datenschutz.section1_text")}
+                        Allgemeine Hinweise: Die folgenden Hinweise geben einen einfachen Überblick darüber, was mit Ihren personenbezogenen Daten passiert, wenn Sie diese Website besuchen.
                     </p>
                 </section>
 
                 <section className="space-y-2">
-                    <h2 className="text-xl font-semibold text-gray-200">{t("datenschutz.section2_title")}</h2>
+                    <h2 className="text-xl font-semibold text-gray-200">2. Verantwortliche Stelle</h2>
                     <p className="text-gray-400">
                         DEspendables GmbH<br />
                         Finanzplatz 1<br />
@@ -33,17 +33,18 @@ export default function Datenschutz() {
                 </section>
 
                 <section className="space-y-2">
-                    <h2 className="text-xl font-semibold text-gray-200">{t("datenschutz.section3_title")}</h2>
-                    <p className="text-gray-400 bold">{t("datenschutz.section3_subtitle")}</p>
+                    <h2 className="text-xl font-semibold text-gray-200">3. Datenerfassung auf unserer Website</h2>
+                    <p className="text-gray-400 bold">Cookies</p>
                     <p className="text-gray-400">
-                        {t("datenschutz.section3_text")}
+                        Unsere Internetseiten verwenden so genannte „Cookies“. Cookies sind kleine Textdateien und richten auf Ihrem Endgerät keinen Schaden an.
+                        Sie dienen dazu, unser Angebot nutzerfreundlicher, effektiver und sicherer zu machen.
                     </p>
                 </section>
 
                 <section className="space-y-2">
-                    <h2 className="text-xl font-semibold text-gray-200">{t("datenschutz.section4_title")}</h2>
+                    <h2 className="text-xl font-semibold text-gray-200">4. Analyse-Tools und Tools von Drittanbietern</h2>
                     <p className="text-gray-400">
-                        {t("datenschutz.section4_text")}
+                        Beim Besuch dieser Website kann Ihr Surf-Verhalten statistisch ausgewertet werden. Das geschieht vor allem mit Cookies und mit sogenannten Analyseprogrammen.
                     </p>
                 </section>
 
@@ -54,4 +55,3 @@ export default function Datenschutz() {
         </div>
     );
 }
-

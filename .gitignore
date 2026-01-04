@@ -30,12 +30,3 @@ backend/serviceAccountKey.json
 .venv/
 backend/venv/
 **/.env.local
-
-# Frontend Artifacts
-frontend/node_modules/
-frontend/.next/
-frontend/.firebase/
-frontend/out/
-frontend/build/
-frontend/*.tsbuildinfo
-frontend/next-env.d.ts

@@ -1,14 +1,14 @@
 "use client";
 
-import { useTranslations } from 'next-intl';
-import { Link } from "@/i18n/navigation";
+import { useLanguage } from "@/context/LanguageContext";
+import Link from "next/link";
 import { Shield, Lightbulb, Eye, Users } from "lucide-react";
 import ScrollReveal from "@/components/animations/ScrollReveal";
 import AnimatedBackground from "@/components/animations/AnimatedBackground";
 import LandingHeader from "@/components/navigation/LandingHeader";
 
 export default function MissionPage() {
-    const t = useTranslations();
+    const { t } = useLanguage();
 
     const values = [
         {

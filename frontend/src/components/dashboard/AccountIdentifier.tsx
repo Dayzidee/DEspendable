@@ -3,22 +3,21 @@
 import { useState } from 'react';
 import { FaHashtag, FaCopy, FaCheck } from 'react-icons/fa';
 
-import { useAuth } from '@/context/AuthContext';
+interface AccountIdentifierProps {
+  accountNumber: string;
+}
 
-export default function AccountIdentifier() {
-  const { accountNumber } = useAuth();
+export default function AccountIdentifier({ accountNumber }: AccountIdentifierProps) {
   const [copied, setCopied] = useState(false);
 
   const handleCopy = () => {
-    if (!accountNumber) return;
     navigator.clipboard.writeText(accountNumber);
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
   };
 
-  const formattedAccount = (accountNumber && accountNumber.length === 10)
-    ? `${accountNumber.slice(0, 4)}-${accountNumber.slice(4, 7)}-${accountNumber.slice(7, 10)}`
-    : (accountNumber || '0000-000-000');
+  // Format: 1234-567-890
+  const formattedAccount = accountNumber ? `${accountNumber.slice(0, 4)}-${accountNumber.slice(4, 7)}-${accountNumber.slice(7, 10)}` : 'N/A';
 
   return (
     <section className="bg-gradient-to-r from-gray-800 to-gray-900 rounded-xl p-6 text-white mb-6 flex justify-between items-center shadow-md">
@@ -27,7 +26,7 @@ export default function AccountIdentifier() {
           <FaHashtag />
         </div>
         <div>
-          <span className="block text-xs text-gray-400 uppercase tracking-wider mb-1">Kontonummer / Account Number</span>
+          <span className="block text-xs text-gray-400 uppercase tracking-wider mb-1">Your Official Account Number</span>
           <span className="font-mono text-xl tracking-wide">{formattedAccount}</span>
         </div>
       </div>
