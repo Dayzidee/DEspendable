@@ -1,12 +1,10 @@
 "use client";
 
-import { useLanguage } from "@/context/LanguageContext";
 import { useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
 import Link from 'next/link';
 
 export default function PhotoTransfer() {
-    const { t } = useLanguage();
     const router = useRouter();
     const [scanning, setScanning] = useState(true);
     const [progress, setProgress] = useState(0);

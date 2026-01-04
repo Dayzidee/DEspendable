@@ -201,7 +201,10 @@
         "success_deleted": "Goal deleted successfully",
         "progress": "Progress",
         "remaining": "Remaining",
-        "completed": "Completed!"
+        "completed": "Completed!",
+        "common": {
+            "back": "Back to Dashboard"
+        }
     },
     "transfer": {
         "title": "Payment",
@@ -490,7 +493,12 @@
         "deleteConfirm": "Are you sure you want to delete this user?",
         "searchPlaceholder": "Search by name or email...",
         "save": "Save",
-        "cancel": "Cancel"
+        "cancel": "Cancel",
+        "supportChats": "Support Chats",
+        "date": "Date",
+        "description": "Description",
+        "recipient": "Recipient",
+        "amount": "Amount"
     },
     "auth": {
         "login": "Sign In",

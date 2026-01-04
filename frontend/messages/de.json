@@ -166,7 +166,6 @@
         "spendingAnalytics": "Ausgaben-Analyse",
         "last30Days": "Letzte 30 Tage",
         "last90Days": "Letzte 90 Tage",
-        "noSpendingData": "Noch keine Ausgabendaten",
         "noSpendingDataDesc": "Ihre Ausgaben-Analyse erscheint hier, sobald Sie Transaktionen tätigen.",
         "recentTransactions": "Letzte Transaktionen",
         "noTransactionsDesc": "Sobald Sie Ihre erste Transaktion tätigen, erscheint sie hier.",
@@ -202,7 +201,10 @@
         "success_deleted": "Ziel erfolgreich gelöscht",
         "progress": "Fortschritt",
         "remaining": "Noch zu sparen",
-        "completed": "Abgeschlossen!"
+        "completed": "Abgeschlossen!",
+        "common": {
+            "back": "Zurück zum Dashboard"
+        }
     },
     "transfer": {
         "title": "Überweisung",
@@ -498,7 +500,13 @@
         "avgBalance": "Ø Guthaben",
         "deleteConfirm": "Sind Sie sicher, dass Sie diesen Benutzer löschen möchten?",
         "searchPlaceholder": "Suche nach Name oder E-Mail...",
-        "save": "Speichern"
+        "save": "Speichern",
+        "cancel": "Abbrechen",
+        "supportChats": "Support-Chats",
+        "date": "Datum",
+        "description": "Beschreibung",
+        "recipient": "Empfänger",
+        "amount": "Betrag"
     },
     "auth": {
         "login": "Anmelden",

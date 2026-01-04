@@ -12,7 +12,7 @@ import { useTranslations } from "next-intl";
 
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
     const pathname = usePathname();
-    const { user } = useAuth();
+    const { user, isAdmin } = useAuth();
     const t = useTranslations();
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
@@ -27,8 +27,8 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
         { name: t("nav.postbox"), href: "/postbox", icon: <FaInbox /> },
     ];
 
-    // Add Admin link if user is admin (mock logic, ideally check claim)
-    if (user?.email?.includes("admin") || true) { // Keeping consistent with previous mock
+    // Add Admin link only if user has is_admin flag
+    if (isAdmin) {
         menuItems.push({ name: t("nav.admin"), href: "/admin", icon: <FaUserShield /> });
     }
 

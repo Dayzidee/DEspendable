@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { db } from '@/lib/firebaseAdmin';
+import { db, auth } from '@/lib/firebaseAdmin';
 import { verifyAdmin } from '@/lib/adminCheck';
 import { FieldValue } from 'firebase-admin/firestore';
 
@@ -130,6 +130,56 @@ export async function PUT(request: NextRequest) {
 
     return NextResponse.json({ success: true, newBalance });
   } catch (error: any) {
+    return NextResponse.json({ error: error.message }, { status: 400 });
+  }
+}
+
+export async function DELETE(request: NextRequest) {
+  try {
+    await verifyAdmin(request.headers.get('Authorization'));
+    const { searchParams } = new URL(request.url);
+    const userId = searchParams.get('userId');
+
+    if (!userId) {
+      return NextResponse.json({ error: 'Missing userId' }, { status: 400 });
+    }
+
+    // Use a batch to delete user and related documents
+    const batch = db.batch();
+    const userRef = db.collection('users').doc(userId);
+
+    // Delete checks
+    const accountsSnapshot = await db.collection('accounts').where('owner_uid', '==', userId).get();
+    accountsSnapshot.docs.forEach(doc => {
+      batch.delete(doc.ref);
+    });
+
+    const transactionsSnapshot = await db.collection('transactions').where('user_id', '==', userId).get();
+    transactionsSnapshot.docs.forEach(doc => {
+      batch.delete(doc.ref);
+    });
+
+    // Delete goals
+    const goalsSnapshot = await db.collection('goals').where('userId', '==', userId).get();
+    goalsSnapshot.docs.forEach(doc => {
+      batch.delete(doc.ref);
+    });
+
+    // Delete user
+    batch.delete(userRef);
+
+    await batch.commit();
+
+    // Also delete from Auth (this requires the uid)
+    try {
+      await auth.deleteUser(userId);
+    } catch (authError) {
+      console.warn('Could not delete user from Auth (might already be deleted):', authError);
+    }
+
+    return NextResponse.json({ success: true });
+  } catch (error: any) {
+    console.error('Admin Users DELETE Error:', error);
     return NextResponse.json({ error: error.message }, { status: 400 });
   }
 }

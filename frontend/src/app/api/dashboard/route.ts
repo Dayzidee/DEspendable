@@ -1,6 +1,16 @@
+
 import { NextRequest, NextResponse } from 'next/server';
 import { auth, db } from '@/lib/firebaseAdmin';
-import { Timestamp } from 'firebase-admin/firestore';
+import { FieldValue, Timestamp } from 'firebase-admin/firestore';
+import crypto from 'crypto';
+
+function generateIBAN() {
+  const bankCode = '10050000';
+  const country = 'DE';
+  const checksum = crypto.randomInt(10, 99).toString();
+  const partialAccount = crypto.randomInt(1000000000, 9999999999).toString();
+  return `${country}${checksum}${bankCode}${partialAccount}`;
+}
 
 export async function GET(request: NextRequest) {
   try {
@@ -13,17 +23,55 @@ export async function GET(request: NextRequest) {
     const userId = decodedToken.uid;
 
     // Fetch Accounts
-    const accountsSnapshot = await db
-      .collection('accounts')
+    const accountsSnapshot = await db.collection('accounts')
       .where('owner_uid', '==', userId)
       .get();
 
-    const accounts = accountsSnapshot.docs.map(doc => {
+    // Auto-initialize accounts if user has none
+    if (accountsSnapshot.empty) {
+      console.log(`Dashboard: User ${userId} has no accounts.Creating default accounts...`);
+      const batch = db.batch();
+
+      const checkingRef = db.collection('accounts').doc();
+      batch.set(checkingRef, {
+        owner_uid: userId,
+        type: 'Checking',
+        name: 'Checking Account',
+        display_name: 'Girokonto',
+        balance: 0.00,
+        iban: generateIBAN(),
+        currency: 'EUR',
+        status: 'Active',
+        created_at: FieldValue.serverTimestamp()
+      });
+
+      const savingsRef = db.collection('accounts').doc();
+      batch.set(savingsRef, {
+        owner_uid: userId,
+        type: 'Savings',
+        name: 'Savings Account',
+        display_name: 'Tagesgeld',
+        balance: 0.00,
+        iban: generateIBAN(),
+        currency: 'EUR',
+        status: 'Active',
+        created_at: FieldValue.serverTimestamp()
+      });
+
+      await batch.commit();
+    }
+
+    // Re-fetch accounts after potential creation
+    const finalAccountsSnapshot = await db.collection('accounts')
+      .where('owner_uid', '==', userId)
+      .get();
+
+    const accounts = finalAccountsSnapshot.docs.map(doc => {
       const data = doc.data();
       return {
         id: doc.id,
         account_name: data.name || 'Girokonto',
-        masked_account_number: data.iban ? `DE****${data.iban.slice(-4)}` : 'DE****0000',
+        masked_account_number: data.iban ? `DE **** ${data.iban.slice(-4)} ` : 'DE****0000',
         balance: Number(data.balance || 0),
         currency: data.currency || 'EUR',
         type: data.type || 'Checking'

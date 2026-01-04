@@ -135,9 +135,22 @@ function AdminContent() {
         }]
     };
 
-    const handleDeleteUser = (userId: string) => {
+    const handleDeleteUser = async (userId: string) => {
         if (confirm(t('deleteConfirm'))) {
-            setUsers(users.filter(u => u.id !== userId));
+            try {
+                const res = await fetch(`/api/admin/users?userId=${userId}`, {
+                    method: 'DELETE',
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+
+                if (res.ok) {
+                    setUsers(users.filter(u => u.id !== userId));
+                } else {
+                    console.error('Failed to delete user');
+                }
+            } catch (error) {
+                console.error('Error deleting user:', error);
+            }
         }
     };
 

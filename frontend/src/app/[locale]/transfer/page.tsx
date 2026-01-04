@@ -1,7 +1,7 @@
 "use client";
 
 import { useAuth } from "@/context/AuthContext";
-import { useLanguage } from "@/context/LanguageContext";
+import { useTranslations } from 'next-intl';
 import { useState, useEffect, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import SCAModal from "@/components/SCAModal";
@@ -13,7 +13,7 @@ export const dynamic = "force-dynamic";
 
 function TransferContent() {
     const { user, token } = useAuth();
-    const { t } = useLanguage();
+    const t = useTranslations();
     const router = useRouter();
     const searchParams = useSearchParams();
 
