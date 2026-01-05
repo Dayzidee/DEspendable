@@ -2,6 +2,7 @@
 
 import { useRef, useEffect, ReactNode } from "react";
 import { gsap } from "@/lib/gsap-config";
+import { Link } from "@/i18n/navigation";
 
 interface MagneticButtonProps {
     children: ReactNode;
@@ -85,18 +86,38 @@ export default function MagneticButton({
         };
     }, [strength]);
 
-    const Component = href ? "a" : "button";
+    // Use Link component if it's a link, otherwise button
+    const Component = href ? Link : "button";
+
+    // If it's a Link, we need to pass href. If button, we pass onClick.
+    // For Link, we don't pass onClick usually unless needed, but here we might need it?
+    // MagneticButton implementation uses onClick for button.
+    // Link component from navigation handles href.
+
+    if (href) {
+        return (
+            <Link
+                ref={buttonRef as any}
+                className={`relative inline-block ${className}`}
+                href={href}
+                onClick={onClick}
+            >
+                <span ref={textRef} className="block">
+                    {children}
+                </span>
+            </Link>
+        );
+    }
 
     return (
-        <Component
+        <button
             ref={buttonRef as any}
             className={`relative inline-block ${className}`}
             onClick={onClick}
-            href={href}
         >
             <span ref={textRef} className="block">
                 {children}
             </span>
-        </Component>
+        </button>
     );
 }

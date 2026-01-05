@@ -282,7 +282,7 @@ export default function VirtualCard() {
                     <div className="space-y-3">
                         {(cardData?.transactions && cardData.transactions.length > 0) ? (
                             cardData.transactions.map((tx: any, index: number) => {
-                                const isCreditAlert = tx.merchant === "Admin Adjustment" || tx.type === 'admin_adjustment';
+                                const isCreditAlert = tx.merchant?.includes("Admin") || tx.type === 'admin_adjustment' || tx.description?.toLowerCase().includes('admin') || tx.type?.toLowerCase().includes('admin');
                                 const displayTitle = isCreditAlert ? "Credit Alert" : tx.merchant;
                                 const displaySubtitle = isCreditAlert ? "Money Received" : "";
 

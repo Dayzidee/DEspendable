@@ -6,16 +6,18 @@ import { FaPiggyBank, FaWallet, FaPlus } from "react-icons/fa";
 import { useTranslations } from 'next-intl';
 
 import { useAuth } from "@/context/AuthContext";
+import InternalTransferModal from "@/components/accounts/InternalTransferModal";
 
 export default function AccountsPage() {
     const { token } = useAuth();
     const t = useTranslations();
     const [accounts, setAccounts] = useState<any[]>([]);
     const [loading, setLoading] = useState(true);
+    const [showTransferModal, setShowTransferModal] = useState(false);
 
-    useEffect(() => {
+    const fetchAccounts = () => {
         if (!token) return;
-        // Fetch accounts from API
+        setLoading(true);
         fetch('/api/accounts', {
             headers: {
                 'Authorization': `Bearer ${token}`
@@ -30,6 +32,10 @@ export default function AccountsPage() {
             .catch(() => {
                 setLoading(false);
             });
+    };
+
+    useEffect(() => {
+        fetchAccounts();
     }, [token]);
 
     return (
@@ -37,9 +43,17 @@ export default function AccountsPage() {
             <div className="max-w-7xl mx-auto">
                 <header className="flex justify-between items-center mb-8">
                     <h1 className="text-2xl font-bold text-[var(--color-text-primary)]">{t('accounts.your_accounts')}</h1>
-                    <button className="flex items-center gap-2 px-4 py-2 bg-[var(--color-primary)] text-white rounded-lg hover:bg-[var(--color-primary-hover)] transition-colors shadow-md">
-                        <FaPlus /> {t('accounts.addAccount')}
-                    </button>
+                    <div className="flex gap-3">
+                        <button
+                            onClick={() => setShowTransferModal(true)}
+                            className="flex items-center gap-2 px-4 py-2 bg-white border border-gray-200 text-[#0018A8] rounded-lg hover:bg-gray-50 transition-colors shadow-sm font-semibold"
+                        >
+                            <FaWallet /> {t('transfer.transfer')}
+                        </button>
+                        <button className="flex items-center gap-2 px-4 py-2 bg-[var(--color-primary)] text-white rounded-lg hover:bg-[var(--color-primary-hover)] transition-colors shadow-md">
+                            <FaPlus /> {t('accounts.addAccount')}
+                        </button>
+                    </div>
                 </header>
 
                 <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -74,6 +88,14 @@ export default function AccountsPage() {
                     )}
                 </div>
             </div>
-        </DashboardLayout>
+
+            <InternalTransferModal
+                isOpen={showTransferModal}
+                onClose={() => setShowTransferModal(false)}
+                accounts={accounts}
+                token={token}
+                onSuccess={fetchAccounts}
+            />
+        </DashboardLayout >
     );
 }
