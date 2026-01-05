@@ -16,13 +16,17 @@ export async function GET(request: NextRequest) {
 
         const goalsSnapshot = await db.collection('goals')
             .where('userId', '==', userId)
-            .orderBy('created_at', 'desc')
+            // .orderBy('created_at', 'desc') // Requires index, sorting in memory instead
             .get();
 
         const goals = goalsSnapshot.docs.map(doc => ({
             id: doc.id,
             ...doc.data()
-        }));
+        })).sort((a: any, b: any) => {
+            const dateA = a.created_at?.toMillis ? a.created_at.toMillis() : 0;
+            const dateB = b.created_at?.toMillis ? b.created_at.toMillis() : 0;
+            return dateB - dateA;
+        });
 
         return NextResponse.json(goals);
     } catch (error: any) {

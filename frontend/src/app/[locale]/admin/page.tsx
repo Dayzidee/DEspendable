@@ -322,7 +322,7 @@ function AdminContent() {
                                                         </button>
                                                     </td>
                                                     <td className="p-4 text-[#666666] text-sm whitespace-nowrap">
-                                                        {new Date(user.metadata.creationTime).toLocaleDateString()}
+                                                        {user.metadata?.creationTime ? new Date(user.metadata.creationTime).toLocaleDateString() : (user.created_at ? new Date(user.created_at).toLocaleDateString() : 'N/A')}
                                                     </td>
                                                     <td className="p-4 text-right whitespace-nowrap">
                                                         <div className="flex items-center justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
