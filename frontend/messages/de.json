@@ -218,6 +218,7 @@
     },
     "transfer": {
         "title": "Überweisung",
+        "transfer": "Überweisung",
         "newTransfer": "Neue Überweisung",
         "fromAccount": "Von Konto",
         "toAccount": "Zu Konto",

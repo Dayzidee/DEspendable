@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
+import { createPortal } from "react-dom";
 import { Link } from "@/i18n/navigation";
 import { useTranslations } from 'next-intl';
 import LanguageToggle from "./LanguageToggle";
@@ -137,7 +138,7 @@ export default function MobileMenu() {
             </button>
 
             {/* Full-Screen Overlay */}
-            {isOpen && (
+            {isOpen && createPortal(
                 <>
                     {/* Backdrop */}
                     <div
@@ -237,7 +238,8 @@ export default function MobileMenu() {
                             </div>
                         </div>
                     </div>
-                </>
+                </>,
+                document.body
             )}
         </>
     );

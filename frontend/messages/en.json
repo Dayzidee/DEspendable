@@ -218,6 +218,7 @@
     },
     "transfer": {
         "title": "Payment",
+        "transfer": "Transfer",
         "newTransfer": "New Transfer",
         "fromAccount": "From Account",
         "toAccount": "To Account",

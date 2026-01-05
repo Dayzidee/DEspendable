@@ -41,16 +41,16 @@ export default function AccountsPage() {
     return (
         <DashboardLayout>
             <div className="max-w-7xl mx-auto">
-                <header className="flex justify-between items-center mb-8">
+                <header className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
                     <h1 className="text-2xl font-bold text-[var(--color-text-primary)]">{t('accounts.your_accounts')}</h1>
-                    <div className="flex gap-3">
+                    <div className="flex gap-3 w-full md:w-auto">
                         <button
                             onClick={() => setShowTransferModal(true)}
-                            className="flex items-center gap-2 px-4 py-2 bg-white border border-gray-200 text-[#0018A8] rounded-lg hover:bg-gray-50 transition-colors shadow-sm font-semibold"
+                            className="flex-1 md:flex-none flex items-center justify-center gap-2 px-4 py-2 bg-white border border-gray-200 text-[#0018A8] rounded-lg hover:bg-gray-50 transition-colors shadow-sm font-semibold whitespace-nowrap"
                         >
                             <FaWallet /> {t('transfer.transfer')}
                         </button>
-                        <button className="flex items-center gap-2 px-4 py-2 bg-[var(--color-primary)] text-white rounded-lg hover:bg-[var(--color-primary-hover)] transition-colors shadow-md">
+                        <button className="flex-1 md:flex-none flex items-center justify-center gap-2 px-4 py-2 bg-[var(--color-primary)] text-white rounded-lg hover:bg-[var(--color-primary-hover)] transition-colors shadow-md whitespace-nowrap">
                             <FaPlus /> {t('accounts.addAccount')}
                         </button>
                     </div>
