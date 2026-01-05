@@ -143,6 +143,7 @@ export default function Dashboard() {
                 <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 md:gap-8">
                     {/* Left Column - Main Content */}
                     <div className="lg:col-span-8 space-y-6 md:space-y-8 min-w-0">
+                        <AccountIdentifier />
                         <AccountsList accounts={accounts} />
                         <SpendingAnalytics data={chartData} />
                         <RecentTransactions transactions={recentTransactions} />
@@ -151,7 +152,7 @@ export default function Dashboard() {
                     {/* Right Column - Sidebar Widgets */}
                     <div className="lg:col-span-4 space-y-6 md:space-y-8 min-w-0">
                         {/* <QuickTransfer /> */}
-                        <GoalsWidget goals={data?.goals || []} />
+
 
                         <section className="bg-white rounded-xl shadow-sm p-6 card-hover border border-gray-100">
                             <header className="mb-4">

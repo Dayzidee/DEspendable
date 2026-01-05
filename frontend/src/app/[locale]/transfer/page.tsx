@@ -135,14 +135,7 @@ function TransferContent() {
         <DashboardLayout>
             <div className="min-h-screen bg-[#F4F6F8] pb-24">
                 {/* Header */}
-                <header className="bg-white border-b border-gray-200 px-6 py-6 sticky top-0 z-10">
-                    <div className="flex items-center gap-4">
-                        <Link href="/dashboard" className="p-2 hover:bg-gray-100 rounded-lg transition">
-                            <ArrowLeft className="w-5 h-5 text-[#0018A8]" />
-                        </Link>
-                        <h1 className="text-xl font-bold text-[#1C1C1C]">{t("transfer.title")}</h1>
-                    </div>
-                </header>
+
 
                 <div className="max-w-2xl mx-auto px-6 py-8">
                     {/* Transfer Type Tabs */}

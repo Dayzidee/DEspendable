@@ -9,7 +9,7 @@ import { ArrowLeft, Copy, Lock, Unlock, Settings, Eye, EyeOff } from "lucide-rea
 import { useTranslations } from 'next-intl';
 
 export default function VirtualCard() {
-    const { token } = useAuth();
+    const { token, user } = useAuth();
     const t = useTranslations('cards');
     const [cardData, setCardData] = useState<any>(null);
     const [loading, setLoading] = useState(true);
@@ -127,7 +127,13 @@ export default function VirtualCard() {
                                         </div>
                                         <div className="text-right">
                                             <div className="text-xs opacity-80">{t('cardHolder')}</div>
-                                            <div className="font-semibold">{cardData.holder}</div>
+                                            <div className="font-semibold">
+                                                {(cardData.holder === "User" && user?.displayName)
+                                                    ? user.displayName
+                                                    : (cardData.holder === "User" && user?.email)
+                                                        ? user.email.split('@')[0]
+                                                        : cardData.holder}
+                                            </div>
                                         </div>
                                     </div>
                                 </div>

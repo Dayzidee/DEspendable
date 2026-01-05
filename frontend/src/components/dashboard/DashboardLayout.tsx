@@ -5,7 +5,7 @@ import { usePathname } from "next/navigation";
 import { Link } from "@/i18n/navigation";
 import { useAuth } from "@/context/AuthContext";
 import { auth } from "@/lib/firebase";
-import { FaHome, FaExchangeAlt, FaCreditCard, FaGift, FaInbox, FaUserShield, FaSignOutAlt, FaLeaf, FaChartLine, FaPiggyBank, FaBars, FaTimes } from "react-icons/fa";
+import { FaHome, FaExchangeAlt, FaCreditCard, FaGift, FaInbox, FaUserShield, FaSignOutAlt, FaLeaf, FaChartLine, FaPiggyBank, FaBars, FaTimes, FaUser } from "react-icons/fa";
 import { motion, AnimatePresence } from "framer-motion";
 
 import { useTranslations } from "next-intl";
@@ -24,7 +24,9 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
         { name: t("nav.cards"), href: "/cards", icon: <FaCreditCard /> },
         { name: t("nav.investments"), href: "/investments", icon: <FaChartLine /> },
         { name: t("nav.rewards"), href: "/rewards", icon: <FaGift /> },
+        { name: t("nav.rewards"), href: "/rewards", icon: <FaGift /> },
         { name: t("nav.postbox"), href: "/postbox", icon: <FaInbox /> },
+        { name: t("nav.profile"), href: "/profile", icon: <FaUser /> },
     ];
 
     // Add Admin link only if user has is_admin flag

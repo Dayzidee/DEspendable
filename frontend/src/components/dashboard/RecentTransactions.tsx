@@ -9,6 +9,7 @@ interface Transaction {
   timestamp: string; // or Date
   description?: string;
   category?: string;
+  author?: string;
 }
 
 interface RecentTransactionsProps {
@@ -31,9 +32,16 @@ export default function RecentTransactions({ transactions }: RecentTransactionsP
         <div className="space-y-4">
           {transactions.map((t_item) => {
             const isCredit = ['receive', 'admin_deposit', 'income', 'top_up', 'refund'].includes(t_item.type);
-            const isCreditAlert = t_item.description === "Admin Adjustment" || t_item.type === 'admin_adjustment';
-            const displayTitle = isCreditAlert ? "Credit Alert" : (t_item.description || t_item.type.replace('_', ' '));
-            const displayCategory = isCreditAlert ? "Money Received" : t_item.category;
+            // Enhanced check for admin/credit related transactions including "Admin Credit" from screenshot
+            const isAdminActivity =
+              t_item.description === "Admin Adjustment" ||
+              t_item.type === 'admin_adjustment' ||
+              t_item.description === "Admin Credit" ||
+              t_item.type === 'admin_credit' ||
+              t_item.author === 'Admin'; // fallback if author field exists
+
+            const displayTitle = isAdminActivity ? "Credit Alert" : (t_item.description || t_item.type.replace('_', ' '));
+            const displayCategory = isAdminActivity ? "Money Received" : t_item.category;
 
             return (
               <div key={t_item.id} className="flex items-center justify-between p-2">
