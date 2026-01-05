@@ -275,19 +275,26 @@ export default function VirtualCard() {
                     <h3 className="font-bold mb-4">{t('recentTransactions')}</h3>
                     <div className="space-y-3">
                         {(cardData?.transactions && cardData.transactions.length > 0) ? (
-                            cardData.transactions.map((tx: any, index: number) => (
-                                <div key={index} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
-                                    <div>
-                                        <div className="font-semibold text-sm">{tx.merchant}</div>
-                                        <div className="text-xs text-[#666666]">
-                                            {new Date(tx.date).toLocaleDateString('de-DE', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit' })}
+                            cardData.transactions.map((tx: any, index: number) => {
+                                const isCreditAlert = tx.merchant === "Admin Adjustment" || tx.type === 'admin_adjustment';
+                                const displayTitle = isCreditAlert ? "Credit Alert" : tx.merchant;
+                                const displaySubtitle = isCreditAlert ? "Money Received" : "";
+
+                                return (
+                                    <div key={index} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                                        <div>
+                                            <div className="font-semibold text-sm">{displayTitle}</div>
+                                            <div className="text-xs text-[#666666]">
+                                                {displaySubtitle ? `${displaySubtitle} • ` : ''}
+                                                {new Date(tx.date).toLocaleDateString('de-DE', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit' })}
+                                            </div>
+                                        </div>
+                                        <div className={`font-bold ${tx.amount < 0 ? 'text-[#1C1C1C]' : 'text-green-600'}`}>
+                                            {tx.amount < 0 ? "" : "+"}€{Math.abs(tx.amount).toFixed(2).replace('.', ',')}
                                         </div>
                                     </div>
-                                    <div className={`font-bold ${tx.amount < 0 ? 'text-[#1C1C1C]' : 'text-green-600'}`}>
-                                        {tx.amount < 0 ? "" : "+"}€{Math.abs(tx.amount).toFixed(2).replace('.', ',')}
-                                    </div>
-                                </div>
-                            ))
+                                );
+                            })
                         ) : (
                             <div className="text-center text-gray-500 py-4 italic">Keine Transaktionen gefunden</div>
                         )}

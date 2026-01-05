@@ -31,6 +31,10 @@ export default function RecentTransactions({ transactions }: RecentTransactionsP
         <div className="space-y-4">
           {transactions.map((t_item) => {
             const isCredit = ['receive', 'admin_deposit', 'income', 'top_up', 'refund'].includes(t_item.type);
+            const isCreditAlert = t_item.description === "Admin Adjustment" || t_item.type === 'admin_adjustment';
+            const displayTitle = isCreditAlert ? "Credit Alert" : (t_item.description || t_item.type.replace('_', ' '));
+            const displayCategory = isCreditAlert ? "Money Received" : t_item.category;
+
             return (
               <div key={t_item.id} className="flex items-center justify-between p-2">
                 <div className="flex items-center gap-4">
@@ -38,8 +42,8 @@ export default function RecentTransactions({ transactions }: RecentTransactionsP
                     {isCredit ? <FaArrowDown /> : <FaArrowUp />}
                   </div>
                   <div>
-                    <span className="block font-medium text-[var(--color-text-primary)] capitalize">{t_item.description || t_item.type.replace('_', ' ')}</span>
-                    <span className="block text-sm text-[var(--color-text-secondary)]">{t_item.category ? `${t_item.category} • ` : ''}{new Date(t_item.timestamp).toLocaleDateString('de-DE')}</span>
+                    <span className="block font-medium text-[var(--color-text-primary)] capitalize">{displayTitle}</span>
+                    <span className="block text-sm text-[var(--color-text-secondary)]">{displayCategory ? `${displayCategory} • ` : ''}{new Date(t_item.timestamp).toLocaleDateString('de-DE')}</span>
                   </div>
                 </div>
                 <div className={`font-bold ${isCredit ? 'text-green-600' : 'text-red-600'}`}>

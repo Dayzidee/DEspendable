@@ -277,73 +277,77 @@ function AdminContent() {
                             </div>
 
                             {/* Users Table */}
-                            <div className="overflow-x-auto">
-                                <table className="w-full">
-                                    <thead>
-                                        <tr className="border-b border-gray-200">
-                                            <th className="text-left py-3 px-4 font-semibold text-sm text-[#666666]">{t('name')}</th>
-                                            <th className="text-left py-3 px-4 font-semibold text-sm text-[#666666]">{t('email')}</th>
-                                            <th className="text-left py-3 px-4 font-semibold text-sm text-[#666666]">{t('balance')}</th>
-                                            <th className="text-left py-3 px-4 font-semibold text-sm text-[#666666]">{t('tier')}</th>
-                                            <th className="text-left py-3 px-4 font-semibold text-sm text-[#666666]">{t('status')}</th>
-                                            <th className="text-right py-3 px-4 font-semibold text-sm text-[#666666]">{t('actions')}</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        {filteredUsers.map((user: any, index: number) => (
-                                            <motion.tr
-                                                key={user.id}
-                                                initial={{ opacity: 0, x: -20 }}
-                                                animate={{ opacity: 1, x: 0 }}
-                                                transition={{ delay: index * 0.05 }}
-                                                className="border-b border-gray-100 hover:bg-gray-50 transition"
-                                            >
-                                                <td className="py-4 px-4">
-                                                    <div className="font-semibold">{user.name || user.email?.split('@')[0]}</div>
-                                                </td>
-                                                <td className="py-4 px-4 text-sm text-[#666666]">{user.email}</td>
-                                                <td className="py-4 px-4 font-bold text-[#0018A8]">{formatCurrency(user.balance || 0)}</td>
-                                                <td className="py-4 px-4">
-                                                    <span className={`px-3 py-1 rounded-full text-xs font-semibold ${user.tier === 'Gold' ? 'bg-yellow-100 text-yellow-800' :
-                                                        user.tier === 'Silver' ? 'bg-gray-100 text-gray-800' :
-                                                            'bg-orange-100 text-orange-800'
-                                                        }`}>
-                                                        {user.tier || 'Standard'}
-                                                    </span>
-                                                </td>
-                                                <td className="py-4 px-4">
-                                                    <button
-                                                        onClick={() => handleToggleStatus(user.id, user.status)}
-                                                        className={`px-3 py-1 rounded-full text-xs font-semibold transition-all flex items-center gap-1 ${user.status === 'active' ? 'bg-green-100 text-green-800 hover:bg-green-200' : 'bg-red-100 text-red-800 hover:bg-red-200'
-                                                            }`}
-                                                    >
-                                                        {user.status === 'active' ? <ShieldCheck className="w-3 h-3" /> : <ShieldAlert className="w-3 h-3" />}
-                                                        {user.status === 'active' ? t('active') : t('suspended')}
-                                                    </button>
-                                                </td>
-                                                <td className="py-4 px-4">
-                                                    <div className="flex items-center justify-end gap-2">
+                            <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+                                <div className="overflow-x-auto">
+                                    <table className="w-full text-left">
+                                        <thead>
+                                            <tr className="bg-gray-50 border-b border-gray-100">
+                                                <th className="p-4 text-sm font-semibold text-gray-600 whitespace-nowrap">User</th>
+                                                <th className="p-4 text-sm font-semibold text-gray-600 whitespace-nowrap">Email</th>
+                                                <th className="p-4 text-sm font-semibold text-gray-600 whitespace-nowrap">Account Number</th>
+                                                <th className="p-4 text-sm font-semibold text-gray-600 whitespace-nowrap">Balance</th>
+                                                <th className="p-4 text-sm font-semibold text-gray-600 whitespace-nowrap">Status</th>
+                                                <th className="p-4 text-sm font-semibold text-gray-600 whitespace-nowrap">Created</th>
+                                                <th className="p-4 text-sm font-semibold text-gray-600 whitespace-nowrap text-right">Actions</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody className="divide-y divide-gray-100">
+                                            {filteredUsers.map((user: any) => (
+                                                <motion.tr
+                                                    key={user.id}
+                                                    initial={{ opacity: 0, x: -20 }}
+                                                    animate={{ opacity: 1, x: 0 }}
+                                                    transition={{ delay: filteredUsers.indexOf(user) * 0.05 }}
+                                                    className="hover:bg-gray-50 transition-colors group"
+                                                >
+                                                    <td className="p-4">
+                                                        <div className="flex items-center gap-3 min-w-[200px]">
+                                                            <div className="w-10 h-10 rounded-full bg-blue-100 text-[#0018A8] flex items-center justify-center font-bold">
+                                                                {user.name?.charAt(0) || user.email?.charAt(0).toUpperCase()}
+                                                            </div>
+                                                            <div className="font-medium text-[#1C1C1C]">{user.name || 'No Name'}</div>
+                                                        </div>
+                                                    </td>
+                                                    <td className="p-4 text-[#666666] whitespace-nowrap">{user.email}</td>
+                                                    <td className="p-4 text-[#666666] font-mono whitespace-nowrap">{user.accountNumber || 'N/A'}</td>
+                                                    <td className="p-4 font-medium text-[#1C1C1C] whitespace-nowrap">{formatCurrency(user.balance || 0)}</td>
+                                                    <td className="p-4 whitespace-nowrap">
                                                         <button
-                                                            onClick={() => {
-                                                                setSelectedUser(user);
-                                                                setShowBalanceModal(true);
-                                                            }}
-                                                            className="px-3 py-1.5 bg-blue-50 text-[#0018A8] rounded-lg text-xs font-bold hover:bg-blue-100 transition"
+                                                            onClick={() => handleToggleStatus(user.id, user.status)}
+                                                            className={`px-2 py-1 rounded-full text-xs font-medium transition-all flex items-center gap-1 ${user.status === 'active' ? 'bg-green-100 text-green-700 hover:bg-green-200' : 'bg-red-100 text-red-700 hover:bg-red-200'
+                                                                }`}
                                                         >
-                                                            {t('adjustBalance')}
+                                                            {user.status === 'active' ? <ShieldCheck className="w-3 h-3" /> : <ShieldAlert className="w-3 h-3" />}
+                                                            {user.status === 'active' ? t('active') : t('suspended')}
                                                         </button>
-                                                        <button
-                                                            onClick={() => handleDeleteUser(user.id)}
-                                                            className="p-2 hover:bg-red-50 rounded-lg transition text-red-600"
-                                                        >
-                                                            <Trash2 className="w-4 h-4" />
-                                                        </button>
-                                                    </div>
-                                                </td>
-                                            </motion.tr>
-                                        ))}
-                                    </tbody>
-                                </table>
+                                                    </td>
+                                                    <td className="p-4 text-[#666666] text-sm whitespace-nowrap">
+                                                        {new Date(user.metadata.creationTime).toLocaleDateString()}
+                                                    </td>
+                                                    <td className="p-4 text-right whitespace-nowrap">
+                                                        <div className="flex items-center justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                                                            <button
+                                                                onClick={() => {
+                                                                    setSelectedUser(user);
+                                                                    setShowBalanceModal(true);
+                                                                }}
+                                                                className="px-3 py-1.5 bg-blue-50 text-[#0018A8] rounded-lg text-xs font-bold hover:bg-blue-100 transition"
+                                                            >
+                                                                {t('adjustBalance')}
+                                                            </button>
+                                                            <button
+                                                                onClick={() => handleDeleteUser(user.id)}
+                                                                className="p-2 hover:bg-red-50 rounded-lg transition text-red-600"
+                                                            >
+                                                                <Trash2 className="w-4 h-4" />
+                                                            </button>
+                                                        </div>
+                                                    </td>
+                                                </motion.tr>
+                                            ))}
+                                        </tbody>
+                                    </table>
+                                </div>
                             </div>
                         </>
                     ) : (
@@ -379,30 +383,33 @@ function AdminContent() {
                         </div>
                     )}
                 </div>
-            </div>
 
-            {/* Balance Adjustment Modal */}
-            {showBalanceModal && selectedUser && (
-                <BalanceAdjustmentModal
-                    user={{
-                        id: selectedUser.id,
-                        name: selectedUser.name || selectedUser.email?.split('@')[0],
-                        email: selectedUser.email,
-                        balance: selectedUser.balance || 0
-                    }}
-                    token={token!}
-                    onClose={() => {
-                        setShowBalanceModal(false);
-                        setSelectedUser(null);
-                    }}
-                    onSuccess={(newBalance: number) => {
-                        setUsers(users.map((u: any) => u.id === selectedUser.id ? { ...u, balance: newBalance } : u));
-                        setShowBalanceModal(false);
-                        setSelectedUser(null);
-                        fetchData(); // Refresh stats
-                    }}
-                />
-            )}
+                {/* Balance Adjustment Modal */}
+                {
+                    showBalanceModal && selectedUser && (
+                        <BalanceAdjustmentModal
+                            user={{
+                                id: selectedUser.id,
+                                name: selectedUser.name || selectedUser.email?.split('@')[0],
+                                email: selectedUser.email,
+                                balance: selectedUser.balance || 0
+                            }}
+                            token={token!}
+                            onClose={() => {
+                                setShowBalanceModal(false);
+                                setSelectedUser(null);
+                            }}
+                            onSuccess={(newBalance: number) => {
+                                setUsers(users.map((u: any) => u.id === selectedUser.id ? { ...u, balance: newBalance } : u));
+                                setShowBalanceModal(false);
+                                setSelectedUser(null);
+                                fetchData(); // Refresh stats
+                            }}
+                        />
+                    )
+                }
+            </div>
         </div>
     );
 }
+

@@ -3,6 +3,9 @@
 @import "tailwindcss/utilities" layer(utilities);
 
 @theme {
+  /* Breakpoints */
+  --breakpoint-xs: 375px;
+
   /* Primary Colors */
   --color-primary: #0018A8;
   --color-primary-hover: #00127a;
@@ -43,7 +46,6 @@
 }
 
 body {
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }

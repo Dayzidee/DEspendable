@@ -52,6 +52,15 @@
         "faq": "FAQ",
         "support": "Support"
     },
+    "import": {
+        "title": "Kontoauszug importieren",
+        "description": "Laden Sie einen Kontoauszug (CSV, PDF, MT940, CAMT) hoch, um Transaktionen zu importieren.",
+        "drag_drop": "Datei hierher ziehen und ablegen",
+        "supported_formats": "Unterstützte Formate: CSV, PDF, MT940, CAMT",
+        "success_title": "Upload erfolgreich!",
+        "success_desc": "Ihr Kontoauszug wird verarbeitet. Transaktionen erscheinen in Kürze.",
+        "security_note": "Ihre Dokumente werden verschlüsselt und sicher verarbeitet."
+    },
     "nav": {
         "about": "Über uns",
         "features": "Funktionen",
@@ -550,6 +559,28 @@
         "crypto": "Krypto",
         "commodity": "Rohstoffe"
     },
+    "profile_data": {
+        "title": "Mein Profil",
+        "personal_info": "Persönliche Daten",
+        "address_info": "Adresse",
+        "financial_info": "Finanzielle Informationen",
+        "firstName": "Vorname",
+        "lastName": "Nachname",
+        "dateOfBirth": "Geburtsdatum",
+        "phoneNumber": "Telefonnummer",
+        "nationality": "Nationalität",
+        "taxId": "Steuer-ID",
+        "street": "Straße",
+        "city": "Stadt",
+        "postalCode": "Postleitzahl",
+        "country": "Land",
+        "employmentStatus": "Beschäftigungsstatus",
+        "sourceOfFunds": "Herkunft der Mittel",
+        "annualIncome": "Jahreseinkommen",
+        "save": "Profil speichern",
+        "modal_title": "Vervollständigen Sie Ihr Profil",
+        "modal_desc": "Um die Sicherheit Ihres Kontos zu gewährleisten und Bankvorschriften einzuhalten, benötigen wir vor der Fortsetzung einige zusätzliche Informationen."
+    },
     "accounts": {
         "title": "Konten",
         "checking": "Girokonto",
@@ -634,7 +665,9 @@
         "max": "Maximalwert: {max}",
         "pattern": "Ungültiges Format",
         "numeric": "Muss eine Zahl sein",
-        "alphanumeric": "Nur Buchstaben und Zahlen erlaubt"
+        "alphanumeric": "Nur Buchstaben und Zahlen erlaubt",
+        "select": "Option auswählen",
+        "processing": "Wird bearbeitet..."
     },
     "formatting": {
         "currency": "€{amount}",

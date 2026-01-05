@@ -17,10 +17,12 @@ import SpendingAnalytics from "@/components/dashboard/SpendingAnalytics";
 import AccountIdentifier from "@/components/dashboard/AccountIdentifier";
 import AccountsList from "@/components/dashboard/AccountsList";
 import RecentTransactions from "@/components/dashboard/RecentTransactions";
+import QuickTransfer from "../../../components/dashboard/QuickTransfer";
 import VirtualCard from "@/components/dashboard/VirtualCard";
 import GoalsWidget from "@/components/dashboard/GoalsWidget";
 import FloatingChatWidget from "@/components/dashboard/FloatingChatWidget";
 import { FaUserShield, FaFileImport, FaBullseye, FaChevronRight, FaChartLine, FaTrophy } from 'react-icons/fa';
+import ProfileCompletionModal from "@/components/profile/ProfileCompletionModal";
 
 export default function Dashboard() {
     const { user, token, loading, isAdmin } = useAuth();
@@ -29,6 +31,7 @@ export default function Dashboard() {
     const router = useRouter();
     const [data, setData] = useState<any>(null);
     const [fetchError, setFetchError] = useState("");
+    const [isDataLoading, setIsDataLoading] = useState(true);
 
     useEffect(() => {
         if (!loading && !user) {
@@ -36,15 +39,14 @@ export default function Dashboard() {
         }
     }, [user, loading, router]);
 
-    useEffect(() => {
+    const loadData = () => {
         if (user && token) {
-            // Fetch Dashboard Data
+            setIsDataLoading(true);
             const fetchDashboard = fetch(`/api/dashboard`, {
                 headers: { Authorization: `Bearer ${token}` },
                 cache: 'no-store'
             }).then(res => res.json());
 
-            // Fetch Goals Data
             const fetchGoals = fetch(`/api/goals`, {
                 headers: { Authorization: `Bearer ${token}` }
             }).then(res => res.json());
@@ -53,9 +55,17 @@ export default function Dashboard() {
                 .then(([dashboardData, goalsData]) => {
                     if (dashboardData.error) throw new Error(dashboardData.error);
                     setData({ ...dashboardData, goals: goalsData.error ? [] : goalsData });
+                    setIsDataLoading(false);
                 })
-                .catch(err => setFetchError(err.message));
+                .catch(err => {
+                    setFetchError(err.message);
+                    setIsDataLoading(false);
+                });
         }
+    };
+
+    useEffect(() => {
+        loadData();
     }, [user, token]);
 
     if (loading || !user) {
@@ -69,6 +79,8 @@ export default function Dashboard() {
     const accounts = data?.accounts || [];
     const recentTransactions = data?.recent_transactions || [];
     const totalBalance = data?.total_balance || 0;
+    // Use firstName if available, otherwise display name or email part
+    const displayName = data?.firstName || user.displayName || user.email?.split('@')[0] || "User";
 
     const chartData = {
         labels: data?.spending_by_category ? Object.keys(data.spending_by_category) : ['No Data'],
@@ -93,10 +105,20 @@ export default function Dashboard() {
 
     return (
         <DashboardLayout>
-            <div className="max-w-7xl mx-auto pb-12">
+            {/* Profile Completion Modal - Blocks interaction if profile is incomplete */}
+            {!isDataLoading && data && (
+                <ProfileCompletionModal
+                    isOpen={!data.isProfileComplete}
+                    onSuccess={() => {
+                        loadData(); // Reload data to close modal and update UI
+                    }}
+                />
+            )}
+
+            <div className={`max-w-7xl mx-auto pb-12 ${!data?.isProfileComplete ? 'blur-sm pointer-events-none' : ''}`}>
                 <div className="flex justify-between items-start mb-4">
                     <DashboardHeader
-                        username={user.displayName || user.email?.split('@')[0] || "User"}
+                        username={displayName}
                         tier={data?.account_tier || "Standard"}
                     />
                     <div className="flex items-center gap-3">
@@ -117,15 +139,20 @@ export default function Dashboard() {
                     pendingCount={recentTransactions.filter((tx: any) => tx.status === 'pending').length}
                 />
 
-                <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-                    <div className="lg:col-span-2 space-y-6">
-                        <SpendingAnalytics data={chartData} />
-                        <AccountIdentifier />
+                {/* Dashboard Grid */}
+                <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 md:gap-8">
+                    {/* Left Column - Main Content */}
+                    <div className="lg:col-span-8 space-y-6 md:space-y-8 min-w-0">
                         <AccountsList accounts={accounts} />
+                        <SpendingAnalytics data={chartData} />
                         <RecentTransactions transactions={recentTransactions} />
                     </div>
 
-                    <aside className="space-y-6">
+                    {/* Right Column - Sidebar Widgets */}
+                    <div className="lg:col-span-4 space-y-6 md:space-y-8 min-w-0">
+                        {/* <QuickTransfer /> */}
+                        <GoalsWidget goals={data?.goals || []} />
+
                         <section className="bg-white rounded-xl shadow-sm p-6 card-hover border border-gray-100">
                             <header className="mb-4">
                                 <h2 className="text-xl font-bold text-[#1C1C1C]">{t('dashboard.quickActions')}</h2>
@@ -143,7 +170,7 @@ export default function Dashboard() {
                                     </Link>
                                 )}
 
-                                <Link href="#" className="flex items-center justify-between p-3 rounded-lg hover:bg-gray-50 transition-colors group cursor-pointer">
+                                <Link href="/import" className="flex items-center justify-between p-3 rounded-lg hover:bg-gray-50 transition-colors group cursor-pointer">
                                     <div className="flex items-center gap-3">
                                         <div className="w-8 h-8 rounded-full bg-blue-100 text-[#0018A8] flex items-center justify-center">
                                             <FaFileImport />
@@ -216,8 +243,8 @@ export default function Dashboard() {
                             </div>
                         </section>
 
-                        <VirtualCard cardHolder={data?.recent_transactions?.[0]?.owner?.username || user.displayName || "User"} />
-                    </aside>
+                        <VirtualCard cardHolder={displayName} />
+                    </div>
                 </div>
             </div>
             <FloatingChatWidget />

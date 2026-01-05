@@ -52,6 +52,15 @@
         "contact_us": "Contact Us",
         "read_more": "Read More"
     },
+    "import": {
+        "title": "Import Statement",
+        "description": "Upload a bank statement (CSV, PDF, MT940, CAMT) to import transactions.",
+        "drag_drop": "Drag and drop your file here",
+        "supported_formats": "Supported formats: CSV, PDF, MT940, CAMT",
+        "success_title": "Upload Successful!",
+        "success_desc": "Your statement is being processed. Transactions will appear shortly.",
+        "security_note": "Your documents are encrypted and securely processed."
+    },
     "nav": {
         "about": "About Us",
         "features": "Features",
@@ -550,6 +559,28 @@
         "crypto": "Crypto",
         "commodity": "Commodity"
     },
+    "profile_data": {
+        "title": "My Profile",
+        "personal_info": "Personal Information",
+        "address_info": "Address",
+        "financial_info": "Financial Information",
+        "firstName": "First Name",
+        "lastName": "Last Name",
+        "dateOfBirth": "Date of Birth",
+        "phoneNumber": "Phone Number",
+        "nationality": "Nationality",
+        "taxId": "Tax ID",
+        "street": "Street",
+        "city": "City",
+        "postalCode": "Postal Code",
+        "country": "Country",
+        "employmentStatus": "Employment Status",
+        "sourceOfFunds": "Source of Funds",
+        "annualIncome": "Annual Income",
+        "save": "Save Profile",
+        "modal_title": "Complete Your Profile",
+        "modal_desc": "To ensure the security of your account and comply with banking regulations, we need some additional information before you can continue."
+    },
     "accounts": {
         "title": "Accounts",
         "checking": "Current Account",
@@ -634,7 +665,9 @@
         "max": "Maximum value: {max}",
         "pattern": "Invalid format",
         "numeric": "Must be a number",
-        "alphanumeric": "Only letters and numbers allowed"
+        "alphanumeric": "Only letters and numbers allowed",
+        "select": "Select an option",
+        "processing": "Processing..."
     },
     "formatting": {
         "currency": "€{amount}",

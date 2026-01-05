@@ -131,11 +131,17 @@ export async function GET(request: NextRequest) {
     // Calculate Total Balance
     const totalBalance = accounts.reduce((sum, acc) => sum + acc.balance, 0);
 
+    // Fetch User Profile Status
+    const userDoc = await db.collection('users').doc(userId).get();
+    const userData = userDoc.exists ? userDoc.data() : null;
+
     return NextResponse.json({
       accounts,
       recent_transactions: transactions,
       spending_by_category: spendingByCategory,
       total_balance: totalBalance,
+      firstName: userData?.firstName || '',
+      isProfileComplete: !!userData?.isProfileComplete,
       last_login: new Date().toISOString()
     });
 

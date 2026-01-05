@@ -20,13 +20,20 @@ export async function GET(request: NextRequest) {
             .get();
 
         if (cardsSnapshot.empty) {
+            // Fetch user profile for name
+            const userDoc = await db.collection('users').doc(userId).get();
+            const userData = userDoc.exists ? userDoc.data() : null;
+            const holderName = userData?.firstName && userData?.lastName
+                ? `${userData.firstName} ${userData.lastName}`
+                : (decodedToken.name || "User");
+
             // Create a default card for the user if none exist
             const newCard = {
                 user_id: userId,
                 number: "4532 " + Math.floor(1000 + Math.random() * 9000) + " " + Math.floor(1000 + Math.random() * 9000) + " " + Math.floor(1000 + Math.random() * 9000),
                 cvv: Math.floor(100 + Math.random() * 900).toString(),
                 expiry: "12/28",
-                holder: decodedToken.name || "User",
+                holder: holderName,
                 status: 'active',
                 type: 'Premium',
                 balance: 2500.00,

@@ -8,6 +8,7 @@ import SCAModal from "@/components/SCAModal";
 import Link from 'next/link';
 import { motion } from "framer-motion";
 import { ArrowLeft, Camera, Users, Send } from "lucide-react";
+import DashboardLayout from "@/components/dashboard/DashboardLayout";
 
 export const dynamic = "force-dynamic";
 
@@ -131,143 +132,145 @@ function TransferContent() {
     };
 
     return (
-        <div className="min-h-screen bg-[#F4F6F8] pb-24">
-            {/* Header */}
-            <header className="bg-white border-b border-gray-200 px-6 py-6 sticky top-0 z-10">
-                <div className="flex items-center gap-4">
-                    <Link href="/dashboard" className="p-2 hover:bg-gray-100 rounded-lg transition">
-                        <ArrowLeft className="w-5 h-5 text-[#0018A8]" />
-                    </Link>
-                    <h1 className="text-xl font-bold text-[#1C1C1C]">{t("transfer.title")}</h1>
-                </div>
-            </header>
-
-            <div className="max-w-2xl mx-auto px-6 py-8">
-                {/* Transfer Type Tabs */}
-                <div className="grid grid-cols-2 gap-4 mb-8">
-                    <Link
-                        href="/transfer"
-                        className="bg-gradient-to-r from-[#0018A8] to-[#0025D9] text-white p-4 rounded-xl flex items-center justify-center gap-2 font-semibold shadow-lg"
-                    >
-                        <Send className="w-5 h-5" />
-                        SEPA-Überweisung
-                    </Link>
-                    <Link
-                        href="/transfer/p2p"
-                        className="bg-white text-[#0018A8] border-2 border-gray-200 p-4 rounded-xl flex items-center justify-center gap-2 font-semibold hover:border-[#0018A8] transition"
-                    >
-                        <Users className="w-5 h-5" />
-                        P2P Transfer
-                    </Link>
-                </div>
-
-                {error && (
-                    <motion.div
-                        initial={{ opacity: 0, y: -10 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        className="p-4 mb-6 bg-red-50 border border-red-200 text-[#E2001A] rounded-xl text-sm"
-                    >
-                        {error}
-                    </motion.div>
-                )}
-
-                <form onSubmit={handleInitiate} className="bg-white rounded-2xl p-8 shadow-lg border border-gray-100 space-y-6">
-                    {/* From Account */}
-                    <div>
-                        <label className="block text-sm font-semibold text-[#1C1C1C] mb-2">
-                            Von Konto
-                        </label>
-                        <select
-                            className="w-full bg-[#F4F6F8] border border-gray-300 rounded-lg px-4 py-3 text-[#1C1C1C] focus:outline-none focus:ring-2 focus:ring-[#0018A8] focus:border-transparent transition"
-                            value={fromAccount}
-                            onChange={e => setFromAccount(e.target.value)}
-                        >
-                            {accounts.map(acc => (
-                                <option key={acc.id} value={acc.id}>
-                                    {acc.type} - {parseFloat(acc.balance).toFixed(2)}€
-                                </option>
-                            ))}
-                        </select>
+        <DashboardLayout>
+            <div className="min-h-screen bg-[#F4F6F8] pb-24">
+                {/* Header */}
+                <header className="bg-white border-b border-gray-200 px-6 py-6 sticky top-0 z-10">
+                    <div className="flex items-center gap-4">
+                        <Link href="/dashboard" className="p-2 hover:bg-gray-100 rounded-lg transition">
+                            <ArrowLeft className="w-5 h-5 text-[#0018A8]" />
+                        </Link>
+                        <h1 className="text-xl font-bold text-[#1C1C1C]">{t("transfer.title")}</h1>
                     </div>
+                </header>
 
-                    {/* IBAN */}
-                    <div>
-                        <label className="block text-sm font-semibold text-[#1C1C1C] mb-2">
-                            {t("transfer.iban")}
-                        </label>
-                        <input
-                            type="text"
-                            required
-                            className="w-full bg-[#F4F6F8] border border-gray-300 rounded-lg px-4 py-3 text-[#1C1C1C] focus:outline-none focus:ring-2 focus:ring-[#0018A8] focus:border-transparent transition font-mono"
-                            value={iban}
-                            onChange={e => setIban(e.target.value)}
-                            placeholder="DE89 3705 0000 1234 5678 90"
-                        />
-                    </div>
-
-                    {/* Amount */}
-                    <div>
-                        <label className="block text-sm font-semibold text-[#1C1C1C] mb-2">
-                            {t("transfer.amount")}
-                        </label>
-                        <div className="relative">
-                            <input
-                                type="number"
-                                required
-                                step="0.01"
-                                min="0.01"
-                                className="w-full bg-[#F4F6F8] border border-gray-300 rounded-lg pl-4 pr-12 py-3 text-[#1C1C1C] focus:outline-none focus:ring-2 focus:ring-[#0018A8] focus:border-transparent transition"
-                                value={amount}
-                                onChange={e => setAmount(e.target.value)}
-                                placeholder="0.00"
-                            />
-                            <span className="absolute right-4 top-3 text-[#666666] font-semibold">€</span>
-                        </div>
-                    </div>
-
-                    {/* Reference */}
-                    <div>
-                        <label className="block text-sm font-semibold text-[#1C1C1C] mb-2">
-                            {t("transfer.reference")} <span className="text-[#E2001A]">*</span>
-                        </label>
-                        <input
-                            type="text"
-                            required
-                            maxLength={140}
-                            className="w-full bg-[#F4F6F8] border border-gray-300 rounded-lg px-4 py-3 text-[#1C1C1C] focus:outline-none focus:ring-2 focus:ring-[#0018A8] focus:border-transparent transition"
-                            value={reference}
-                            onChange={e => setReference(e.target.value)}
-                            placeholder={t("transfer.reference_placeholder")}
-                        />
-                    </div>
-
-                    <div className="pt-4 space-y-3">
-                        <button
-                            type="submit"
-                            disabled={loading}
-                            className="w-full bg-gradient-to-r from-[#0018A8] to-[#0025D9] text-white font-bold py-4 rounded-xl hover:shadow-xl hover:-translate-y-0.5 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
-                        >
-                            {loading ? "Wird verarbeitet..." : t("transfer.submit")}
-                        </button>
-
+                <div className="max-w-2xl mx-auto px-6 py-8">
+                    {/* Transfer Type Tabs */}
+                    <div className="grid grid-cols-2 gap-4 mb-8">
                         <Link
-                            href="/transfer/scan"
-                            className="w-full flex items-center justify-center gap-2 bg-white border-2 border-[#0018A8] text-[#0018A8] font-bold py-4 rounded-xl hover:bg-gray-50 transition"
+                            href="/transfer"
+                            className="bg-gradient-to-r from-[#0018A8] to-[#0025D9] text-white p-4 rounded-xl flex items-center justify-center gap-2 font-semibold shadow-lg"
                         >
-                            <Camera className="w-5 h-5" />
-                            Foto-Überweisung
+                            <Send className="w-5 h-5" />
+                            SEPA-Überweisung
+                        </Link>
+                        <Link
+                            href="/transfer/p2p"
+                            className="bg-white text-[#0018A8] border-2 border-gray-200 p-4 rounded-xl flex items-center justify-center gap-2 font-semibold hover:border-[#0018A8] transition"
+                        >
+                            <Users className="w-5 h-5" />
+                            P2P Transfer
                         </Link>
                     </div>
-                </form>
 
-                <SCAModal
-                    isOpen={scaRequired}
-                    onConfirm={handleConfirmSCA}
-                    onCancel={() => setScaRequired(false)}
-                    mockTan={mockTan}
-                />
+                    {error && (
+                        <motion.div
+                            initial={{ opacity: 0, y: -10 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            className="p-4 mb-6 bg-red-50 border border-red-200 text-[#E2001A] rounded-xl text-sm"
+                        >
+                            {error}
+                        </motion.div>
+                    )}
+
+                    <form onSubmit={handleInitiate} className="bg-white rounded-2xl p-8 shadow-lg border border-gray-100 space-y-6">
+                        {/* From Account */}
+                        <div>
+                            <label className="block text-sm font-semibold text-[#1C1C1C] mb-2">
+                                Von Konto
+                            </label>
+                            <select
+                                className="w-full bg-[#F4F6F8] border border-gray-300 rounded-lg px-4 py-3 text-[#1C1C1C] focus:outline-none focus:ring-2 focus:ring-[#0018A8] focus:border-transparent transition"
+                                value={fromAccount}
+                                onChange={e => setFromAccount(e.target.value)}
+                            >
+                                {accounts.map(acc => (
+                                    <option key={acc.id} value={acc.id}>
+                                        {acc.type} - {parseFloat(acc.balance).toFixed(2)}€
+                                    </option>
+                                ))}
+                            </select>
+                        </div>
+
+                        {/* IBAN */}
+                        <div>
+                            <label className="block text-sm font-semibold text-[#1C1C1C] mb-2">
+                                {t("transfer.iban")}
+                            </label>
+                            <input
+                                type="text"
+                                required
+                                className="w-full bg-[#F4F6F8] border border-gray-300 rounded-lg px-4 py-3 text-[#1C1C1C] focus:outline-none focus:ring-2 focus:ring-[#0018A8] focus:border-transparent transition font-mono"
+                                value={iban}
+                                onChange={e => setIban(e.target.value)}
+                                placeholder="DE89 3705 0000 1234 5678 90"
+                            />
+                        </div>
+
+                        {/* Amount */}
+                        <div>
+                            <label className="block text-sm font-semibold text-[#1C1C1C] mb-2">
+                                {t("transfer.amount")}
+                            </label>
+                            <div className="relative">
+                                <input
+                                    type="number"
+                                    required
+                                    step="0.01"
+                                    min="0.01"
+                                    className="w-full bg-[#F4F6F8] border border-gray-300 rounded-lg pl-4 pr-12 py-3 text-[#1C1C1C] focus:outline-none focus:ring-2 focus:ring-[#0018A8] focus:border-transparent transition"
+                                    value={amount}
+                                    onChange={e => setAmount(e.target.value)}
+                                    placeholder="0.00"
+                                />
+                                <span className="absolute right-4 top-3 text-[#666666] font-semibold">€</span>
+                            </div>
+                        </div>
+
+                        {/* Reference */}
+                        <div>
+                            <label className="block text-sm font-semibold text-[#1C1C1C] mb-2">
+                                {t("transfer.reference")} <span className="text-[#E2001A]">*</span>
+                            </label>
+                            <input
+                                type="text"
+                                required
+                                maxLength={140}
+                                className="w-full bg-[#F4F6F8] border border-gray-300 rounded-lg px-4 py-3 text-[#1C1C1C] focus:outline-none focus:ring-2 focus:ring-[#0018A8] focus:border-transparent transition"
+                                value={reference}
+                                onChange={e => setReference(e.target.value)}
+                                placeholder={t("transfer.reference_placeholder")}
+                            />
+                        </div>
+
+                        <div className="pt-4 space-y-3">
+                            <button
+                                type="submit"
+                                disabled={loading}
+                                className="w-full bg-gradient-to-r from-[#0018A8] to-[#0025D9] text-white font-bold py-4 rounded-xl hover:shadow-xl hover:-translate-y-0.5 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                            >
+                                {loading ? "Wird verarbeitet..." : t("transfer.submit")}
+                            </button>
+
+                            <Link
+                                href="/transfer/scan"
+                                className="w-full flex items-center justify-center gap-2 bg-white border-2 border-[#0018A8] text-[#0018A8] font-bold py-4 rounded-xl hover:bg-gray-50 transition"
+                            >
+                                <Camera className="w-5 h-5" />
+                                Foto-Überweisung
+                            </Link>
+                        </div>
+                    </form>
+
+                    <SCAModal
+                        isOpen={scaRequired}
+                        onConfirm={handleConfirmSCA}
+                        onCancel={() => setScaRequired(false)}
+                        mockTan={mockTan}
+                    />
+                </div>
             </div>
-        </div>
+        </DashboardLayout>
     );
 }
 
