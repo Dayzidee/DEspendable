@@ -211,7 +211,7 @@ export default function Rewards() {
                         {pointsHistory.map((item: RewardHistoryItem, index: number) => (
                             <div key={index} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
                                 <div>
-                                    <div className="font-semibold text-sm">{t(`history.${item.descriptionKey}`)}</div>
+                                    <div className="font-semibold text-sm">{t(`history.${item.descriptionKey || 'other'}`)}</div>
                                     <div className="text-xs text-[#666666]">{item.date}</div>
                                 </div>
                                 <div className="text-green-600 font-bold">+{item.points}</div>

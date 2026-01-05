@@ -42,7 +42,27 @@ export async function GET(request: NextRequest) {
             return NextResponse.json(initialRewards);
         }
 
-        return NextResponse.json(rewardsDoc.data());
+        const data = rewardsDoc.data();
+
+        // Process history to ensure descriptionKey exists (handling legacy data)
+        const processedHistory = (data?.history || []).map((item: any) => {
+            if (item.descriptionKey) return item;
+
+            // Map legacy descriptions to keys
+            let key = 'other';
+            if (item.description === 'Willkommensbonus') key = 'welcome_bonus';
+            else if (item.description === 'Erste Anmeldung') key = 'first_login';
+
+            return {
+                ...item,
+                descriptionKey: key
+            };
+        });
+
+        return NextResponse.json({
+            ...data,
+            history: processedHistory
+        });
     } catch (error: any) {
         console.error('Rewards API Error:', error);
         return NextResponse.json({ error: error.message }, { status: 400 });

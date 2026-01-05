@@ -362,7 +362,8 @@
             "gas_station": "Gas Station",
             "restaurant": "Restaurant",
             "welcome_bonus": "Welcome Bonus",
-            "first_login": "First Login"
+            "first_login": "First Login",
+            "other": "Other"
         },
         "transactions_earn": "1 point per €1 spent",
         "referral_earn": "500 points per referral",

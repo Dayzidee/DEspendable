@@ -361,7 +361,10 @@
             "grocery_shopping": "Lebensmitteleinkauf",
             "online_shopping": "Online-Shopping",
             "gas_station": "Tankstelle",
-            "restaurant": "Restaurant"
+            "restaurant": "Restaurant",
+            "welcome_bonus": "Willkommensbonus",
+            "first_login": "Erste Anmeldung",
+            "other": "Sonstiges"
         },
         "transactions_earn": "1 Punkt pro 1 € Umsatz",
         "referral_earn": "500 Punkte pro Empfehlung",
