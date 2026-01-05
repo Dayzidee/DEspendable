@@ -138,6 +138,7 @@ export class TANService {
         .digest('hex');
 
       if (tanData.dynamic_link !== expectedLink) {
+        console.error(`TAN Verify Fail: Exp: ${expectedLink} (from ${transactionId}:${amount}:${recipient}), Act: ${tanData.dynamic_link}`);
         return { isValid: false, error: 'Transaktionsdetails stimmen nicht überein' };
       }
 

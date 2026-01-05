@@ -105,9 +105,9 @@ export class TransactionService {
     // 2. Validate TAN
     let recipientIdentifier = '';
     if (txData.type === 'internal') {
-      recipientIdentifier = txData.recipient_info.to_account_id;
+      recipientIdentifier = txData.recipient_info.to_account_id || 'unknown';
     } else {
-      recipientIdentifier = txData.recipient_info.recipient_account_number;
+      recipientIdentifier = txData.recipient_info.recipient_account_number || 'unknown';
     }
 
     const { isValid, error } = await TANService.validateTan(
@@ -139,15 +139,15 @@ export class TransactionService {
       let toAccSnap: any = null;
 
       if (txData.type === 'internal' && txData.recipient_info.to_account_id) {
-         toAccRef = db.collection('accounts').doc(txData.recipient_info.to_account_id);
-         toAccSnap = await t.get(toAccRef);
+        toAccRef = db.collection('accounts').doc(txData.recipient_info.to_account_id);
+        toAccSnap = await t.get(toAccRef);
       } else if (txData.type === 'external') {
-         // Attempt to find internal recipient by account number?
-         // Firestore transactions cannot run queries that are not document lookups easily if data can change.
-         // Queries in transactions require all docs to be read.
-         // For SIMPLICITY and SAFETY in this demo:
-         // We will NOT query for external recipient users inside the transaction to avoid complexity.
-         // External transfers will just deduct funds.
+        // Attempt to find internal recipient by account number?
+        // Firestore transactions cannot run queries that are not document lookups easily if data can change.
+        // Queries in transactions require all docs to be read.
+        // For SIMPLICITY and SAFETY in this demo:
+        // We will NOT query for external recipient users inside the transaction to avoid complexity.
+        // External transfers will just deduct funds.
       }
 
       // --- LOGIC PHASE ---
@@ -165,8 +165,8 @@ export class TransactionService {
 
       // Credit Recipient (if internal and found)
       if (toAccRef && toAccSnap && toAccSnap.exists) {
-          const newBal = (toAccSnap.data()?.balance || 0) + amount;
-          t.update(toAccRef, { balance: newBal });
+        const newBal = (toAccSnap.data()?.balance || 0) + amount;
+        t.update(toAccRef, { balance: newBal });
       }
 
       // Update Transaction Status

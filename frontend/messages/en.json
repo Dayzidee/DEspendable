@@ -239,6 +239,11 @@
         "enterTan": "Please enter your TAN",
         "tanPlaceholder": "6-digit TAN",
         "mockTanInfo": "Demo TAN",
+        "types": {
+            "internal": "Internal Transfer",
+            "external": "External Transfer",
+            "p2p": "P2P Transfer"
+        },
         "p2pTransfer": "P2P Transfer",
         "sepaTransfer": "SEPA Transfer",
         "photoTransfer": "Photo Transfer",
