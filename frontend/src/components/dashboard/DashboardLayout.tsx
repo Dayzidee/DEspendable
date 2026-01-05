@@ -12,9 +12,25 @@ import { useTranslations } from "next-intl";
 
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
     const pathname = usePathname();
-    const { user, isAdmin } = useAuth();
+    const { user, isAdmin, status } = useAuth();
     const t = useTranslations();
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+
+    const isSuspended = status === 'suspended';
+
+    // Persistent Frozen Message
+    const FrozenBanner = () => {
+        if (!isSuspended) return null;
+        return (
+            <div className="bg-red-600 text-white px-4 py-3 shadow-lg flex items-center justify-center gap-3 animate-pulse relative z-50">
+                <FaUserShield className="text-xl" />
+                <div className="text-center font-medium">
+                    <p className="font-bold text-lg mb-1">Account Frozen / Under Investigation</p>
+                    <p className="text-sm opacity-90">Your account has been temporarily frozen. Please contact your account officer or support for more information.</p>
+                </div>
+            </div>
+        );
+    };
 
     const menuItems = [
         { name: t("nav.dashboard"), href: "/dashboard", icon: <FaHome /> },
@@ -24,7 +40,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
         { name: t("nav.cards"), href: "/cards", icon: <FaCreditCard /> },
         { name: t("nav.investments"), href: "/investments", icon: <FaChartLine /> },
         { name: t("nav.rewards"), href: "/rewards", icon: <FaGift /> },
-        { name: t("nav.rewards"), href: "/rewards", icon: <FaGift /> },
+
         { name: t("nav.postbox"), href: "/postbox", icon: <FaInbox /> },
         { name: t("nav.profile"), href: "/profile", icon: <FaUser /> },
     ];
@@ -86,110 +102,113 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
     );
 
     return (
-        <div className="min-h-screen bg-[var(--color-background)] flex">
-            {/* Mobile Header */}
-            <header className="lg:hidden fixed top-0 left-0 right-0 h-16 bg-white border-b border-gray-100 flex items-center justify-between px-4 z-30">
-                <button
-                    onClick={() => setIsMobileMenuOpen(true)}
-                    className="p-2 rounded-lg hover:bg-gray-100 transition-colors"
-                    aria-label="Open menu"
-                >
-                    <FaBars className="text-xl text-gray-700" />
-                </button>
-                <div className="flex items-center gap-2">
-                    <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-[#0018A8] to-[#0025D9] flex items-center justify-center text-white">
-                        <FaLeaf className="text-sm" />
+        <div className="min-h-screen bg-[var(--color-background)] flex flex-col">
+            <FrozenBanner />
+            <div className="flex flex-1 relative">
+                {/* Mobile Header */}
+                <header className="lg:hidden fixed top-0 left-0 right-0 h-16 bg-white border-b border-gray-100 flex items-center justify-between px-4 z-30">
+                    <button
+                        onClick={() => setIsMobileMenuOpen(true)}
+                        className="p-2 rounded-lg hover:bg-gray-100 transition-colors"
+                        aria-label="Open menu"
+                    >
+                        <FaBars className="text-xl text-gray-700" />
+                    </button>
+                    <div className="flex items-center gap-2">
+                        <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-[#0018A8] to-[#0025D9] flex items-center justify-center text-white">
+                            <FaLeaf className="text-sm" />
+                        </div>
+                        <span className="text-lg font-bold text-[#0018A8]">
+                            DE<span className="font-normal text-gray-700">spendables</span>
+                        </span>
                     </div>
-                    <span className="text-lg font-bold text-[#0018A8]">
-                        DE<span className="font-normal text-gray-700">spendables</span>
-                    </span>
-                </div>
-                <div className="w-10" /> {/* Spacer for centering */}
-            </header>
+                    <div className="w-10" /> {/* Spacer for centering */}
+                </header>
 
-            {/* Sidebar - Desktop */}
-            <aside className="w-64 bg-white border-r border-gray-100 hidden lg:flex flex-col fixed h-full z-20">
-                <SidebarContent />
-            </aside>
+                {/* Sidebar - Desktop */}
+                <aside className="w-64 bg-white border-r border-gray-100 hidden lg:flex flex-col fixed h-full z-20">
+                    <SidebarContent />
+                </aside>
 
-            {/* Mobile Sidebar Drawer */}
-            <AnimatePresence>
-                {isMobileMenuOpen && (
-                    <>
-                        {/* Backdrop */}
-                        <motion.div
-                            initial={{ opacity: 0 }}
-                            animate={{ opacity: 1 }}
-                            exit={{ opacity: 0 }}
-                            onClick={() => setIsMobileMenuOpen(false)}
-                            className="lg:hidden fixed inset-0 bg-black/50 z-40"
-                        />
-                        {/* Drawer */}
-                        <motion.aside
-                            initial={{ x: "-100%" }}
-                            animate={{ x: 0 }}
-                            exit={{ x: "-100%" }}
-                            transition={{ type: "spring", damping: 25, stiffness: 200 }}
-                            className="lg:hidden fixed left-0 top-0 bottom-0 w-64 bg-white z-50 flex flex-col shadow-2xl"
-                        >
-                            <div className="p-4 border-b border-gray-100 flex items-center justify-between">
-                                <div className="flex items-center gap-2">
-                                    <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-[#0018A8] to-[#0025D9] flex items-center justify-center text-white">
-                                        <FaLeaf className="text-sm" />
+                {/* Mobile Sidebar Drawer */}
+                <AnimatePresence>
+                    {isMobileMenuOpen && (
+                        <>
+                            {/* Backdrop */}
+                            <motion.div
+                                initial={{ opacity: 0 }}
+                                animate={{ opacity: 1 }}
+                                exit={{ opacity: 0 }}
+                                onClick={() => setIsMobileMenuOpen(false)}
+                                className="lg:hidden fixed inset-0 bg-black/50 z-40"
+                            />
+                            {/* Drawer */}
+                            <motion.aside
+                                initial={{ x: "-100%" }}
+                                animate={{ x: 0 }}
+                                exit={{ x: "-100%" }}
+                                transition={{ type: "spring", damping: 25, stiffness: 200 }}
+                                className="lg:hidden fixed left-0 top-0 bottom-0 w-64 bg-white z-50 flex flex-col shadow-2xl"
+                            >
+                                <div className="p-4 border-b border-gray-100 flex items-center justify-between">
+                                    <div className="flex items-center gap-2">
+                                        <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-[#0018A8] to-[#0025D9] flex items-center justify-center text-white">
+                                            <FaLeaf className="text-sm" />
+                                        </div>
+                                        <span className="text-lg font-bold text-[#0018A8]">
+                                            DE<span className="font-normal text-gray-700">spendables</span>
+                                        </span>
                                     </div>
-                                    <span className="text-lg font-bold text-[#0018A8]">
-                                        DE<span className="font-normal text-gray-700">spendables</span>
-                                    </span>
+                                    <button
+                                        onClick={() => setIsMobileMenuOpen(false)}
+                                        className="p-2 rounded-lg hover:bg-gray-100 transition-colors"
+                                        aria-label="Close menu"
+                                    >
+                                        <FaTimes className="text-xl text-gray-700" />
+                                    </button>
                                 </div>
-                                <button
-                                    onClick={() => setIsMobileMenuOpen(false)}
-                                    className="p-2 rounded-lg hover:bg-gray-100 transition-colors"
-                                    aria-label="Close menu"
-                                >
-                                    <FaTimes className="text-xl text-gray-700" />
-                                </button>
-                            </div>
-                            <div className="flex-1 overflow-y-auto">
-                                <nav className="p-4 space-y-1">
-                                    {menuItems.map((item) => {
-                                        const isActive = pathname.includes(item.href);
-                                        return (
-                                            <Link
-                                                key={item.name}
-                                                href={item.href}
-                                                onClick={() => setIsMobileMenuOpen(false)}
-                                                className={`flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 group ${isActive
-                                                    ? "bg-[var(--color-primary)] text-white shadow-md"
-                                                    : "text-gray-500 hover:bg-gray-50 hover:text-[var(--color-primary)]"
-                                                    }`}
-                                            >
-                                                <span className={`text-lg ${isActive ? "text-white" : "text-gray-400 group-hover:text-[var(--color-primary)]"}`}>
-                                                    {item.icon}
-                                                </span>
-                                                <span className="font-medium">{item.name}</span>
-                                            </Link>
-                                        );
-                                    })}
-                                </nav>
-                            </div>
-                            <div className="p-4 border-t border-gray-100">
-                                <button
-                                    onClick={() => auth.signOut()}
-                                    className="flex items-center gap-3 px-4 py-3 rounded-xl w-full text-red-500 hover:bg-red-50 transition-colors"
-                                >
-                                    <FaSignOutAlt />
-                                    <span className="font-medium">{t("common.logout")}</span>
-                                </button>
-                            </div>
-                        </motion.aside>
-                    </>
-                )}
-            </AnimatePresence>
+                                <div className="flex-1 overflow-y-auto">
+                                    <nav className="p-4 space-y-1">
+                                        {menuItems.map((item) => {
+                                            const isActive = pathname.includes(item.href);
+                                            return (
+                                                <Link
+                                                    key={item.name}
+                                                    href={item.href}
+                                                    onClick={() => setIsMobileMenuOpen(false)}
+                                                    className={`flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 group ${isActive
+                                                        ? "bg-[var(--color-primary)] text-white shadow-md"
+                                                        : "text-gray-500 hover:bg-gray-50 hover:text-[var(--color-primary)]"
+                                                        }`}
+                                                >
+                                                    <span className={`text-lg ${isActive ? "text-white" : "text-gray-400 group-hover:text-[var(--color-primary)]"}`}>
+                                                        {item.icon}
+                                                    </span>
+                                                    <span className="font-medium">{item.name}</span>
+                                                </Link>
+                                            );
+                                        })}
+                                    </nav>
+                                </div>
+                                <div className="p-4 border-t border-gray-100">
+                                    <button
+                                        onClick={() => auth.signOut()}
+                                        className="flex items-center gap-3 px-4 py-3 rounded-xl w-full text-red-500 hover:bg-red-50 transition-colors"
+                                    >
+                                        <FaSignOutAlt />
+                                        <span className="font-medium">{t("common.logout")}</span>
+                                    </button>
+                                </div>
+                            </motion.aside>
+                        </>
+                    )}
+                </AnimatePresence>
 
-            {/* Main Content */}
-            <main className="flex-1 lg:ml-64 pt-20 lg:pt-0 p-4 lg:p-8 overflow-x-hidden">
-                {children}
-            </main>
+                {/* Main Content */}
+                <main className="flex-1 lg:ml-64 pt-20 lg:pt-0 p-4 lg:p-8 overflow-x-hidden">
+                    {children}
+                </main>
+            </div>
         </div>
     );
 }

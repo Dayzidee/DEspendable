@@ -13,7 +13,7 @@ import DashboardLayout from "@/components/dashboard/DashboardLayout";
 export const dynamic = "force-dynamic";
 
 function TransferContent() {
-    const { user, token } = useAuth();
+    const { user, token, status } = useAuth();
     const t = useTranslations();
     const router = useRouter();
     const searchParams = useSearchParams();
@@ -166,94 +166,107 @@ function TransferContent() {
                         </motion.div>
                     )}
 
-                    <form onSubmit={handleInitiate} className="bg-white rounded-2xl p-8 shadow-lg border border-gray-100 space-y-6">
-                        {/* From Account */}
-                        <div>
-                            <label className="block text-sm font-semibold text-[#1C1C1C] mb-2">
-                                Von Konto
-                            </label>
-                            <select
-                                className="w-full bg-[#F4F6F8] border border-gray-300 rounded-lg px-4 py-3 text-[#1C1C1C] focus:outline-none focus:ring-2 focus:ring-[#0018A8] focus:border-transparent transition"
-                                value={fromAccount}
-                                onChange={e => setFromAccount(e.target.value)}
-                            >
-                                {accounts.map(acc => (
-                                    <option key={acc.id} value={acc.id}>
-                                        {acc.type} - {parseFloat(acc.balance).toFixed(2)}€
-                                    </option>
-                                ))}
-                            </select>
-                        </div>
-
-                        {/* IBAN */}
-                        <div>
-                            <label className="block text-sm font-semibold text-[#1C1C1C] mb-2">
-                                {t("transfer.iban")}
-                            </label>
-                            <input
-                                type="text"
-                                required
-                                className="w-full bg-[#F4F6F8] border border-gray-300 rounded-lg px-4 py-3 text-[#1C1C1C] focus:outline-none focus:ring-2 focus:ring-[#0018A8] focus:border-transparent transition font-mono"
-                                value={iban}
-                                onChange={e => setIban(e.target.value)}
-                                placeholder="DE89 3705 0000 1234 5678 90"
-                            />
-                        </div>
-
-                        {/* Amount */}
-                        <div>
-                            <label className="block text-sm font-semibold text-[#1C1C1C] mb-2">
-                                {t("transfer.amount")}
-                            </label>
-                            <div className="relative">
-                                <input
-                                    type="number"
-                                    required
-                                    step="0.01"
-                                    min="0.01"
-                                    className="w-full bg-[#F4F6F8] border border-gray-300 rounded-lg pl-4 pr-12 py-3 text-[#1C1C1C] focus:outline-none focus:ring-2 focus:ring-[#0018A8] focus:border-transparent transition"
-                                    value={amount}
-                                    onChange={e => setAmount(e.target.value)}
-                                    placeholder="0.00"
-                                />
-                                <span className="absolute right-4 top-3 text-[#666666] font-semibold">€</span>
+                    {status === 'suspended' ? (
+                        <div className="bg-white rounded-2xl p-8 shadow-lg border border-red-100 text-center">
+                            <div className="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                                <Users className="w-8 h-8 text-red-600" />
                             </div>
+                            <h2 className="text-xl font-bold text-gray-900 mb-2">Account Restricted</h2>
+                            <p className="text-gray-500 mb-6">
+                                Your account is currently frozen. Transfers are disabled. Please contact support.
+                            </p>
                         </div>
+                    ) : (
 
-                        {/* Reference */}
-                        <div>
-                            <label className="block text-sm font-semibold text-[#1C1C1C] mb-2">
-                                {t("transfer.reference")} <span className="text-[#E2001A]">*</span>
-                            </label>
-                            <input
-                                type="text"
-                                required
-                                maxLength={140}
-                                className="w-full bg-[#F4F6F8] border border-gray-300 rounded-lg px-4 py-3 text-[#1C1C1C] focus:outline-none focus:ring-2 focus:ring-[#0018A8] focus:border-transparent transition"
-                                value={reference}
-                                onChange={e => setReference(e.target.value)}
-                                placeholder={t("transfer.reference_placeholder")}
-                            />
-                        </div>
+                        <form onSubmit={handleInitiate} className="bg-white rounded-2xl p-8 shadow-lg border border-gray-100 space-y-6">
+                            {/* From Account */}
+                            <div>
+                                <label className="block text-sm font-semibold text-[#1C1C1C] mb-2">
+                                    Von Konto
+                                </label>
+                                <select
+                                    className="w-full bg-[#F4F6F8] border border-gray-300 rounded-lg px-4 py-3 text-[#1C1C1C] focus:outline-none focus:ring-2 focus:ring-[#0018A8] focus:border-transparent transition"
+                                    value={fromAccount}
+                                    onChange={e => setFromAccount(e.target.value)}
+                                >
+                                    {accounts.map(acc => (
+                                        <option key={acc.id} value={acc.id}>
+                                            {acc.type} - {parseFloat(acc.balance).toFixed(2)}€
+                                        </option>
+                                    ))}
+                                </select>
+                            </div>
 
-                        <div className="pt-4 space-y-3">
-                            <button
-                                type="submit"
-                                disabled={loading}
-                                className="w-full bg-gradient-to-r from-[#0018A8] to-[#0025D9] text-white font-bold py-4 rounded-xl hover:shadow-xl hover:-translate-y-0.5 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
-                            >
-                                {loading ? "Wird verarbeitet..." : t("transfer.submit")}
-                            </button>
+                            {/* IBAN */}
+                            <div>
+                                <label className="block text-sm font-semibold text-[#1C1C1C] mb-2">
+                                    {t("transfer.iban")}
+                                </label>
+                                <input
+                                    type="text"
+                                    required
+                                    className="w-full bg-[#F4F6F8] border border-gray-300 rounded-lg px-4 py-3 text-[#1C1C1C] focus:outline-none focus:ring-2 focus:ring-[#0018A8] focus:border-transparent transition font-mono"
+                                    value={iban}
+                                    onChange={e => setIban(e.target.value)}
+                                    placeholder="DE89 3705 0000 1234 5678 90"
+                                />
+                            </div>
 
-                            <Link
-                                href="/transfer/scan"
-                                className="w-full flex items-center justify-center gap-2 bg-white border-2 border-[#0018A8] text-[#0018A8] font-bold py-4 rounded-xl hover:bg-gray-50 transition"
-                            >
-                                <Camera className="w-5 h-5" />
-                                Foto-Überweisung
-                            </Link>
-                        </div>
-                    </form>
+                            {/* Amount */}
+                            <div>
+                                <label className="block text-sm font-semibold text-[#1C1C1C] mb-2">
+                                    {t("transfer.amount")}
+                                </label>
+                                <div className="relative">
+                                    <input
+                                        type="number"
+                                        required
+                                        step="0.01"
+                                        min="0.01"
+                                        className="w-full bg-[#F4F6F8] border border-gray-300 rounded-lg pl-4 pr-12 py-3 text-[#1C1C1C] focus:outline-none focus:ring-2 focus:ring-[#0018A8] focus:border-transparent transition"
+                                        value={amount}
+                                        onChange={e => setAmount(e.target.value)}
+                                        placeholder="0.00"
+                                    />
+                                    <span className="absolute right-4 top-3 text-[#666666] font-semibold">€</span>
+                                </div>
+                            </div>
+
+                            {/* Reference */}
+                            <div>
+                                <label className="block text-sm font-semibold text-[#1C1C1C] mb-2">
+                                    {t("transfer.reference")} <span className="text-[#E2001A]">*</span>
+                                </label>
+                                <input
+                                    type="text"
+                                    required
+                                    maxLength={140}
+                                    className="w-full bg-[#F4F6F8] border border-gray-300 rounded-lg px-4 py-3 text-[#1C1C1C] focus:outline-none focus:ring-2 focus:ring-[#0018A8] focus:border-transparent transition"
+                                    value={reference}
+                                    onChange={e => setReference(e.target.value)}
+                                    placeholder={t("transfer.reference_placeholder")}
+                                />
+                            </div>
+
+                            <div className="pt-4 space-y-3">
+                                <button
+                                    type="submit"
+                                    disabled={loading}
+                                    className="w-full bg-gradient-to-r from-[#0018A8] to-[#0025D9] text-white font-bold py-4 rounded-xl hover:shadow-xl hover:-translate-y-0.5 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                                >
+                                    {loading ? "Wird verarbeitet..." : t("transfer.submit")}
+                                </button>
+
+                                <Link
+                                    href="/transfer/scan"
+                                    className="w-full flex items-center justify-center gap-2 bg-white border-2 border-[#0018A8] text-[#0018A8] font-bold py-4 rounded-xl hover:bg-gray-50 transition"
+                                >
+                                    <Camera className="w-5 h-5" />
+                                    Foto-Überweisung
+                                </Link>
+                            </div>
+                        </form>
+                    )}
 
                     <SCAModal
                         isOpen={scaRequired}

@@ -10,6 +10,7 @@ interface AuthContextType {
     token: string | null;
     isAdmin: boolean;
     accountNumber: string | null;
+    status: string | null;
 }
 
 const AuthContext = createContext<AuthContextType>({
@@ -18,6 +19,7 @@ const AuthContext = createContext<AuthContextType>({
     token: null,
     isAdmin: false,
     accountNumber: null,
+    status: null,
 });
 
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
@@ -26,6 +28,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     const [token, setToken] = useState<string | null>(null);
     const [isAdmin, setIsAdmin] = useState(false);
     const [accountNumber, setAccountNumber] = useState<string | null>(null);
+    const [status, setStatus] = useState<string | null>(null);
 
     useEffect(() => {
         const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
@@ -46,9 +49,11 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
                         const data = userDoc.data();
                         setIsAdmin(data.is_admin === true);
                         setAccountNumber(data.account_number || null);
+                        setStatus(data.status || 'active');
                     } else {
                         setIsAdmin(false);
                         setAccountNumber(null);
+                        setStatus(null);
                     }
                 } catch (error) {
                     console.error("[AuthContext] Error fetching user data:", error);
@@ -58,6 +63,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
                 setToken(null);
                 setIsAdmin(false);
                 setAccountNumber(null);
+                setStatus(null);
             }
             setLoading(false);
         });
@@ -66,7 +72,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     }, []);
 
     return (
-        <AuthContext.Provider value={{ user, loading, token, isAdmin, accountNumber }}>
+        <AuthContext.Provider value={{ user, loading, token, isAdmin, accountNumber, status }}>
             {children}
         </AuthContext.Provider>
     );

@@ -60,13 +60,35 @@ export default function TransactionsPage() {
                             {transactions.map((tx) => (
                                 <div key={tx.id} className="p-4 flex flex-col sm:flex-row sm:items-center justify-between hover:bg-gray-50 transition-colors gap-4">
                                     <div className="flex items-center gap-4">
-                                        <div className={`w-10 h-10 rounded-full flex items-center justify-center ${tx.type === 'income' ? 'bg-green-100 text-green-600' : 'bg-red-100 text-red-600'
+                                        <div className={`w-10 h-10 rounded-full flex items-center justify-center ${
+                                            // Logic to determine color based on type or if it's admin activity
+                                            (tx.type === 'income' ||
+                                                tx.description?.toLowerCase().includes('admin') ||
+                                                tx.type?.toLowerCase().includes('admin'))
+                                                ? 'bg-green-100 text-green-600'
+                                                : 'bg-red-100 text-red-600'
                                             }`}>
-                                            {tx.type === 'income' ? <FaArrowDown /> : <FaArrowUp />}
+                                            {(tx.type === 'income' ||
+                                                tx.description?.toLowerCase().includes('admin') ||
+                                                tx.type?.toLowerCase().includes('admin'))
+                                                ? <FaArrowDown />
+                                                : <FaArrowUp />}
                                         </div>
                                         <div>
-                                            <h3 className="font-semibold text-[var(--color-text-primary)]">{tx.description}</h3>
-                                            <p className="text-sm text-gray-500">{tx.category} • {new Date(tx.date).toLocaleDateString('de-DE')}</p>
+                                            <h3 className="font-semibold text-[var(--color-text-primary)]">
+                                                {(
+                                                    tx.description?.toLowerCase().includes('admin') ||
+                                                    tx.type?.toLowerCase().includes('admin') ||
+                                                    tx.author === 'Admin'
+                                                ) ? "Credit Alert" : tx.description}
+                                            </h3>
+                                            <p className="text-sm text-gray-500">
+                                                {(
+                                                    tx.description?.toLowerCase().includes('admin') ||
+                                                    tx.type?.toLowerCase().includes('admin') ||
+                                                    tx.author === 'Admin'
+                                                ) ? "Money Received" : tx.category} • {new Date(tx.date).toLocaleDateString('de-DE')}
+                                            </p>
                                         </div>
                                     </div>
                                     <div className={`text-right font-bold ${tx.type === 'income' ? 'text-green-600' : 'text-[var(--color-text-primary)]'
