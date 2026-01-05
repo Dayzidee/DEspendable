@@ -77,8 +77,9 @@
         "transactions": "Transaktionen",
         "accounts": "Konten",
         "loans": "Kredite",
-        "investments": "Investitionen",
-        "admin": "Administration"
+        "investments": "Anlagen",
+        "admin": "Verwaltung",
+        "profile": "Profil"
     },
     "landing": {
         "hero_title": "Banking Made",

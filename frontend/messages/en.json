@@ -78,7 +78,8 @@
         "accounts": "Accounts",
         "loans": "Loans",
         "investments": "Investments",
-        "admin": "Admin"
+        "admin": "Admin",
+        "profile": "Profile"
     },
     "landing": {
         "hero_title": "Banking Made",
