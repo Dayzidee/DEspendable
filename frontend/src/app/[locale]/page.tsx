@@ -39,8 +39,8 @@ export default function Home() {
               transition={{ duration: 0.6 }}
               className="relative z-10"
             >
-              <div className="mb-8">
-                <h1 className="text-6xl md:text-7xl lg:text-8xl font-extrabold leading-[1.05] tracking-tight">
+              <div className="mb-6 md:mb-8">
+                <h1 className="text-4xl md:text-7xl lg:text-8xl font-extrabold leading-[1.1] md:leading-[1.05] tracking-tight">
                   <TextReveal type="words" stagger={0.08}>
                     <span className="text-[#1C1C1C] block">{t("landing.hero_title")}</span>
                   </TextReveal>
@@ -49,14 +49,14 @@ export default function Home() {
                   </TextReveal>
                 </h1>
               </div>
-              <p className="text-xl text-[#666666] mb-8 leading-relaxed">
+              <p className="text-lg md:text-xl text-[#666666] mb-8 leading-relaxed max-w-xl">
                 {t("landing.hero_description")}
               </p>
               <div className="flex gap-4 mb-12">
                 <MagneticButton
                   href="/signup"
                   strength={0.4}
-                  className="group px-8 py-4 bg-gradient-to-r from-[#0018A8] to-[#0025D9] text-white font-bold rounded-xl shadow-xl flex items-center gap-2"
+                  className="group px-6 py-3 md:px-8 md:py-4 bg-gradient-to-r from-[#0018A8] to-[#0025D9] text-white font-bold rounded-xl shadow-xl flex items-center gap-2 text-sm md:text-base"
                 >
                   {t("landing.cta_primary")}
                   <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
@@ -64,7 +64,7 @@ export default function Home() {
                 <MagneticButton
                   href="#features"
                   strength={0.3}
-                  className="px-8 py-4 border-2 border-[#0018A8] text-[#0018A8] font-bold rounded-xl hover:bg-[#0018A8] hover:text-white transition-all"
+                  className="px-6 py-3 md:px-8 md:py-4 border-2 border-[#0018A8] text-[#0018A8] font-bold rounded-xl hover:bg-[#0018A8] hover:text-white transition-all text-sm md:text-base"
                 >
                   {t("landing.cta_secondary")}
                 </MagneticButton>
@@ -107,7 +107,7 @@ export default function Home() {
               <CascadingCards />
             </motion.div>
           </div>
-        </div>
+        </div >
       </section>
 
       {/* Features Section */}

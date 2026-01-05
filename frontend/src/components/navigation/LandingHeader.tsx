@@ -11,7 +11,7 @@ export default function LandingHeader() {
     const t = useTranslations('auth');
 
     return (
-        <nav className="fixed top-0 left-0 right-0 z-50 glass border-b border-white/30">
+        <nav className="fixed top-0 left-0 right-0 z-[100] glass border-b border-white/30">
             <div className="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
                 {/* Logo */}
                 <Link href="/">
