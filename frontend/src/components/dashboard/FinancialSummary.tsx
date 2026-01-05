@@ -1,6 +1,7 @@
 import { FaWallet, FaUniversity, FaHourglassHalf, FaExchangeAlt } from 'react-icons/fa';
 import { Link } from '@/i18n/navigation';
 import { useTranslations } from 'next-intl';
+import { formatCurrency } from '@/lib/formatters';
 
 interface FinancialSummaryProps {
   totalBalance: number;
@@ -25,7 +26,7 @@ export default function FinancialSummary({ totalBalance, accountsCount, pendingC
           </div>
           <div>
             <span className="block text-sm text-blue-100 font-medium uppercase tracking-wider">{t('dashboard.totalBalance')}</span>
-            <span className="block text-4xl font-bold mt-1">€{totalBalance.toFixed(2)}</span>
+            <span className="block text-4xl font-bold mt-1">{formatCurrency(totalBalance)}</span>
           </div>
         </div>
 

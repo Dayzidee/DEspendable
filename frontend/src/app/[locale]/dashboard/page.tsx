@@ -244,7 +244,7 @@ export default function Dashboard() {
                             </div>
                         </section>
 
-                        <VirtualCard cardHolder={displayName} />
+                        {/* <VirtualCard cardHolder={displayName} /> */}
                     </div>
                 </div>
             </div>

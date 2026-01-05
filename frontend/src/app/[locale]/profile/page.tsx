@@ -3,10 +3,11 @@
 import DashboardLayout from "@/components/dashboard/DashboardLayout";
 import { useAuth } from "@/context/AuthContext";
 import { useTranslations } from "next-intl";
-import { motion } from "framer-motion";
-import { User, Shield, Settings, MapPin, Briefcase, Wallet } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
+import { User, Shield, Settings, MapPin, Briefcase, Wallet, Edit } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useRouter } from "@/i18n/navigation";
+import ProfileForm from "@/components/profile/ProfileForm";
 
 interface ProfileData {
     firstName: string;
@@ -24,6 +25,7 @@ interface ProfileData {
     annualIncome: string;
     nationality: string;
     dateOfBirth: string;
+    taxId?: string; // Added to match form data type
 }
 
 export default function Profile() {
@@ -35,39 +37,40 @@ export default function Profile() {
     const [profileData, setProfileData] = useState<ProfileData | null>(null);
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState("");
+    const [isEditing, setIsEditing] = useState(false);
+
+    const fetchProfile = async () => {
+        if (!token) return;
+
+        try {
+            const response = await fetch('/api/user/profile', {
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            });
+
+            if (!response.ok) {
+                throw new Error('Failed to fetch profile data');
+            }
+
+            const data = await response.json();
+            setProfileData({
+                ...data,
+                email: user?.email || ""
+            });
+        } catch (err: any) {
+            console.error(err);
+            setError(err.message);
+        } finally {
+            setIsLoading(false);
+        }
+    };
 
     useEffect(() => {
         if (!authLoading && !user) {
             router.push("/login");
             return;
         }
-
-        const fetchProfile = async () => {
-            if (!token) return;
-
-            try {
-                const response = await fetch('/api/user/profile', {
-                    headers: {
-                        'Authorization': `Bearer ${token}`
-                    }
-                });
-
-                if (!response.ok) {
-                    throw new Error('Failed to fetch profile data');
-                }
-
-                const data = await response.json();
-                setProfileData({
-                    ...data,
-                    email: user?.email || ""
-                });
-            } catch (err: any) {
-                console.error(err);
-                setError(err.message);
-            } finally {
-                setIsLoading(false);
-            }
-        };
 
         if (user && token) {
             fetchProfile();
@@ -114,7 +117,7 @@ export default function Profile() {
             title: tProfile('financial_info'),
             icon: <Wallet className="w-5 h-5" />,
             items: [
-                { label: tProfile('employmentStatus'), value: profileData?.employmentStatus ? tProfile(`options.${profileData.employmentStatus}`) : profileData?.employmentStatus }, // Assuming simple value for now, could be translated
+                { label: tProfile('employmentStatus'), value: profileData?.employmentStatus ? tProfile(`options.${profileData.employmentStatus}`) : profileData?.employmentStatus },
                 { label: tProfile('sourceOfFunds'), value: profileData?.sourceOfFunds ? tProfile(`options.${profileData.sourceOfFunds}`) : profileData?.sourceOfFunds },
                 { label: tProfile('annualIncome'), value: profileData?.annualIncome ? `€${profileData.annualIncome}` : '' }
             ]
@@ -124,7 +127,7 @@ export default function Profile() {
             icon: <Shield className="w-5 h-5" />,
             items: [
                 { label: "Password", value: "••••••••••••" },
-                { label: "2FA", value: "Enabled" }, // Placeholder logic for now
+                { label: "2FA", value: "Enabled" },
             ]
         }
     ];
@@ -137,9 +140,9 @@ export default function Profile() {
                 <motion.div
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
-                    className="bg-white rounded-2xl p-8 shadow-sm border border-gray-100 flex flex-col md:flex-row items-center gap-8"
+                    className="bg-white rounded-2xl p-8 shadow-sm border border-gray-100 flex flex-col md:flex-row items-center gap-8 relative overflow-hidden"
                 >
-                    <div className="relative">
+                    <div className="relative z-10">
                         <div className="w-24 h-24 rounded-full bg-gradient-to-br from-[#0018A8] to-[#0025D9] flex items-center justify-center text-white text-3xl font-bold shadow-lg">
                             {initial}
                         </div>
@@ -148,74 +151,111 @@ export default function Profile() {
                         </div>
                     </div>
 
-                    <div className="text-center md:text-left flex-1">
+                    <div className="text-center md:text-left flex-1 relative z-10">
                         <h1 className="text-2xl font-bold text-[#1C1C1C] mb-1">{fullName}</h1>
                         <p className="text-gray-500 mb-4">{profileData?.email} • {t('cards.premium')} Member</p>
                         <div className="flex flex-wrap justify-center md:justify-start gap-2">
                             <span className="px-3 py-1 bg-blue-50 text-[#0018A8] rounded-full text-sm font-medium flex items-center gap-1">
                                 <Shield className="w-3 h-3" /> Verified
                             </span>
-                            <span className="px-3 py-1 bg-purple-50 text-purple-600 rounded-full text-sm font-medium">
-                                Member since {new Date().getFullYear()} {/* Could use creationTime from metadata */}
-                            </span>
                         </div>
+                    </div>
+
+                    <div className="absolute top-4 right-4 z-20">
+                        <button
+                            onClick={() => setIsEditing(!isEditing)}
+                            className={`flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-medium transition-colors ${isEditing
+                                ? 'bg-red-50 text-red-600 hover:bg-red-100'
+                                : 'bg-gray-100 text-gray-700 hover:bg-gray-200'}`}
+                        >
+                            {isEditing ? (
+                                'Cancel'
+                            ) : (
+                                <>
+                                    <Edit className="w-4 h-4" />
+                                    {t('editProfile') || 'Edit Profile'}
+                                </>
+                            )}
+                        </button>
                     </div>
                 </motion.div>
 
-                {/* Profile Grid */}
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    {sections.map((section, idx) => (
+                <AnimatePresence mode="wait">
+                    {isEditing ? (
                         <motion.div
-                            key={idx}
+                            key="edit-form"
                             initial={{ opacity: 0, y: 20 }}
                             animate={{ opacity: 1, y: 0 }}
-                            transition={{ delay: idx * 0.1 }}
-                            className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100"
+                            exit={{ opacity: 0, y: -20 }}
+                            className="bg-white rounded-2xl p-8 shadow-sm border border-gray-100"
                         >
-                            <div className="flex items-center gap-3 mb-6 pb-4 border-b border-gray-50">
-                                <div className="w-10 h-10 rounded-xl bg-blue-50 text-[#0018A8] flex items-center justify-center">
-                                    {section.icon}
-                                </div>
-                                <h2 className="text-lg font-bold text-[#1C1C1C]">{section.title}</h2>
-                            </div>
-
-                            <div className="space-y-4">
-                                {section.items.map((item, itemIdx) => (
-                                    <div key={itemIdx} className="flex items-center justify-between group">
-                                        <span className="text-gray-500 text-sm">{item.label}</span>
-                                        <span className="font-medium text-[#1C1C1C] flex items-center gap-2">
-                                            {item.value || '-'}
-                                        </span>
-                                    </div>
-                                ))}
-                            </div>
+                            <h2 className="text-xl font-bold mb-6">{t('editProfile') || 'Edit Profile'}</h2>
+                            <ProfileForm
+                                initialData={profileData || {}}
+                                onSuccess={() => {
+                                    setIsEditing(false);
+                                    fetchProfile();
+                                }}
+                            />
                         </motion.div>
-                    ))}
+                    ) : (
+                        <div key="view-mode" className="space-y-6">
+                            {/* Profile Grid */}
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                {sections.map((section, idx) => (
+                                    <motion.div
+                                        key={idx}
+                                        initial={{ opacity: 0, y: 20 }}
+                                        animate={{ opacity: 1, y: 0 }}
+                                        transition={{ delay: idx * 0.1 }}
+                                        className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100"
+                                    >
+                                        <div className="flex items-center gap-3 mb-6 pb-4 border-b border-gray-50">
+                                            <div className="w-10 h-10 rounded-xl bg-blue-50 text-[#0018A8] flex items-center justify-center">
+                                                {section.icon}
+                                            </div>
+                                            <h2 className="text-lg font-bold text-[#1C1C1C]">{section.title}</h2>
+                                        </div>
 
-                    {/* Address Card */}
-                    <motion.div
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: 0.3 }}
-                        className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100"
-                    >
-                        <div className="flex items-center gap-3 mb-6 pb-4 border-b border-gray-50">
-                            <div className="w-10 h-10 rounded-xl bg-green-50 text-green-600 flex items-center justify-center">
-                                <MapPin className="w-5 h-5" />
-                            </div>
-                            <h2 className="text-lg font-bold text-[#1C1C1C]">{tProfile('address_info')}</h2>
-                        </div>
-                        <div className="space-y-3">
-                            <p className="text-[#1C1C1C]">{profileData?.address?.street || '-'}</p>
-                            <div className="flex gap-2">
-                                <span className="text-[#1C1C1C]">{profileData?.address?.postalCode || '-'}</span>
-                                <span className="text-[#1C1C1C]">{profileData?.address?.city || '-'}</span>
-                            </div>
-                            <p className="text-[#1C1C1C]">{profileData?.address?.country || '-'}</p>
-                        </div>
-                    </motion.div>
+                                        <div className="space-y-4">
+                                            {section.items.map((item, itemIdx) => (
+                                                <div key={itemIdx} className="flex items-center justify-between group">
+                                                    <span className="text-gray-500 text-sm">{item.label}</span>
+                                                    <span className="font-medium text-[#1C1C1C] flex items-center gap-2">
+                                                        {item.value || '-'}
+                                                    </span>
+                                                </div>
+                                            ))}
+                                        </div>
+                                    </motion.div>
+                                ))}
 
-                </div>
+                                {/* Address Card */}
+                                <motion.div
+                                    initial={{ opacity: 0, y: 20 }}
+                                    animate={{ opacity: 1, y: 0 }}
+                                    transition={{ delay: 0.3 }}
+                                    className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100"
+                                >
+                                    <div className="flex items-center gap-3 mb-6 pb-4 border-b border-gray-50">
+                                        <div className="w-10 h-10 rounded-xl bg-green-50 text-green-600 flex items-center justify-center">
+                                            <MapPin className="w-5 h-5" />
+                                        </div>
+                                        <h2 className="text-lg font-bold text-[#1C1C1C]">{tProfile('address_info')}</h2>
+                                    </div>
+                                    <div className="space-y-3">
+                                        <p className="text-[#1C1C1C]">{profileData?.address?.street || '-'}</p>
+                                        <div className="flex gap-2">
+                                            <span className="text-[#1C1C1C]">{profileData?.address?.postalCode || '-'}</span>
+                                            <span className="text-[#1C1C1C]">{profileData?.address?.city || '-'}</span>
+                                        </div>
+                                        <p className="text-[#1C1C1C]">{profileData?.address?.country || '-'}</p>
+                                    </div>
+                                </motion.div>
+                            </div>
+                        </div>
+                    )}
+                </AnimatePresence>
             </div>
         </DashboardLayout>
     );
