@@ -38,15 +38,15 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
                     const idToken = await getIdToken(currentUser);
                     setToken(idToken);
 
-                    // Fetch admin status from public Firestore (client-side)
-                    // Note: This matches the user's document structure in /src/app/api/signup/route.ts
-                    const { doc, getDoc, getFirestore } = await import("firebase/firestore");
-                    const { app } = await import("@/lib/firebase");
-                    const db = getFirestore(app);
-                    const userDoc = await getDoc(doc(db, "users", currentUser.uid));
+                    // Fetch admin status from secure API route bypassing Firestore client rules
+                    const res = await fetch('/api/user/me', {
+                        headers: {
+                            'Authorization': `Bearer ${idToken}`
+                        }
+                    });
 
-                    if (userDoc.exists()) {
-                        const data = userDoc.data();
+                    if (res.ok) {
+                        const data = await res.json();
                         setIsAdmin(data.is_admin === true);
                         setAccountNumber(data.account_number || null);
                         setStatus(data.status || 'active');
